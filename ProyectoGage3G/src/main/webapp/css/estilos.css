@@ -1,0 +1,56 @@
+
+.ui-layout-north {
+	background: #17a2b8;
+}
+
+.ui-layout-pane-north .ui-layout-unit-content {
+	background: #17a2b8;
+}
+
+.ui-layout-west {
+	background: #ffc107;
+}
+
+.ui-layout-pane-west .ui-layout-unit-content {
+	background: #ffc107;
+}
+
+.ui-widget-header{
+	font-size: 14px;
+}
+
+.pie{
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.container-fluid legend {
+	font-size: 14px;
+	text-align: center;
+}
+
+.container-fluid .d-flex {
+	font-size: 14px;
+}
+
+.container-fluid .d-flex input{
+	width: 100%;
+}
+
+.container-fluid table {
+	font-size: 14px;
+	text-align: center;
+}
+
+.ui-dialog{
+	font-size: 14px;
+}
+
+
+
+table tr:HOVER{
+	background: #1976D2;
+}
+
+

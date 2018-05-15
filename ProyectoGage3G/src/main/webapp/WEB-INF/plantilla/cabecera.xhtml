@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<link rel="stylesheet" type="text/css" href="css/estilos.css" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/javascript" href="js/calendario.js" />
+</h:head>
+<h:form>
+	<div class="container-fluid">
+
+		<div class="d-flex">
+			<div class="p-2 flex-fill">
+				<i class="fa fa-fw fa-fire-extinguisher"></i><b>3G</b>
+			</div>
+
+			<div class="p-2 flex-fill">
+				<h:graphicImage value="/imagenes/usuario.png" width="25" />
+				<p:outputLabel value=" JHONNY NEYRA LOPEZ"/>
+			</div>
+
+			<div class="p-2">
+				<h:commandLink action="home.xhtml" immediate="true" title="HOME">
+					<i class="fa fa-fw fas fa-home"></i>
+					<p:outputLabel value=" Home " />
+				</h:commandLink>
+			</div>
+			<div class="p-2 ml-auto">
+				<h:commandLink action="#{usuario.logout}" immediate="true"
+					title="CERRAR SESION">
+					<i class="fa fa-fw fa-sign-out"></i>
+					<p:outputLabel value=" Salir " />
+				</h:commandLink>
+			</div>
+		</div>
+	</div>
+</h:form>
+</html>
