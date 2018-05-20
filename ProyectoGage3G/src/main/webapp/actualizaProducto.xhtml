@@ -23,7 +23,7 @@
 								<p:inputText value="#{productoBean.descripcionProducto}"
 									id="descripcion" placeholder="Buscar producto"
 									styleClass="form-control">
-									<p:ajax event="keyup" update="tabla" />
+									<p:ajax event="keyup" update="tablaProducto" />
 								</p:inputText>
 							</div>
 						</div>
@@ -32,63 +32,67 @@
 							<p:commandLink action="ACTUALIZAR_PRODUCTO" id="nuevo"
 								onclick="PF('dlgProducto').show();" styleClass="#{r.verde}">
 								<i class="fa fa-fw fa-plus-circle"></i>
-								<p:outputLabel value=" Nuevo " />
+								<h:outputText value=" Nuevo " />
 							</p:commandLink>
 						</div>
 
 					</div>
 
 
-					<p:dataTable id="tabla" value="#{productoBean.productos}" var="p"
-						emptyMessage="No hay productos" paginator="true"
+					<p:dataTable id="tablaProducto" value="#{productoBean.productos}"
+						var="p"
+						emptyMessage="No existe el producto #{productoBean.descripcionProducto}, has click en boton nuevo"
+						paginator="true"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						rowsPerPageTemplate="5,10,15,20,25,50" rows="25" reflow="true">
 
 						<p:column headerText="CODIGO">
-							<p:outputLabel value="#{p.codProducto}" />
+							<h:outputText value="#{p.codProducto}" />
 						</p:column>
 						<p:column headerText="DESCRIPCION" width="40%">
-							<p:outputLabel value="#{p.descripcion}" />
+							<h:outputText value="#{p.descripcion}" />
 						</p:column>
 						<p:column headerText="TIPO">
-							<p:outputLabel value="#{p.tipo.descripcion} " />
+							<h:outputText value="#{p.tipo.descripcion} " />
 						</p:column>
 						<p:column headerText="COSTO">
-							<p:outputLabel value="#{p.precioCompra}" />
+							<h:outputText value="#{p.precioCompra}" />
 						</p:column>
 						<p:column headerText="PRECIO">
-							<p:outputLabel value="#{p.precioVenta}" />
+							<h:outputText value="#{p.precioVenta}" />
 						</p:column>
 						<p:column headerText="U.M">
-							<p:outputLabel value="#{p.medida.descripcion}" />
+							<h:outputText value="#{p.medida.descripcion}" />
 						</p:column>
-						<p:column>
-							<p:commandLink actionListener="#{productoBean.editarProducto}"
-								update="dialogo" action="ACTUALIZAR_PRODUCTO"
-								oncomplete="PF('dlgProducto').show();" styleClass="#{r.celeste}">
-								<i class="fa fa-fw fa-edit"></i>
-								<f:attribute value="#{p.codProducto}" name="codigo" />
-							</p:commandLink>
-						</p:column>
-						<p:column>
-							<p:commandLink actionListener="#{productoBean.eliminarProducto}"
-								styleClass="#{r.rojo}" action="ACTUALIZAR_PRODUCTO"
-								update="tabla">
-								<p:confirm header="Confirmacion" message="Estas seguro de eliminar?"
-									icon="ui-icon-alert" />
-								<i class="fa fa-fw fa-trash"></i>
-								<f:attribute value="#{p.codProducto}" name="codigo" />
-							</p:commandLink>
+						<p:column width="8%" styleClass="text-center">
+							<div class="btn-group">
+								<p:commandLink actionListener="#{productoBean.editarProducto}"
+									update="dialogo" action="ACTUALIZAR_PRODUCTO"
+									oncomplete="PF('dlgProducto').show();"
+									styleClass="#{r.celeste}">
+									<i class="fa fa-fw fa-edit"></i>
+									<f:attribute value="#{p.codProducto}" name="codigo" />
+								</p:commandLink>
+							</div>
+							<div class="btn-group">
+								<p:commandLink actionListener="#{productoBean.eliminarProducto}"
+									styleClass="#{r.rojo}" action="ACTUALIZAR_PRODUCTO"
+									update="tablaProducto">
+									<p:confirm header="Confirmacion"
+										message="Estas seguro de eliminar?" icon="ui-icon-alert" />
+									<i class="fa fa-fw fa-trash"></i>
+									<f:attribute value="#{p.codProducto}" name="codigo" />
+								</p:commandLink>
+							</div>
 						</p:column>
 					</p:dataTable>
 
 
 					<p:confirmDialog global="true">
-						<p:commandButton value="Yes"
-							update="pnlProducto tabla" styleClass="ui-confirmdialog-yes"
-							icon="ui-icon-check" />
-						<p:commandButton value="No"
-							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						<p:commandButton value="Si" update="pnlProducto tablaProducto"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+							icon="ui-icon-close" />
 					</p:confirmDialog>
 
 					<p:messages for="mensajeProductoEliminado"
@@ -96,9 +100,10 @@
 				</p:fieldset>
 
 			</h:form>
+
 			<p:dialog header="REGISTRAR PRODUCTO" widgetVar="dlgProducto"
 				closable="false" id="dialogo" showEffect="scale" position="left top"
-				hideEffect="explode"  modal="true" positionType="absolute"
+				hideEffect="explode" modal="true" positionType="absolute"
 				appendTo="@(body)" responsive="true">
 				<h:form id="formProductoNuevo">
 					<h:panelGroup id="pnlProducto">
@@ -107,10 +112,19 @@
 							<div class="form-group">
 								<p:outputLabel value="#{r.codigo}" for="codigo" />
 								<h:inputText value="#{productoBean.codigoProducto}" id="codigo"
-									disabled="true" styleClass="form-control form-control-sm" />
+									disabled="true" styleClass="form-control" />
 							</div>
 							<div class="form-group">
-								<p:outputLabel value="#{r.tipo}" />
+								<h:outputText value="#{r.descripcion}" />
+								<h:inputText value="#{productoBean.descripcion}"
+									styleClass="form-control form-control-sm" required="true"
+									requiredMessage="Ingrese nombre del producto" id="descripcion">
+									<f:ajax event="keyup" render="msgDescripcion" />
+								</h:inputText>
+								<p:message for="descripcion" id="msgDescripcion" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.categoria}" />
 								<p:selectOneMenu value="#{productoBean.codigoTipoProducto}"
 									required="true" styleClass="form-control form-control-sm"
 									requiredMessage="Seleccione un tipo de producto" id="tipo">
@@ -121,39 +135,7 @@
 								<p:message for="tipo" id="msgTipo" />
 							</div>
 							<div class="form-group">
-								<p:outputLabel value="#{r.descripcion}" />
-								<h:inputText value="#{productoBean.descripcion}"
-									styleClass="form-control form-control-sm" required="true"
-									requiredMessage="Ingrese nombre del producto" id="descripcion">
-									<f:ajax event="keyup" execute="@this" render="msgDescripcion" />
-								</h:inputText>
-								<p:message for="descripcion" id="msgDescripcion" />
-							</div>
-
-							<div class="row">
-								<div class="col">
-									<div class="form-group">
-										<p:outputLabel value="#{r.costo}" />
-										<h:inputText value="#{productoBean.precioCompra}"
-											styleClass="form-control form-control-sm">
-										</h:inputText>
-									</div>
-								</div>
-								<div class="col">
-									<div class="form-group">
-										<p:outputLabel value="#{r.precio}" />
-										<h:inputText value="#{productoBean.precioVenta}"
-											styleClass="form-control form-control-sm" required="true"
-											requiredMessage="Ingrese el precio" id="precio">
-											<f:ajax event="keyup" execute="@this" render="msgPrecio" />
-										</h:inputText>
-										<p:message for="precio" id="msgPrecio" />
-									</div>
-
-								</div>
-							</div>
-							<div class="form-group">
-								<p:outputLabel value="#{r.um}" />
+								<h:outputText value="#{r.um}" />
 								<p:selectOneMenu value="#{productoBean.codigoMedida}"
 									required="true" requiredMessage="Seleccione una medida"
 									id="medida" styleClass="form-control form-control-sm">
@@ -163,32 +145,48 @@
 								</p:selectOneMenu>
 								<p:message for="medida" id="msgMedida" />
 							</div>
-						</div>
-
-						<div class="row">
-							<div class="col">
-	
-									<p:commandLink action="ACTUALIZAR_PRODUCTO"
-										actionListener="#{productoBean.actualizarProducto}"
-										update="formProductoNuevo:pnlProducto msgProducto :formProducto:tabla"
-										styleClass="#{r.azul}">
-										<i class="fa fa-fw fa-save"></i>
-										<p:outputLabel value=" Grabar" />
-									</p:commandLink>
-							
+							<div class="row">
+								<div class="col">
+									<div class="form-group">
+										<h:outputText value="#{r.costo}" />
+										<h:inputText value="#{productoBean.precioCompra}"
+											styleClass="form-control form-control-sm">
+										</h:inputText>
+									</div>
+								</div>
+								<div class="col">
+									<div class="form-group">
+										<h:outputText value="#{r.precio}" />
+										<h:inputText value="#{productoBean.precioVenta}"
+											styleClass="form-control form-control-sm" required="true"
+											requiredMessage="Ingrese el precio" id="precio">
+											<f:ajax event="keyup" execute="@this" render="msgPrecio" />
+										</h:inputText>
+										<p:message for="precio" id="msgPrecio" />
+									</div>
+								</div>
 							</div>
 
-							<div class="col">
-								
+							<div class="row">
+								<div class="col">
+									<p:commandLink action="ACTUALIZAR_PRODUCTO"
+										actionListener="#{productoBean.actualizarProducto}"
+										update="formProductoNuevo:pnlProducto msgProducto :formProducto:tablaProducto"
+										styleClass="#{r.azul}">
+										<i class="fa fa-fw fa-save"></i>
+										<h:outputText value=" Grabar" />
+									</p:commandLink>
+								</div>
 
+								<div class="col">
 									<p:commandLink onclick="PF('dlgProducto').hide();"
 										update="formProductoNuevo" immediate="true"
 										action="ACTUALIZAR_PRODUCTO" styleClass="#{r.gris}"
 										actionListener="#{productoBean.cancelarProducto}">
 										<i class="fa fa-fw fa-sign-out"></i>
-										<p:outputLabel value=" Salir" />
+										<h:outputText value=" Salir" />
 									</p:commandLink>
-								
+								</div>
 							</div>
 						</div>
 						<p:messages for="mensajeRegistroProducto" id="msgProducto" />

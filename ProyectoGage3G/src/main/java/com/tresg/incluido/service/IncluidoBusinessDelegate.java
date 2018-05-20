@@ -14,4 +14,9 @@ public class IncluidoBusinessDelegate {
 		return new ComboService();
 
 	}
+	
+	public static GestionarClienteService_I getGestionarClienteService(){
+		return new GestionarClienteService();
+		
+	}
 }

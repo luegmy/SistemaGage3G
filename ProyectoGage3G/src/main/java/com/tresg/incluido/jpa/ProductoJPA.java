@@ -18,6 +18,7 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "tb_producto")
 
+
 @NamedQuery(name = "producto.listarProductoPorDescripcion", query = "select p from ProductoJPA p where p.descripcion like :x")
 
 public class ProductoJPA implements Serializable {

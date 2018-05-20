@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO GESTION</ui:define>
+	<ui:define name="content">
+
+		<div class="container-fluid">
+			<h:form id="formCliente">
+				<p:fieldset id="pnlCliente" legend="GESTION DE CLIENTE">
+
+					<div class="d-flex justify-content-between">
+
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"> <i
+									class="fa fa-fw fa-search"></i></span>
+								<p:inputText value="#{clienteBean.busqueda}"
+									placeholder="Buscar cliente" styleClass="form-control">
+									<p:ajax event="keyup" update="tablaCliente" />
+								</p:inputText>
+							</div>
+						</div>
+
+						<div class="btn-group" role="group">
+							<p:commandLink action="ACTUALIZAR_CLIENTE" id="nuevo"
+								onclick="PF('dlgCliente').show();" styleClass="#{r.verde}">
+								<i class="fa fa-fw fa-user-plus"></i>
+								<h:outputText value=" Nuevo" />
+							</p:commandLink>
+						</div>
+
+					</div>
+
+					<p:dataTable id="tablaCliente" value="#{clienteBean.clientes}"
+						var="c" widgetVar="tablaCliente2"
+						emptyMessage="No existe el cliente #{clienteBean.busqueda}, has click en boton nuevo"
+						paginator="true" rows="15" reflow="true"
+						rowsPerPageTemplate="15,20,25,30">
+						<f:facet name="header">
+							<p:outputPanel styleClass="text-center">
+								<h:outputText value="FILTRO :" />
+								<p:inputText id="globalFilter"
+									onkeyup="PF('tablaCliente2').filter()"
+									placeholder="Filtrar busqueda" />
+							</p:outputPanel>
+						</f:facet>
+
+						<p:column filterBy="#{c.nombre}" headerText="NOMBRE">
+							<h:outputText value="#{c.nombre}" />
+						</p:column>
+						<p:column filterBy="#{c.direccion}"
+							headerText="DIRECCION">
+							<h:outputText value="#{c.direccion}" />
+						</p:column>
+						<p:column filterBy="#{c.nroDocumento}" width="10%"
+							headerText="RUC">
+							<h:outputText value="#{c.nroDocumento}" />
+						</p:column>
+						<p:column filterBy="#{c.telefono}" width="10%"
+							headerText="TELEFONO">
+							<h:outputText value="#{c.telefono}" />
+						</p:column>
+						<p:column filterBy="#{c.correo}" width="10%" headerText="CORREO">
+							<h:outputText value="#{c.correo}" />
+						</p:column>
+
+						<p:column width="5%" exportable="false">
+							<p:commandLink actionListener="#{clienteBean.editarCliente}"
+								update="dialogo" action="ACTUALIZAR_CLIENTE"
+								oncomplete="PF('dlgCliente').show();" styleClass="#{r.celeste}">
+								<i class="fa fa-fw fa-edit"></i>
+								<f:attribute value="#{c.codCliente}" name="codigo" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+
+			<p:dialog header="REGISTRAR CLIENTE" widgetVar="dlgCliente"
+				closable="false" id="dialogo" showEffect="scale" position="left top"
+				hideEffect="explode" responsive="true" positionType="absolute"
+				modal="true" appendTo="@(body)">
+				<h:form id="formClienteNuevo">
+					<h:panelGroup id="pnlCliente">
+
+						<div class="modal-body">
+
+							<div class="form-group">
+								<p:outputLabel value="#{r.codigo}" for="codigo" />
+								<p:inputText value="#{clienteBean.codigoCliente}"
+									disabled="true" id="codigo" styleClass="form-control" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.nombre}" />
+								<p:inputText value="#{clienteBean.nombreCliente}" id="nombre"
+									required="true" requiredMessage="Ingrese un nombre"
+									styleClass="form-control form-control-sm">
+									<f:ajax event="keyup" render="msgNombre" />
+								</p:inputText>
+								<p:message for="nombre" id="msgNombre" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.direccion}" />
+								<p:inputText value="#{clienteBean.direccion}"
+									styleClass="form-control form-control-sm" id="direccion"
+									validatorMessage="Ingrese como maximo 100 caracteres">
+									<f:validateLength maximum="100" />
+									<f:ajax event="keyup" render="msgDireccion" />
+								</p:inputText>
+								<p:message for="direccion" id="msgDireccion" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.documento}" for="identidad" />
+								<p:selectOneMenu value="#{clienteBean.codIdentidad}"
+									id="identidad" styleClass="form-control form-control-sm"
+									required="true" requiredMessage="Seleccione una opcion">
+									<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+									<f:selectItems value="#{clienteBean.identidades}" />
+									<f:ajax event="keyup" render="msgIdentidad" />
+								</p:selectOneMenu>
+								<p:message for="identidad" id="msgIdentidad" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.ruc}" />
+								<p:inputText value="#{clienteBean.ruc}" size="60" maxlength="11"
+									id="ruc" required="true"
+									styleClass="form-control form-control-sm"
+									requiredMessage="Ingrese numero de documento"
+									validatorMessage="Ingrese 8 digitos para DNI o 11 digitos para RUC">
+									<f:validateLength minimum="8" maximum="11" />
+									<f:ajax event="keyup" render="msgRuc" />
+								</p:inputText>
+								<p:message for="ruc" id="msgRuc" />
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="form-group">
+										<h:outputText value="#{r.telefono}" />
+										<p:inputText value="#{clienteBean.telefono}"
+											styleClass="form-control form-control-sm" mask="999 999 999" />
+									</div>
+								</div>
+
+								<div class="col">
+									<div class="form-group">
+										<h:outputText value="#{r.correo}" />
+										<p:inputText value="#{clienteBean.correo}"
+											styleClass="form-control form-control-sm" />
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<p:commandLink action="ACTUALIZAR_CLIENTE"
+										styleClass="#{r.azul}"
+										actionListener="#{clienteBean.actualizarCliente}"
+										update="formClienteNuevo:pnlCliente msgCliente msgRucExiste :formCliente:tablaCliente">
+										<i class="fa fa-fw fa-save"></i>
+										<h:outputText value=" Grabar" />
+									</p:commandLink>
+								</div>
+								<div class="col">
+									<p:commandLink actionListener="#{clienteBean.cancelarCliente}"
+										update="formClienteNuevo" immediate="true"
+										styleClass="#{r.gris}" action="ACTUALIZAR_CLIENTE"
+										onclick="PF('dlgCliente').hide();">
+										<i class="fa fa-fw fa-sign-out"></i>
+										<h:outputText value=" Salir" />
+									</p:commandLink>
+								</div>
+							</div>
+						</div>
+						<p:messages for="mensajeRegistroCliente" id="msgCliente" />
+						<p:messages for="mensajeRucExiste" id="msgRucExiste" />
+					</h:panelGroup>
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

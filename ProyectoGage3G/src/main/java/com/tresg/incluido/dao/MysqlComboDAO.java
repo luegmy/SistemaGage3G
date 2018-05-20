@@ -9,6 +9,7 @@ import javax.persistence.Query;
 
 import com.tresg.almacen.jpa.AlmacenJPA;
 import com.tresg.incluido.interfaz.ComboDAO;
+import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
@@ -60,7 +61,14 @@ public class MysqlComboDAO implements ComboDAO {
 		return q.getResultList();
 	}
 
-	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<DocumentoIdentidadJPA> comboIdentidad() {
+		open();
+		Query q = em.createNamedQuery("identidad.comboIdentidad");
+
+		return q.getResultList();
+	}
 	
 
 }

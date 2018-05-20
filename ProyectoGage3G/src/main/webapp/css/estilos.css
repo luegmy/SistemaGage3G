@@ -19,6 +19,10 @@
 	font-size: 14px;
 }
 
+.icono{
+	font-size: 2em; 
+}
+
 .pie{
 	font-size: 12px;
 	font-weight: bold;
@@ -40,14 +44,11 @@
 
 .container-fluid table {
 	font-size: 14px;
-	text-align: center;
 }
 
 .ui-dialog{
 	font-size: 14px;
 }
-
-
 
 table tr:HOVER{
 	background: #1976D2;

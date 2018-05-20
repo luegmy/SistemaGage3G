@@ -6,6 +6,7 @@ import java.util.List;
 import com.tresg.almacen.jpa.AlmacenJPA;
 import com.tresg.factoria.DAOFactory;
 import com.tresg.incluido.interfaz.ComboDAO;
+import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
@@ -41,5 +42,8 @@ public class ComboService implements ComboService_I,Serializable {
 		return iComboDAO.listarAlamcen();
 	}
 	
-	
+	@Override
+	public List<DocumentoIdentidadJPA> comboIdentidad() {
+		return iComboDAO.comboIdentidad();
+	}
 }

@@ -29,7 +29,7 @@ public class ProductoBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	// Formulario buscar
-	private String descripcionProducto = "botiquin";
+	private String descripcionProducto;
 	private List<ProductoJPA> productos;
 
 	// Formulario producto
@@ -116,8 +116,7 @@ public class ProductoBean implements Serializable{
 	}
 
 	public List<ProductoJPA> getProductos(){
-		productos = new ArrayList<>();
-		
+		productos = new ArrayList<>();		
 		sProducto.buscaProductoPorDescripcion(descripcionProducto).forEach(productos::add);
 		return productos;
 	}

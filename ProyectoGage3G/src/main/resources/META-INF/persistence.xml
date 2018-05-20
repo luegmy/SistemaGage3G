@@ -12,6 +12,8 @@
 		<class>com.tresg.almacen.jpa.AlmacenJPA</class>
 		<class>com.tresg.almacen.jpa.DetalleAlmacenJPA</class>
 		<class>com.tresg.almacen.jpa.DetalleAlmacenJPAPK</class>
+		<class>com.tresg.incluido.jpa.ClienteJPA</class>
+		<class>com.tresg.incluido.jpa.DocumentoIdentidadJPA</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
