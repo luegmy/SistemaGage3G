@@ -10,6 +10,6 @@ public interface GestionarClienteService_I {
 	public List<ClienteJPA> listaCliente() ;
 	public ClienteJPA buscaClientePorCodigo(int codigo) ;
 	public String actualizaCliente(ClienteJPA cliente) ;
-	public String obtieneRuc(String ruc) ;
+	public ClienteJPA buscaClientePorRuc(String ruc);
 
 }

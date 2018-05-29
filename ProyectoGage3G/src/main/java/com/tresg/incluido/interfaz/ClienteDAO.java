@@ -11,7 +11,9 @@ public interface ClienteDAO {
 	ClienteJPA buscarClientePorCodigo(int codigo);
 	
 	String actualizarCliente(ClienteJPA cliente);
-	//metodo para verificar que un cliente no se repita
-	String obtenerRuc(String ruc);
+	
+	// metodo para cargar en la venta segun ruc
+	ClienteJPA buscarClientePorRuc(String ruc);
+
 
 }

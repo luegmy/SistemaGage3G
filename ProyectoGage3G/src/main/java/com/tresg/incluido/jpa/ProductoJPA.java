@@ -19,13 +19,13 @@ import javax.persistence.Transient;
 @Table(name = "tb_producto")
 
 
-@NamedQuery(name = "producto.listarProductoPorDescripcion", query = "select p from ProductoJPA p where p.descripcion like :x")
+@NamedQuery(name = "producto.listarProducto", query = "select p from ProductoJPA p")
 
 public class ProductoJPA implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String LISTAR_PRODUCTO_POR_DESCRIPCION = "producto.listarProductoPorDescripcion";
+	public static final String LISTAR_PRODUCTO= "producto.listarProducto";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

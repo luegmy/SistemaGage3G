@@ -21,13 +21,13 @@ import com.tresg.incluido.service.IncluidoBusinessDelegate;
 
 @ManagedBean(name = "productoBean")
 @SessionScoped
-public class ProductoBean implements Serializable{
+public class ProductoBean implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	// Formulario buscar
 	private String descripcionProducto;
 	private List<ProductoJPA> productos;
@@ -82,7 +82,7 @@ public class ProductoBean implements Serializable{
 				new FacesMessage(FacesMessage.SEVERITY_INFO, sProducto.actualizaProducto(objP), null));
 		limpiar();
 	}
-	
+
 	public void eliminarProducto(ActionEvent e) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		int codigo = (int) e.getComponent().getAttributes().get("codigo");
@@ -96,9 +96,9 @@ public class ProductoBean implements Serializable{
 		precioCompra = new java.math.BigDecimal("0.00");
 		precioVenta = new java.math.BigDecimal("0.00");
 		codigoTipoProducto = 0;
-		codigoMedida=0;
+		codigoMedida = 0;
 	}
-	
+
 	public void cancelarProducto() {
 		limpiar();
 	}
@@ -115,9 +115,10 @@ public class ProductoBean implements Serializable{
 		return descripcionProducto;
 	}
 
-	public List<ProductoJPA> getProductos(){
-		productos = new ArrayList<>();		
-		sProducto.buscaProductoPorDescripcion(descripcionProducto).forEach(productos::add);
+	public List<ProductoJPA> getProductos() {
+		productos = new ArrayList<>();
+		sProducto.listaProducto().stream().filter(p -> p.getDescripcion().toLowerCase().contains(descripcionProducto))
+				.forEach(productos::add);
 		return productos;
 	}
 

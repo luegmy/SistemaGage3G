@@ -7,7 +7,7 @@ import com.tresg.incluido.jpa.ProductoJPA;
 
 public interface GestionarProductoService_I {
 
-	public List<ProductoJPA> buscaProductoPorDescripcion(String descripcion);
+	public List<ProductoJPA> listaProducto();
 
 	public ProductoJPA buscaProductoPorCodigo(int codigo);
 

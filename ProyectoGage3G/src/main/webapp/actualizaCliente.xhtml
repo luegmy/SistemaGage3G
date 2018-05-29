@@ -38,7 +38,7 @@
 					</div>
 
 					<p:dataTable id="tablaCliente" value="#{clienteBean.clientes}"
-						var="c" widgetVar="tablaCliente2"
+						var="c" widgetVar="tablaCliente2" binding="#{clienteBean.tbCliente}"
 						emptyMessage="No existe el cliente #{clienteBean.busqueda}, has click en boton nuevo"
 						paginator="true" rows="15" reflow="true"
 						rowsPerPageTemplate="15,20,25,30">

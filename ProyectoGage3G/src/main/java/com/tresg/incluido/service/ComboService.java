@@ -6,8 +6,11 @@ import java.util.List;
 import com.tresg.almacen.jpa.AlmacenJPA;
 import com.tresg.factoria.DAOFactory;
 import com.tresg.incluido.interfaz.ComboDAO;
+import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
+import com.tresg.incluido.jpa.MediosPagoJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
+import com.tresg.incluido.jpa.SerieJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 
@@ -19,17 +22,11 @@ public class ComboService implements ComboService_I,Serializable {
 	
 	DAOFactory fabrica = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
 	ComboDAO iComboDAO = fabrica.getComboDAO();
-
-	@Override
-	public List<ProductoJPA> listaProducto(int tipo) {
-		return iComboDAO.listarProducto(tipo);
-	}
-
+	
 	@Override
 	public List<TipoProductoJPA> listaTipoProducto() {
 		return iComboDAO.listarTipoProducto();
 	}
-
 
 	@Override
 	public List<UnidadMedidaJPA> listaUnidadMedida() {
@@ -45,5 +42,20 @@ public class ComboService implements ComboService_I,Serializable {
 	@Override
 	public List<DocumentoIdentidadJPA> comboIdentidad() {
 		return iComboDAO.comboIdentidad();
+	}
+	
+	@Override
+	public List<ComprobanteJPA> comboComprobante() {
+		return iComboDAO.comboComprobante();
+	}
+	
+	@Override
+	public List<SerieJPA> comboSerie(int comprobante) {
+		return iComboDAO.comboSerie(comprobante);
+	}
+
+	@Override
+	public List<MediosPagoJPA> comboPago() {
+		return iComboDAO.comboPago();
 	}
 }

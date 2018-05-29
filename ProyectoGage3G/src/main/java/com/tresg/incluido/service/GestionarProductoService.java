@@ -16,6 +16,11 @@ public class GestionarProductoService implements GestionarProductoService_I{
 	
 	
 	@Override
+	public List<ProductoJPA> listaProducto()  {
+		return iProducto.listarProducto();
+	}
+	
+	@Override
 	public ProductoJPA buscaProductoPorCodigo(int codigo)
 			 {
 		return iProducto.buscarProductoPorCodigo(codigo);
@@ -27,10 +32,6 @@ public class GestionarProductoService implements GestionarProductoService_I{
 		return iProducto.actualizarProducto(producto);
 	}
 
-	@Override
-	public List<ProductoJPA> buscaProductoPorDescripcion(String descripcion)  {
-		return iProducto.buscarProductoPorDescripcion(descripcion);
-	}
 	
 	@Override
 	public String eliminaProducto(int codigo) {

@@ -19,6 +19,14 @@ public class MysqlProductoDAO implements ProductoDAO {
 		 em.close();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProductoJPA> listarProducto() {
+		open();
+		Query q = em.createNamedQuery(ProductoJPA.LISTAR_PRODUCTO);
+
+		return q.getResultList();
+	}
 
 	@Override
 	public ProductoJPA buscarProductoPorCodigo(int codigo) {
@@ -48,16 +56,6 @@ public class MysqlProductoDAO implements ProductoDAO {
 		}
 		
 		return mensaje;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ProductoJPA> buscarProductoPorDescripcion(String descripcion) {
-		open();
-		Query q = em.createNamedQuery(ProductoJPA.LISTAR_PRODUCTO_POR_DESCRIPCION).setParameter("x",
-				"%" + descripcion + "%");
-
-		return q.getResultList();
 	}
 
 	@Override

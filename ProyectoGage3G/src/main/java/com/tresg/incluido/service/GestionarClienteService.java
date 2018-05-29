@@ -27,11 +27,9 @@ public class GestionarClienteService implements GestionarClienteService_I{
 	public String actualizaCliente(ClienteJPA cliente)  {
 		return iCliente.actualizarCliente(cliente);
 	}
-	
+
 	@Override
-	public String obtieneRuc(String ruc)  {
-		return iCliente.obtenerRuc(ruc);
+	public ClienteJPA buscaClientePorRuc(String ruc)  {
+		return iCliente.buscarClientePorRuc(ruc);
 	}
-	
-	
 }

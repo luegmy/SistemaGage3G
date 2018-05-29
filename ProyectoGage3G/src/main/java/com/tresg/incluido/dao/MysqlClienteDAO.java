@@ -1,8 +1,6 @@
 package com.tresg.incluido.dao;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
@@ -35,16 +33,6 @@ public class MysqlClienteDAO implements ClienteDAO {
 		open();
 		return em.find(ClienteJPA.class, codigo);
 	}
-	
-	@Override
-	public String obtenerRuc(String ruc) {
-		open();
-			Query q = em.createNamedQuery("").setParameter("p1", ruc);
-			if(!q.getResultList().isEmpty()){
-				return (String) q.getResultList().get(0);
-			}	
-			return null;
-	}
 
 	@Override
 	public String actualizarCliente(ClienteJPA cliente) {
@@ -69,6 +57,16 @@ public class MysqlClienteDAO implements ClienteDAO {
 		}
 
 		return mensaje;
+	}
+	
+	@Override
+	public ClienteJPA buscarClientePorRuc(String ruc) {
+		open();
+		Query q = em.createNamedQuery(ClienteJPA.BUSCAR_CLIENTE_RUC).setParameter("p1", ruc);	
+		if(!q.getResultList().isEmpty()){
+			return (ClienteJPA) q.getResultList().get(0);
+		}	
+		return null;
 	}
 
 }

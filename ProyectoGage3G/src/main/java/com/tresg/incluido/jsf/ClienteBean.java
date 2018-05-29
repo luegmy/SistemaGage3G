@@ -1,10 +1,10 @@
+
 package com.tresg.incluido.jsf;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -27,7 +27,7 @@ public class ClienteBean implements Serializable{
 
 
 	private static final long serialVersionUID = 1L;
-	//DataTable tbCliente;
+	DataTable tbCliente;
 	// parametro de busqueda para la lista clientes
 	private String busqueda="";
 
@@ -191,12 +191,12 @@ public class ClienteBean implements Serializable{
 		this.correo = correo;
 	}
 
-/*	public DataTable getTbCliente() {
+	public DataTable getTbCliente() {
 		return tbCliente;
 	}
 
 	public void setTbCliente(DataTable tbCliente) {
 		this.tbCliente = tbCliente;
-	}*/
+	}
 
 }

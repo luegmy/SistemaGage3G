@@ -9,8 +9,11 @@ import javax.persistence.Query;
 
 import com.tresg.almacen.jpa.AlmacenJPA;
 import com.tresg.incluido.interfaz.ComboDAO;
+import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
+import com.tresg.incluido.jpa.MediosPagoJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
+import com.tresg.incluido.jpa.SerieJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 
@@ -21,15 +24,6 @@ public class MysqlComboDAO implements ComboDAO {
 	private void open() {
 		emf = Persistence.createEntityManagerFactory("tresg");
 		em = emf.createEntityManager();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ProductoJPA> listarProducto(int tipo) {
-		open();
-		Query q = em.createNamedQuery("producto.comboProducto").setParameter("x", tipo);
-
-		return q.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -66,6 +60,32 @@ public class MysqlComboDAO implements ComboDAO {
 	public List<DocumentoIdentidadJPA> comboIdentidad() {
 		open();
 		Query q = em.createNamedQuery("identidad.comboIdentidad");
+
+		return q.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ComprobanteJPA> comboComprobante() {
+		open();
+		Query q = em.createNamedQuery("comprobante.comboComprobante");
+		return q.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<MediosPagoJPA> comboPago() {
+		open();
+		Query q = em.createNamedQuery("pago.comboPago");
+
+		return q.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SerieJPA> comboSerie(int comprobante) {
+		open();
+		Query q = em.createNamedQuery("serie.comboSerie").setParameter("x", comprobante);
 
 		return q.getResultList();
 	}
