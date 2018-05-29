@@ -1,0 +1,186 @@
+
+package com.tresg.ventas.jpa;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.tresg.ventas.jpa.DetalleVentaJPA;
+import com.tresg.incluido.jpa.ClienteJPA;
+import com.tresg.incluido.jpa.ComprobanteJPA;
+import com.tresg.incluido.jpa.EstadoJPA;
+import com.tresg.incluido.jpa.MediosPagoJPA;
+import com.tresg.incluido.jpa.SerieJPA;
+import com.tresg.seguridad.jpa.UsuarioJPA;
+
+@Entity
+@Table(name = "tb_venta")
+@NamedQueries({ @NamedQuery(name = "venta.listarVentas", query = "select v from VentaJPA v"),
+
+		@NamedQuery(name = "venta.actualizarVentaEstado", query = "update VentaJPA v set v.estado=:x where v.numComprobante=:y") })
+
+public class VentaJPA implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String LISTAR_VENTAS = "venta.listarVentas";
+	public static final String ACTUALIZAR_VENTA_ESTADO = "venta.actualizarVentaEstado";// ANULAR O REGISTRAR (GUIAR)
+
+	@Id
+	private int numComprobante;
+
+	@Temporal(TemporalType.DATE)
+	private Date fecha;
+
+	private String hora;
+	private BigDecimal monto;
+	private String observacion;
+
+	@ManyToOne
+	@JoinColumn(name = "codCliente")
+	private ClienteJPA cliente;
+
+	@ManyToOne
+	@JoinColumn(name = "codPago")
+	private MediosPagoJPA pago;
+
+	@ManyToOne
+	@JoinColumn(name = "codComprobante")
+	private ComprobanteJPA comprobante;
+
+	@ManyToOne
+	@JoinColumn(name = "codEstado")
+	private EstadoJPA estado;
+
+	@ManyToOne
+	@JoinColumn(name = "nroSerie")
+	private SerieJPA serie;
+
+	@ManyToOne
+	@JoinColumn(name = "codUsuario")
+	private UsuarioJPA usuario;
+
+	@OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+	private List<DetalleVentaJPA> detalles;
+
+	@OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+	private List<CobranzaJPA> cobranzas;
+
+	public int getNumComprobante() {
+		return numComprobante;
+	}
+
+	public void setNumComprobante(int numComprobante) {
+		this.numComprobante = numComprobante;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public String getHora() {
+		return hora;
+	}
+
+	public void setHora(String hora) {
+		this.hora = hora;
+	}
+
+	public BigDecimal getMonto() {
+		return monto;
+	}
+
+	public void setMonto(BigDecimal monto) {
+		this.monto = monto;
+	}
+
+	public String getObservacion() {
+		return observacion;
+	}
+
+	public void setObservacion(String observacion) {
+		this.observacion = observacion;
+	}
+
+	public ClienteJPA getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(ClienteJPA cliente) {
+		this.cliente = cliente;
+	}
+
+	public MediosPagoJPA getPago() {
+		return pago;
+	}
+
+	public void setPago(MediosPagoJPA pago) {
+		this.pago = pago;
+	}
+
+	public SerieJPA getSerie() {
+		return serie;
+	}
+
+	public void setSerie(SerieJPA serie) {
+		this.serie = serie;
+	}
+
+	public ComprobanteJPA getComprobante() {
+		return comprobante;
+	}
+
+	public void setComprobante(ComprobanteJPA comprobante) {
+		this.comprobante = comprobante;
+	}
+
+	public EstadoJPA getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadoJPA estado) {
+		this.estado = estado;
+	}
+
+	public UsuarioJPA getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(UsuarioJPA usuario) {
+		this.usuario = usuario;
+	}
+
+	public List<DetalleVentaJPA> getDetalles() {
+		return detalles;
+	}
+
+	public void setDetalles(List<DetalleVentaJPA> detalles) {
+		this.detalles = detalles;
+	}
+
+	public List<CobranzaJPA> getCobranzas() {
+		return cobranzas;
+	}
+
+	public void setCobranzas(List<CobranzaJPA> cobranzas) {
+		this.cobranzas = cobranzas;
+	}
+
+}
