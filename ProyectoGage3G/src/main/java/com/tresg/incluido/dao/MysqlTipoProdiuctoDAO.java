@@ -3,27 +3,22 @@ package com.tresg.incluido.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import javax.persistence.Query;
 
 import com.tresg.incluido.interfaz.TipoProductoDAO;
 import com.tresg.incluido.jpa.TipoProductoJPA;
+import com.tresg.util.jpa.JpaUtil;
 
 public class MysqlTipoProdiuctoDAO implements TipoProductoDAO {
 
-	EntityManagerFactory emf = null;
 	EntityManager em = null;
-
 	private void open() {
-		emf = Persistence.createEntityManagerFactory("tresg");
-		em = emf.createEntityManager();
+		 em = JpaUtil.getEntityManager();
 	}
-
+	
 	private void close() {
-		em.close();
-		emf.close();
+		 em.close();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,15 +1,11 @@
 package com.tresg.ventas.dao;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import com.tresg.almacen.jpa.DetalleAlmacenJPA;
@@ -47,26 +43,6 @@ public class MysqlVentaDAO implements VentaDAO {
 
 		return q.getResultList();
 	}
-	
-	public static void main(String[] args) {
-		MysqlVentaDAO m=new MysqlVentaDAO();
-		 int a=m.listarVenta().stream().filter(v->v.getComprobante().getCodComprobante()==2)
-				 .mapToInt(v->v.getNumComprobante()).max().orElse(0);
-		
-		System.out.println("---"+a% 10000000);
-				
-	}
-	
-	@Override
-	public VentaJPA validarNumeroComprobantePago(int comprobante) {
-		open();
-		
-		VentaJPA objVenta=em.find(VentaJPA.class, comprobante);
-		if(objVenta!=null){
-			return objVenta;
-		}
-		return null;
-	}
 
 	@Override
 	public int comprobarExistenciaProducto(int producto) {
@@ -74,7 +50,7 @@ public class MysqlVentaDAO implements VentaDAO {
 
 		Query q = em.createNamedQuery(DetalleAlmacenJPA.VERIFICAR_EXISTENCIA).setParameter("p1", producto);
 		try {
-			return (Integer) q.getSingleResult();
+			return Integer.valueOf( q.getSingleResult().toString());
 		} catch (NoResultException e) {
 			return 0;
 		}	

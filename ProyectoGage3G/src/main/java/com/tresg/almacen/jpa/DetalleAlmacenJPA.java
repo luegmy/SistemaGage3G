@@ -15,7 +15,7 @@ import com.tresg.incluido.jpa.ProductoJPA;
 @Entity
 @Table(name = "tb_detalle_almacen")
 @NamedQueries({
-		@NamedQuery(name = "detalleAlmacen.comprobarStockAlmacen", query = "select d.existencia from DetalleAlmacenJPA d where d.producto.codProducto = :p1 and d.almacen.codAlmacen=3"),
+		@NamedQuery(name = "detalleAlmacen.comprobarStockAlmacen", query = "select sum(d.existencia) from DetalleAlmacenJPA d where d.producto.codProducto = :p1"),
 		@NamedQuery(name = "detalleAlmacen.actualizarAlmacenDecremento", query = "update DetalleAlmacenJPA d set d.existencia=d.existencia - :p1 where d.id= :p2"),
 		@NamedQuery(name = "detalleAlmacen.actualizarAlmacenIncremento", query = "update DetalleAlmacenJPA d set d.existencia=d.existencia + :p1 where d.id= :p2"),
 		@NamedQuery(name = "detalleAlmacen.actualizarProductoNacional", query = "update DetalleAlmacenJPA d set d.existencia=d.existencia - :x "

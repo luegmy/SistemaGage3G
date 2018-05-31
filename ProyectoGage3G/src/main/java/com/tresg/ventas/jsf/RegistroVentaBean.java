@@ -179,7 +179,7 @@ public class RegistroVentaBean implements Serializable {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.getExternalContext().getSessionMap().remove("ventaBean");
-		return atributoUtil.getAgregarVenta();
+		return "registroVenta.xhtml";
 	}
 
 	public AtributoBean getAtributoUtil() {

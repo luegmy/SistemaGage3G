@@ -18,11 +18,6 @@ public class RegistrarVentaService implements RegistrarVentaBusinessService {
 	}
 
 	@Override
-	public VentaJPA validaNumeroComprobantePago(int comprobante) {
-		return iVentaDAO.validarNumeroComprobantePago(comprobante);
-	}
-
-	@Override
 	public int compruebaExistenciaProducto(int producto)  {
 		return iVentaDAO.comprobarExistenciaProducto(producto);
 	}

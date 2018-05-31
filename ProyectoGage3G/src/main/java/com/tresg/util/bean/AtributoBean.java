@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
-import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.service.ComboService_I;
@@ -51,9 +50,6 @@ public class AtributoBean implements Serializable {
 	// atributos para consulta y actualizacion de venta
 	private Date fechaIni = new Date();
 	private Date fechaFin = new Date();
-
-	private String agregarVenta = "AGREGAR_VENTA";
-	private String agregarCompra = "AGREGAR_COMPRA";
 
 	ComboService_I sCombo = IncluidoBusinessDelegate.getComboService();
 
@@ -252,20 +248,5 @@ public class AtributoBean implements Serializable {
 		this.fechaFin = fechaFin;
 	}
 
-	public String getAgregarVenta() {
-		return agregarVenta;
-	}
-
-	public void setAgregarVenta(String agregarVenta) {
-		this.agregarVenta = agregarVenta;
-	}
-
-	public String getAgregarCompra() {
-		return agregarCompra;
-	}
-
-	public void setAgregarCompra(String agregarCompra) {
-		this.agregarCompra = agregarCompra;
-	}
 
 }

@@ -3,8 +3,6 @@ package com.tresg.incluido.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import com.tresg.almacen.jpa.AlmacenJPA;
@@ -12,19 +10,17 @@ import com.tresg.incluido.interfaz.ComboDAO;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
-import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.jpa.SerieJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
+import com.tresg.util.jpa.JpaUtil;
 
 public class MysqlComboDAO implements ComboDAO {
-	EntityManagerFactory emf = null;
 	EntityManager em = null;
-
 	private void open() {
-		emf = Persistence.createEntityManagerFactory("tresg");
-		em = emf.createEntityManager();
+		 em = JpaUtil.getEntityManager();
 	}
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override

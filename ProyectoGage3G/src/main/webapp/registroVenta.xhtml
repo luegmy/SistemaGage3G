@@ -88,9 +88,9 @@
 							</div>
 						</div>
 					</p:panel>
-					<br></br>
+			
 					<!--  DATOS DEL CLIENTE -->
-					<p:panel id="toggleableCliente">
+					<p:panel id="toggleableCliente" header="CLIENTE" toggleable="true">
 
 						<div class="row">
 							<div class="col-12 col-sm-12 col-md-6">
@@ -164,7 +164,7 @@
 									selectionMode="single"
 									selection="#{ventaBean.clienteSeleccionado}"
 									emptyMessage="No existe #{ventaBean.atributoUtil.cliente.nombre}, click en NUEVO"
-									reflow="true" rows="2" rowKey="#{c.codCliente}">
+									reflow="true" rows="5" rowKey="#{c.codCliente}">
 
 									<p:ajax event="rowSelect"
 										listener="#{ventaBean.seleccionarCliente}"
@@ -211,8 +211,7 @@
 					</p:panel>
 
 					<!--  DETALLES DE LA FACTURA -->
-					<br />
-					<p:panel id="toggleableDetalle"
+					<p:panel id="toggleableDetalle" header="DETALLE VENTA" toggleable="true"
 						visible="#{ventaBean.atributoUtil.codigoComprobante!=0}">
 						<div class="row">
 
@@ -451,6 +450,7 @@
 							<div class="col-12 col-sm-4 col-md-2">
 								<div class="form-group">
 									<p:commandLink action="#{ventaBean.cancelarVenta}"
+									actionListener="registroVenta.xhtml"
 										immediate="true" update="formVenta" styleClass="#{r.rojo}">
 										<i class="fa fa-fw fa-plus-circle"></i>
 											

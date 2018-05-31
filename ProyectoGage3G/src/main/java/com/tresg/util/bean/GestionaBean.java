@@ -42,6 +42,7 @@ public class GestionaBean implements Serializable {
 	GestionarClienteService_I sCliente = IncluidoBusinessDelegate.getGestionarClienteService();	
 	GestionarProductoService_I sProducto = IncluidoBusinessDelegate.getGestionarProductoService();
 	
+	//retorna el numero maximo + 1 del numero comprobante
 	public int retornaNumeroComprobante(int comprobante) {
 		return sVenta.listaVenta().stream().filter(v->v.getComprobante().getCodComprobante()==comprobante)
 				 .mapToInt(v->v.getNumComprobante()).max().orElse(0)+1;
@@ -122,7 +123,7 @@ public class GestionaBean implements Serializable {
 
 	}
 
-	
+	//metodo de la propia clase 
 	ClienteJPA tipoCliente(AtributoBean atributo) {
 
 		ClienteJPA objCliente = new ClienteJPA();
@@ -134,6 +135,7 @@ public class GestionaBean implements Serializable {
 		return objCliente;
 	}
 	
+	//metodo de la propia clase
 	int estadoVenta(int formaPago) {
 		int estado = 0;
 		if (formaPago == 1 || formaPago==3) {

@@ -12,9 +12,6 @@ public interface VentaDAO {
 	// CU consultar ventas
 	List<VentaJPA> listarVenta();
 
-	// nuevo requerimiento, validar numero ingresado diferente al mostrado por el sistema
-	VentaJPA validarNumeroComprobantePago(int comprobante);
-
 	int comprobarExistenciaProducto(int producto);
 
 	// CU registrar venta
