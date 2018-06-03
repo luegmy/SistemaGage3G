@@ -16,6 +16,11 @@ public class RegistrarVentaService implements RegistrarVentaBusinessService {
 	public List<VentaJPA> listaVenta() {
 		return iVentaDAO.listarVenta();
 	}
+	
+	@Override
+	public VentaJPA muestraDetalleVenta(int comprobante) {
+		return iVentaDAO.mostrarDetalleVenta(comprobante);
+	}
 
 	@Override
 	public int compruebaExistenciaProducto(int producto)  {
@@ -42,5 +47,6 @@ public class RegistrarVentaService implements RegistrarVentaBusinessService {
 	public String anulaVenta(int venta) {
 		return iVentaDAO.anularVenta(venta);
 	}
+
 
 }

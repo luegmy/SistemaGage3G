@@ -8,6 +8,8 @@ import com.tresg.ventas.jpa.VentaJPA;
 public interface RegistrarVentaBusinessService {
 
 	public List<VentaJPA> listaVenta();
+	
+	public VentaJPA muestraDetalleVenta(int comprobante);
 
 	public int compruebaExistenciaProducto(int producto);
 

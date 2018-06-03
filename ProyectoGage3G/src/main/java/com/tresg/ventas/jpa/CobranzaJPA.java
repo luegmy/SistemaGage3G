@@ -36,6 +36,7 @@ public class CobranzaJPA implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	private Date fecha;
+	private String hora;
 	private BigDecimal montoSaldo;
 	private BigDecimal montoPago;
 
@@ -57,6 +58,14 @@ public class CobranzaJPA implements Serializable {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}
+	
+	public String getHora() {
+		return hora;
+	}
+
+	public void setHora(String hora) {
+		this.hora = hora;
 	}
 
 	public BigDecimal getMontoSaldo() {

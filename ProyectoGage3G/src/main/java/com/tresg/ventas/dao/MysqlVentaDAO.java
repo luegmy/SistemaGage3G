@@ -12,6 +12,7 @@ import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.almacen.jpa.DetalleAlmacenJPAPK;
 import com.tresg.incluido.jpa.EstadoJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
+import com.tresg.util.formato.Formateo;
 import com.tresg.util.jpa.JpaUtil;
 import com.tresg.util.optional.ValoresNulos;
 import com.tresg.util.stock.ActualizarExistencia;
@@ -34,6 +35,7 @@ public class MysqlVentaDAO implements VentaDAO {
 
 	ValoresNulos nuloOptional;
 	ActualizarExistencia stockUtil;
+	Formateo formato;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -42,6 +44,15 @@ public class MysqlVentaDAO implements VentaDAO {
 		Query q = em.createNamedQuery(VentaJPA.LISTAR_VENTAS);
 
 		return q.getResultList();
+	}
+	
+	@Override
+	public VentaJPA mostrarDetalleVenta(int comprobante) {
+		open();
+		VentaJPA objVenta = em.find(VentaJPA.class, comprobante);
+		em.refresh(objVenta);
+		
+		return objVenta;
 	}
 
 	@Override
@@ -80,7 +91,6 @@ public class MysqlVentaDAO implements VentaDAO {
 			}
 		}
 		
-
 		em.getTransaction().commit();
 		close();
 
@@ -175,6 +185,7 @@ public class MysqlVentaDAO implements VentaDAO {
 
 	CobranzaJPA registroVendeCobra(int comprobante, BigDecimal monto, Date fecha) {
 		
+		formato=new Formateo();
 		CobranzaFacturaJPAPK cf = new CobranzaFacturaJPAPK();
 		cf.setNumComprobante(comprobante);
 		cf.setNumCobranza(0);
@@ -182,6 +193,7 @@ public class MysqlVentaDAO implements VentaDAO {
 		CobranzaJPA objCobranza = new CobranzaJPA();
 		objCobranza.setId(cf);
 		objCobranza.setFecha(fecha);
+		objCobranza.setHora(formato.obtenerHora());
 		objCobranza.setMontoSaldo(monto);
 		objCobranza.setMontoPago(new java.math.BigDecimal("0.00"));
 

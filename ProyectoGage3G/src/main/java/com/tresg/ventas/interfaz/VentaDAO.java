@@ -11,7 +11,10 @@ public interface VentaDAO {
 	
 	// CU consultar ventas
 	List<VentaJPA> listarVenta();
-
+	
+	// mostrar el detalle de la VENTA
+	VentaJPA mostrarDetalleVenta(int comprobante);
+	
 	int comprobarExistenciaProducto(int producto);
 
 	// CU registrar venta

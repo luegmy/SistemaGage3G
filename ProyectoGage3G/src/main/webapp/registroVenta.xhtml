@@ -473,6 +473,12 @@
 				id="dlg" closable="false" showEffect="clip" hideEffect="clip"
 				responsive="true" modal="true" appendTo="@(body)">
 				<p:messages for="mensajeRegistroVenta" />
+				<p:commandLink action="#{ventaBean.cancelarVenta}"
+						onclick="PF('dlgMensaje').hide();" immediate="true"
+						update="formVenta" styleClass="#{r.rojo}">
+						<p:graphicImage url="imagenes/exit.png" width="25" height="25" />
+						<p:outputLabel value=" Salir" />
+					</p:commandLink>
 			</p:dialog>
 		</div>
 
