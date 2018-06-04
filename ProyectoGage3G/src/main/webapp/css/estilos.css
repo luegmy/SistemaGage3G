@@ -1,3 +1,62 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+.login{
+	font-family: 'Roboto',sans-serif;
+	background-image: url(../imagenes/extintor.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.container-login {
+	margin: 0 auto;
+	margin-top: 130px;
+	padding: 0;
+
+}
+
+.login .modal-content{
+	background-color: #343a40;
+	opacity: .95;
+	padding: 0 28px;
+	box-shadow: 0 0 3px #848484
+	
+}
+
+.imagen-usuario{
+	margin-top: -50px;
+	margin-bottom: 35px;
+}
+
+.imagen-usuario img{
+	width: 100px;
+	height: 100px;
+}
+
+.login .form-group{
+	margin-bottom: 25px;
+}
+
+.login .form-group input{
+	height: 42px;
+	border-radius: 5px;
+	border: 0;
+	font-size: 18px;
+}
+
+.white-text{
+	font-size: 19px;
+}
+
+.btn{
+	margin: 5px 0 25px;
+}
+.login .input-group-text{
+	background-color:#17a2b8;
+	border-color: #17a2b8;
+	color: white;
+}
+
+
 
 .ui-layout-north {
 	background: #17a2b8;
