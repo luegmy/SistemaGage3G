@@ -34,6 +34,14 @@ public class UsuarioJPA implements Serializable{
 	private String usuario;
 	private String clave;
 	
+	@ManyToOne
+	@JoinColumn(name="codRol")
+	private RolJPA rol;
+	
+	@ManyToOne
+	@JoinColumn(name="dni")
+	private EmpleadoJPA empleado;
+	
 	
 	public void setCodUsuario(int codUsuario) {
 		this.codUsuario = codUsuario;
@@ -54,7 +62,17 @@ public class UsuarioJPA implements Serializable{
 	public void setClave(String clave) {
 		this.clave = clave;
 	}
-
+	public RolJPA getRol() {
+		return rol;
+	}
+	public void setRol(RolJPA rol) {
+		this.rol = rol;
+	}
+	public EmpleadoJPA getEmpleado() {
+		return empleado;
+	}
+	public void setEmpleado(EmpleadoJPA empleado) {
+		this.empleado = empleado;
+	}
 	
-
 }

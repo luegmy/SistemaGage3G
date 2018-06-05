@@ -13,6 +13,7 @@ import com.tresg.incluido.jpa.MediosPagoJPA;
 import com.tresg.incluido.jpa.SerieJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
+import com.tresg.seguridad.jpa.RolJPA;
 import com.tresg.util.jpa.JpaUtil;
 
 public class MysqlComboDAO implements ComboDAO {
@@ -82,6 +83,15 @@ public class MysqlComboDAO implements ComboDAO {
 	public List<SerieJPA> comboSerie(int comprobante) {
 		open();
 		Query q = em.createNamedQuery("serie.comboSerie").setParameter("x", comprobante);
+
+		return q.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<RolJPA> comboRol() {
+		open();
+		Query q = em.createNamedQuery("rol.comboRol");
 
 		return q.getResultList();
 	}

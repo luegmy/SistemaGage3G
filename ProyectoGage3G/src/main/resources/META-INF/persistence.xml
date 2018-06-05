@@ -13,20 +13,21 @@
 		<class>com.tresg.incluido.jpa.SerieJPA</class>
 		<class>com.tresg.incluido.jpa.MediosPagoJPA</class>
 		<class>com.tresg.incluido.jpa.MonedaJPA</class>
+		<class>com.tresg.incluido.jpa.EmpleadoJPA</class>
+		<class>com.tresg.incluido.jpa.ClienteJPA</class>
+		<class>com.tresg.incluido.jpa.DocumentoIdentidadJPA</class>
 
 		<class>com.tresg.almacen.jpa.AlmacenJPA</class>
 		<class>com.tresg.almacen.jpa.DetalleAlmacenJPA</class>
 		<class>com.tresg.almacen.jpa.DetalleAlmacenJPAPK</class>
-		<class>com.tresg.incluido.jpa.ClienteJPA</class>
-		<class>com.tresg.incluido.jpa.DocumentoIdentidadJPA</class>
-		
+				
 		<class>com.tresg.ventas.jpa.VentaJPA</class>
 		<class>com.tresg.ventas.jpa.DetalleVentaJPA</class>
 		<class>com.tresg.ventas.jpa.DetalleVentaJPAPK</class>
 		<class>com.tresg.ventas.jpa.CobranzaJPA</class>
 		
 		<class>com.tresg.seguridad.jpa.UsuarioJPA</class>
-
+		<class>com.tresg.seguridad.jpa.RolJPA</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
