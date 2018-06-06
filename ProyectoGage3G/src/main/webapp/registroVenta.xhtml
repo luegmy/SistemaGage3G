@@ -50,7 +50,7 @@
 									<p:outputLabel value="#{r.numero}" for="comprobante" />
 									<p:inputText
 										value="#{ventaBean.atributoUtil.numeroComprobante}"
-										id="comprobante" styleClass="form-control form-control-sm">
+										id="comprobante" styleClass="form-control">
 										<p:ajax event="keyup"
 											listener="#{ventaBean.validarComprobante}"
 											update="msgCargarComprobante msgNumeroComprobante msgNumeroExiste" />
@@ -80,8 +80,8 @@
 								<div class="form-group">
 									<p:outputLabel value="#{r.fecha}" for="fecha" />
 									<p:calendar value="#{ventaBean.atributoUtil.fecha}"
-										pattern="dd-MM-yyyy" id="fecha"
-										styleClass="form-control form-control-sm" locale="es">
+										pattern="dd-MM-yyyy" id="fecha" locale="es" navigator="true" 
+										inputStyleClass="form-control">
 										<p:ajax event="dateSelect" />
 									</p:calendar>
 								</div>
@@ -99,7 +99,7 @@
 										<div class="form-group">
 											<p:outputLabel value="#{r.nombre}" for="nombre" />
 											<p:inputText value="#{ventaBean.atributoUtil.cliente.nombre}"
-												styleClass="form-control form-control-sm" id="nombre">
+												styleClass="form-control" id="nombre">
 												<p:ajax event="keyup" update="tablaCliente"
 													listener="#{ventaBean.listarCliente}" />
 											</p:inputText>
@@ -126,7 +126,7 @@
 											<p:outputLabel value="#{r.direccion}" for="direccion"/>
 											<p:inputText id="direccion"
 												value="#{ventaBean.atributoUtil.cliente.direccion}"
-												styleClass="form-control form-control-sm" />
+												styleClass="form-control" />
 										</div>
 									</div>
 								</div>
@@ -136,7 +136,7 @@
 											<p:outputLabel value="#{r.ruc}" for="ruc"/>
 											<p:inputText id="ruc"
 												value="#{ventaBean.atributoUtil.cliente.nroDocumento}"
-												styleClass="form-control form-control-sm" />
+												styleClass="form-control" />
 											<p:messages for="mensajeRuc" />
 										</div>
 									</div>
@@ -223,7 +223,7 @@
 											<p:outputLabel value="#{r.descripcion}" for="descripcion" />
 											<p:inputText
 												value="#{ventaBean.atributoUtil.descripcionProducto}"
-												id="descripcion" styleClass="form-control form-control-sm">
+												id="descripcion" styleClass="form-control">
 												<p:ajax event="keyup" update="tablaBusqueda"
 													listener="#{ventaBean.listarProducto}" />
 											</p:inputText>
@@ -247,14 +247,14 @@
 										<div class="form-group">
 											<p:outputLabel value="#{r.precio}" for="precio" />
 											<p:inputText value="#{ventaBean.atributoUtil.precio}"
-												id="precio" styleClass="form-control form-control-sm" />
+												id="precio" styleClass="form-control" />
 										</div>
 									</div>
 									<div class="col-6 col-sm-3">
 										<div class="form-group">
 											<p:outputLabel value="#{r.cantidad}" for="cantidad" />
 											<p:inputText value="#{ventaBean.atributoUtil.cantidad}"
-												id="cantidad" styleClass="form-control form-control-sm">
+												id="cantidad" styleClass="form-control">
 												<f:converter converterId="javax.faces.Integer" />
 												<p:ajax event="keyup" update="msgCantidad msgStock" />
 											</p:inputText>
@@ -268,7 +268,7 @@
 										<div class="form-group">
 											<p:outputLabel value="#{r.codigo}" for="codigo" />
 											<p:inputText value="#{ventaBean.atributoUtil.codigoProducto}"
-												id="codigo" styleClass="form-control form-control-sm" />
+												id="codigo" styleClass="form-control" />
 										</div>
 									</div>
 									<div class="col-6 col-sm-3">

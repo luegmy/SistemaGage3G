@@ -20,6 +20,7 @@ import com.tresg.ventas.interfaz.VentaDAO;
 import com.tresg.ventas.jpa.CobranzaFacturaJPAPK;
 import com.tresg.ventas.jpa.CobranzaJPA;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
+import com.tresg.ventas.jpa.DetalleVentaJPAPK;
 import com.tresg.ventas.jpa.VentaJPA;
 
 public class MysqlVentaDAO implements VentaDAO {
@@ -33,8 +34,8 @@ public class MysqlVentaDAO implements VentaDAO {
 		 em.close();
 	}
 
-	ValoresNulos nuloOptional;
 	ActualizarExistencia stockUtil;
+	//para obtener cadena hora
 	Formateo formato;
 
 	@SuppressWarnings("unchecked")
@@ -89,6 +90,18 @@ public class MysqlVentaDAO implements VentaDAO {
 				em.getTransaction().rollback();
 				throw e;
 			}
+		}
+		
+		stockUtil=new ActualizarExistencia();
+		DetalleAlmacenJPAPK dapk=new DetalleAlmacenJPAPK();
+		DetalleAlmacenJPA da=new DetalleAlmacenJPA();
+		
+		for (DetalleVentaJPA d : venta.getDetalles()) {
+			dapk.setCodAlmacen(3);
+			dapk.setCodProducto(d.getId().getCodProducto());
+			da.setId(dapk);
+			stockUtil.actualizarAlmacenDecremento(d.getCantidad(), da);
+
 		}
 		
 		em.getTransaction().commit();

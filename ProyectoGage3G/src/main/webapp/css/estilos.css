@@ -46,7 +46,7 @@
 	margin-right: 5px;
 }
 
-.btn {
+.boton-login {
 	margin: 5px 0 25px;
 }
 
@@ -74,22 +74,18 @@
 	font-size: 14px;
 }
 
-/*  */
-.icono {
-	font-size: 2em;
+.ui-widget-header {
+	font-size: 14px;
 }
 
+/*  */
 .pie {
 	font-size: 12px;
 	font-weight: bold;
 	text-align: center;
 }
 
-.ui-widget-header {
-	font-size: 14px;
-}
-
-.container-fluid .form-group{
+.container-fluid {
 	font-size: 14px;
 }
 
@@ -102,18 +98,10 @@
 	font-size: 14px;
 }
 
-.container-fluid .d-flex input {
-	width: 100%;
-}
-
-.container-fluid table {
+.ui-selectonemenu-item {
 	font-size: 14px;
 }
 
 .ui-dialog {
 	font-size: 14px;
-}
-
-table tr:HOVER {
-	background: #1976D2;
 }
