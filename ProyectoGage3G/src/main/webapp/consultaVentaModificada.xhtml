@@ -58,8 +58,7 @@
 
 					<p:dataTable id="tabla" value="#{ventaActualizaBean.ventas}"
 						var="t" paginator="true" emptyMessage="No existe ventas" rows="30"
-						reflow="true"
-						widgetVar="ventaTabla">
+						reflow="true" widgetVar="ventaTabla">
 						<f:facet name="header">
 							<p:outputPanel styleClass="text-center">
 								<p:outputLabel value="FILTRO :" />
@@ -68,66 +67,39 @@
 									placeholder="Filtrar busqueda" />
 							</p:outputPanel>
 						</f:facet>
-						<p:column width="5%" filterBy="#{t.numComprobante}">
-							<f:facet name="header">
-								<h:outputText value="Nro." />
-							</f:facet>
+						<p:column width="5%" filterBy="#{t.numComprobante}" headerText="Nro.">
 							<h:outputText value="#{t.numComprobante%10000000}" />
 						</p:column>
-						<p:column width="5%" filterBy="#{t.comprobante.descripcion}">
-							<f:facet name="header">
-								<h:outputText value="CDP" />
-							</f:facet>
+						<p:column width="5%" filterBy="#{t.comprobante.descripcion}" headerText="CDP">
 							<h:outputText value="#{t.comprobante.descripcion}" />
 						</p:column>
-						<p:column width="6%">
-							<f:facet name="header">
-								<h:outputText value="FECHA" />
-							</f:facet>
+						<p:column width="6%" headerText="FECHA">
 							<h:outputText value="#{t.fecha}">
 								<f:convertDateTime pattern="dd-MM-yy" />
 							</h:outputText>
 						</p:column>
-						<p:column width="6%">
-							<f:facet name="header">
-								<h:outputText value="HORA" />
-							</f:facet>
+						<p:column width="6%" headerText="HORA">
 							<h:outputText value="#{t.hora}">
 								<f:convertDateTime pattern="hh - mm - ss" />
 							</h:outputText>
 						</p:column>
-						<p:column filterBy="#{t.cliente.nombre}">
-							<f:facet name="header">
-								<h:outputText value="CLIENTE" />
-							</f:facet>
+						<p:column filterBy="#{t.cliente.nombre}" headerText="CLIENTE">
 							<h:outputText value="#{t.cliente.nombre}" />
 						</p:column>
-						<p:column filterBy="#{t.cliente.direccion}">
-							<f:facet name="header">
-								<h:outputText value="DIRECCION" />
-							</f:facet>
+						<p:column filterBy="#{t.cliente.direccion}" headerText="DIRECCION">
 							<h:outputText value="#{t.cliente.direccion}" />
 						</p:column>
-						<p:column width="8%" filterBy="#{t.cliente.nroDocumento}">
-							<f:facet name="header">
-								<h:outputText value="RUC" />
-							</f:facet>
+						<p:column width="8%" filterBy="#{t.cliente.nroDocumento}" headerText="RUC">
 							<h:outputText value="#{t.cliente.nroDocumento}" />
 						</p:column>
-						<p:column width="6%">
-							<f:facet name="header">
-								<h:outputText value="MONTO" />
-							</f:facet>
+						<p:column width="6%" headerText="MONTO">
 							<h:outputText value="#{t.monto}" />
 						</p:column>
 
-						<p:column width="6%" filterBy="#{t.pago.descripcion}">
-							<f:facet name="header">
-								<h:outputText value="ESTADO" />
-							</f:facet>
+						<p:column width="6%" filterBy="#{t.pago.descripcion}" headerText="ESTADO">
 							<h:outputText value="#{t.estado.descripcion}" />
 						</p:column>
-						<p:column width="14%">
+						<p:column width="14%" styleClass="text-center">
 							<p:commandLink title="Ver detalle"
 								actionListener="#{ventaActualizaBean.mostrarDetalleVenta}"
 								action="consultaVentaModificada" update="formEditaVenta"

@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.almacen.jpa.DetalleAlmacenJPAPK;
 import com.tresg.incluido.jpa.EstadoJPA;
+import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.util.formato.Formateo;
 import com.tresg.util.jpa.JpaUtil;
 import com.tresg.util.stock.ActualizarExistencia;
@@ -178,8 +179,18 @@ public class MysqlVentaDAO implements VentaDAO {
 		dapk.setCodProducto(dv.getId().getCodProducto());
 		da.setId(dapk);
 		
-		stockUtil.actualizarAlmacenDecremento(dv.getCantidad(), da);
-		close();
+		stockUtil.actualizarAlmacenIncremento(dv.getCantidad(), da);
+		
+		DetalleVentaJPA objDetalle = em.find(DetalleVentaJPA.class, dv.getId());
+		try {
+			em.remove(objDetalle);
+			em.getTransaction().commit();
+		} catch (RuntimeException e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			close();
+		}
 
 	}
 
