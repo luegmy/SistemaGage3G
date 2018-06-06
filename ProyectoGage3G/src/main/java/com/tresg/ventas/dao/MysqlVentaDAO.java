@@ -11,31 +11,30 @@ import javax.persistence.Query;
 import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.almacen.jpa.DetalleAlmacenJPAPK;
 import com.tresg.incluido.jpa.EstadoJPA;
-import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.util.formato.Formateo;
 import com.tresg.util.jpa.JpaUtil;
-import com.tresg.util.optional.ValoresNulos;
 import com.tresg.util.stock.ActualizarExistencia;
 import com.tresg.ventas.interfaz.VentaDAO;
 import com.tresg.ventas.jpa.CobranzaFacturaJPAPK;
 import com.tresg.ventas.jpa.CobranzaJPA;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
-import com.tresg.ventas.jpa.DetalleVentaJPAPK;
 import com.tresg.ventas.jpa.VentaJPA;
 
 public class MysqlVentaDAO implements VentaDAO {
 
 	EntityManager em = null;
+
 	private void open() {
-		 em = JpaUtil.getEntityManager();
-	}
-	
-	private void close() {
-		 em.close();
+		em = JpaUtil.getEntityManager();
 	}
 
+	private void close() {
+		em.close();
+	}
+
+	//actualizar el almacen
 	ActualizarExistencia stockUtil;
-	//para obtener cadena hora
+	// para obtener cadena hora
 	Formateo formato;
 
 	@SuppressWarnings("unchecked")
@@ -46,13 +45,13 @@ public class MysqlVentaDAO implements VentaDAO {
 
 		return q.getResultList();
 	}
-	
+
 	@Override
 	public VentaJPA mostrarDetalleVenta(int comprobante) {
 		open();
 		VentaJPA objVenta = em.find(VentaJPA.class, comprobante);
 		em.refresh(objVenta);
-		
+
 		return objVenta;
 	}
 
@@ -62,10 +61,10 @@ public class MysqlVentaDAO implements VentaDAO {
 
 		Query q = em.createNamedQuery(DetalleAlmacenJPA.VERIFICAR_EXISTENCIA).setParameter("p1", producto);
 		try {
-			return Integer.valueOf( q.getSingleResult().toString());
+			return Integer.valueOf(q.getSingleResult().toString());
 		} catch (NoResultException e) {
 			return 0;
-		}	
+		}
 	}
 
 	@Override
@@ -91,19 +90,20 @@ public class MysqlVentaDAO implements VentaDAO {
 				throw e;
 			}
 		}
-		
-		stockUtil=new ActualizarExistencia();
-		DetalleAlmacenJPAPK dapk=new DetalleAlmacenJPAPK();
-		DetalleAlmacenJPA da=new DetalleAlmacenJPA();
-		
+
+		stockUtil = new ActualizarExistencia();
+		DetalleAlmacenJPAPK dapk = new DetalleAlmacenJPAPK();
+		DetalleAlmacenJPA da = new DetalleAlmacenJPA();
+
 		for (DetalleVentaJPA d : venta.getDetalles()) {
 			dapk.setCodAlmacen(3);
 			dapk.setCodProducto(d.getId().getCodProducto());
 			da.setId(dapk);
+
 			stockUtil.actualizarAlmacenDecremento(d.getCantidad(), da);
 
 		}
-		
+
 		em.getTransaction().commit();
 		close();
 
@@ -117,11 +117,27 @@ public class MysqlVentaDAO implements VentaDAO {
 		em.getTransaction().begin();
 
 		DetalleVentaJPA objDetalle;
+		stockUtil = new ActualizarExistencia();
+		DetalleAlmacenJPAPK dapk = new DetalleAlmacenJPAPK();
+		DetalleAlmacenJPA da = new DetalleAlmacenJPA();
 
-		for (DetalleVentaJPA p : venta.getDetalles()) {
+		for (DetalleVentaJPA d : venta.getDetalles()) {
 
-			objDetalle = em.find(DetalleVentaJPA.class, p.getId());
+			dapk.setCodAlmacen(3);
+			dapk.setCodProducto(d.getId().getCodProducto());
+			da.setId(dapk);
 
+			objDetalle = em.find(DetalleVentaJPA.class, d.getId());
+
+			if (objDetalle != null) {
+				BigDecimal cantidadModificada = d.getCantidad().subtract(objDetalle.getCantidad());
+
+				if (!cantidadModificada.equals(new BigDecimal("0.0"))) {
+
+					stockUtil.actualizarAlmacenDecremento(cantidadModificada, da);
+	
+				}
+			}
 		}
 
 		try {
@@ -150,21 +166,19 @@ public class MysqlVentaDAO implements VentaDAO {
 	}
 
 	@Override
-	public void actualizarItemVentaEliminada(ProductoJPA producto) {
+	public void actualizarItemVentaEliminada(DetalleVentaJPA dv) {
 		open();
 
 		em.getTransaction().begin();
 
+		stockUtil = new ActualizarExistencia();
 		DetalleAlmacenJPA da = new DetalleAlmacenJPA();
 		DetalleAlmacenJPAPK dapk = new DetalleAlmacenJPAPK();
 		dapk.setCodAlmacen(3);
-		dapk.setCodProducto(producto.getCodProducto());
+		dapk.setCodProducto(dv.getId().getCodProducto());
 		da.setId(dapk);
-		Query q3 = em.createNamedQuery(DetalleAlmacenJPA.ACTUALIZAR_ALMACEN_INCREMENTO);
-		q3.setParameter("p1", producto.getCantidad());
-		q3.setParameter("p2", da.getId());
-		q3.executeUpdate();
-		em.getTransaction().commit();
+		
+		stockUtil.actualizarAlmacenDecremento(dv.getCantidad(), da);
 		close();
 
 	}
@@ -172,11 +186,11 @@ public class MysqlVentaDAO implements VentaDAO {
 	@Override
 	public String anularVenta(int venta) {
 		open();
-		
+
 		em.getTransaction().begin();
-		EstadoJPA objEstado=new EstadoJPA();
+		EstadoJPA objEstado = new EstadoJPA();
 		objEstado.setCodEstado(3);
-		try {			
+		try {
 			Query q = em.createNamedQuery(VentaJPA.ACTUALIZAR_VENTA_ESTADO);
 			q.setParameter("x", objEstado);
 			q.setParameter("y", venta);
@@ -191,14 +205,25 @@ public class MysqlVentaDAO implements VentaDAO {
 		VentaJPA objVenta = em.find(VentaJPA.class, venta);
 		em.refresh(objVenta);
 
+		stockUtil = new ActualizarExistencia();
+		DetalleAlmacenJPAPK dapk = new DetalleAlmacenJPAPK();
+		DetalleAlmacenJPA da = new DetalleAlmacenJPA();
+
+		for (DetalleVentaJPA d : objVenta.getDetalles()) {
+			dapk.setCodAlmacen(3);
+			dapk.setCodProducto(d.getId().getCodProducto());
+			da.setId(dapk);
+
+			stockUtil.actualizarAlmacenIncremento(d.getCantidad(), da);
+		}
 		em.getTransaction().commit();
 		close();
 		return "Venta anulada";
 	}
 
 	CobranzaJPA registroVendeCobra(int comprobante, BigDecimal monto, Date fecha) {
-		
-		formato=new Formateo();
+
+		formato = new Formateo();
 		CobranzaFacturaJPAPK cf = new CobranzaFacturaJPAPK();
 		cf.setNumComprobante(comprobante);
 		cf.setNumCobranza(0);
@@ -213,6 +238,7 @@ public class MysqlVentaDAO implements VentaDAO {
 		return objCobranza;
 
 	}
-
+	
+	
 
 }

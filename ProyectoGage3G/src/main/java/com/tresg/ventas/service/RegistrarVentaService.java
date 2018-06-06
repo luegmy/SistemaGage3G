@@ -4,8 +4,8 @@ package com.tresg.ventas.service;
 import java.util.List;
 
 import com.tresg.factoria.DAOFactory;
-import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.ventas.interfaz.VentaDAO;
+import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.jpa.VentaJPA;
 
 public class RegistrarVentaService implements RegistrarVentaBusinessService {
@@ -38,8 +38,8 @@ public class RegistrarVentaService implements RegistrarVentaBusinessService {
 	}
 
 	@Override
-	public void actualizaItemVentaEliminada(ProductoJPA producto) {
-		iVentaDAO.actualizarItemVentaEliminada(producto);
+	public void actualizaItemVentaEliminada(DetalleVentaJPA dv) {
+		iVentaDAO.actualizarItemVentaEliminada(dv);
 		
 	}
 	

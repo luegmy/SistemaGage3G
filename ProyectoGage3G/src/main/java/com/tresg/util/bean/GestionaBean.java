@@ -3,7 +3,6 @@ package com.tresg.util.bean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,12 +10,10 @@ import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
-import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.EstadoJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
-import com.tresg.incluido.jpa.MonedaJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.jpa.SerieJPA;
 import com.tresg.incluido.service.GestionarClienteService_I;
@@ -39,13 +36,13 @@ public class GestionaBean implements Serializable {
 	Formateo formato = new Formateo();
 
 	RegistrarVentaBusinessService sVenta = VentasBusinessDelegate.getRegistrarVentaService();
-	GestionarClienteService_I sCliente = IncluidoBusinessDelegate.getGestionarClienteService();	
+	GestionarClienteService_I sCliente = IncluidoBusinessDelegate.getGestionarClienteService();
 	GestionarProductoService_I sProducto = IncluidoBusinessDelegate.getGestionarProductoService();
-	
-	//retorna el numero maximo + 1 del numero comprobante
+
+	// retorna el numero maximo + 1 del numero comprobante
 	public int retornaNumeroComprobante(int comprobante) {
-		return sVenta.listaVenta().stream().filter(v->v.getComprobante().getCodComprobante()==comprobante)
-				 .mapToInt(v->v.getNumComprobante()).max().orElse(0)+1;
+		return sVenta.listaVenta().stream().filter(v -> v.getComprobante().getCodComprobante() == comprobante)
+				.mapToInt(v -> v.getNumComprobante()).max().orElse(0) + 1;
 	}
 
 	// metodo para mostrar lista de clientes dentro la generacion de una venta
@@ -55,10 +52,10 @@ public class GestionaBean implements Serializable {
 				.forEach(clientes::add);
 		return clientes;
 	}
-	
+
 	// metodo para mostrar lista de productos dentro la generacion de una venta
 	public List<ProductoJPA> listarProducto(String descripcionProducto) {
-		List<ProductoJPA>productos = new ArrayList<>();
+		List<ProductoJPA> productos = new ArrayList<>();
 		sProducto.listaProducto().stream().filter(p -> p.getDescripcion().toLowerCase().contains(descripcionProducto))
 				.forEach(productos::add);
 		return productos;
@@ -97,11 +94,11 @@ public class GestionaBean implements Serializable {
 		objSerie.setNroSerie(atributo.getNumeroSerie());
 
 		ClienteJPA objCliente = tipoCliente(atributo);
-		
+
 		EstadoJPA objEstado = new EstadoJPA();
 		objEstado.setCodEstado(estadoVenta(atributo.getCodigoPago()));
-		
-		UsuarioJPA objUsuario= new UsuarioJPA();
+
+		UsuarioJPA objUsuario = new UsuarioJPA();
 		objUsuario.setCodUsuario(1);
 
 		VentaJPA objVenta = new VentaJPA();
@@ -123,7 +120,7 @@ public class GestionaBean implements Serializable {
 
 	}
 
-	//metodo de la propia clase 
+	// metodo de la propia clase
 	ClienteJPA tipoCliente(AtributoBean atributo) {
 
 		ClienteJPA objCliente = new ClienteJPA();
@@ -134,18 +131,17 @@ public class GestionaBean implements Serializable {
 		}
 		return objCliente;
 	}
-	
-	//metodo de la propia clase
+
+	// metodo de la propia clase
 	int estadoVenta(int formaPago) {
 		int estado = 0;
-		if (formaPago == 1 || formaPago==3) {
+		if (formaPago == 1 || formaPago == 3) {
 			estado = 1;// cancelado
 		} else if (formaPago == 2) {
 			estado = 2;// creditado
 		}
 		return estado;
 	}
-
 
 	public String iterarListaVenta(List<DetalleVentaJPA> temporales, AtributoBean atributo) {
 
@@ -199,13 +195,10 @@ public class GestionaBean implements Serializable {
 
 	// metodo si a la hora de modificar la venta se elimina un item de la lista
 	// detalle
-	public void quitarListaProductoModificado(int codigo, int codigoPolvo, BigDecimal cantidad,
+	public void quitarListaProductoModificado(int codigo, BigDecimal cantidad,
 			List<DetalleVentaJPA> temporales, AtributoBean atributo) {
 
 		BigDecimal monto = new java.math.BigDecimal("0.00");
-		ProductoJPA objProducto = new ProductoJPA();
-		objProducto.setCodProducto(codigo);
-		objProducto.setCantidad(cantidad);
 
 		Iterator<DetalleVentaJPA> it = temporales.iterator();
 		while (it.hasNext()) {
@@ -215,7 +208,8 @@ public class GestionaBean implements Serializable {
 				monto = detalleJPA.getPrecio().multiply(detalleJPA.getCantidad());
 				it.remove();
 			}
-
+			// servicio que actualiza el stock en almacen
+			sVenta.actualizaItemVentaEliminada(detalleJPA);
 		}
 		atributo.setTotal(atributo.getTotal().subtract(monto));
 		atributo.setSubtotal(atributo.getTotal().divide(new java.math.BigDecimal("1.18"), 2, RoundingMode.HALF_EVEN));
@@ -224,8 +218,8 @@ public class GestionaBean implements Serializable {
 	}
 
 	// metodo que elimina un item de la lista detalle
-	public void quitarListaProductoVenta(int codigo,  BigDecimal cantidad,
-			List<DetalleVentaJPA> temporales, AtributoBean atributo) {
+	public void quitarListaProductoVenta(int codigo, BigDecimal cantidad, List<DetalleVentaJPA> temporales,
+			AtributoBean atributo) {
 
 		BigDecimal monto = new java.math.BigDecimal("0.00");
 		ProductoJPA objProducto = new ProductoJPA();
@@ -247,8 +241,7 @@ public class GestionaBean implements Serializable {
 
 	}
 
-	public void editarProductoVenta(int codigoProducto,  List<DetalleVentaJPA> temporales,
-			AtributoBean atributo) {
+	public void editarProductoVenta(int codigoProducto, List<DetalleVentaJPA> temporales, AtributoBean atributo) {
 
 		ProductoJPA objProducto = sProducto.buscaProductoPorCodigo(codigoProducto);
 		BigDecimal monto = new java.math.BigDecimal("0.00");
@@ -271,6 +264,5 @@ public class GestionaBean implements Serializable {
 		atributo.setIgv(atributo.getTotal().subtract(atributo.getSubtotal()));
 
 	}
-
 
 }

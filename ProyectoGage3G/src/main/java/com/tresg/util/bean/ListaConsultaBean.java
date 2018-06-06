@@ -6,9 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tresg.incluido.jpa.ProductoJPA;
-import com.tresg.incluido.service.GestionarProductoService_I;
-import com.tresg.incluido.service.IncluidoBusinessDelegate;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.jpa.VentaJPA;
 import com.tresg.ventas.service.RegistrarVentaBusinessService;

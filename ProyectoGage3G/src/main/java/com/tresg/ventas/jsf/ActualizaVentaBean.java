@@ -1,13 +1,9 @@
 package com.tresg.ventas.jsf;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -15,12 +11,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
-import org.xml.sax.SAXException;
 
 import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.incluido.jpa.ClienteJPA;
@@ -184,10 +178,9 @@ public class ActualizaVentaBean implements Serializable {
 
 		public void quitarListaProducto(ActionEvent e) {
 			int codigo = (int) e.getComponent().getAttributes().get("codigo");
-			int codigoPolvo = (int) e.getComponent().getAttributes().get("codigoPolvo");
 			BigDecimal cantidad = (BigDecimal) e.getComponent().getAttributes().get("cantidad");
 
-			gestionUtil.quitarListaProductoModificado(codigo, codigoPolvo, cantidad, temporales, atributoUtil);
+			gestionUtil.quitarListaProductoModificado(codigo, cantidad, temporales, atributoUtil);
 
 		}
 
@@ -198,6 +191,7 @@ public class ActualizaVentaBean implements Serializable {
 
 		}
 
+		@SuppressWarnings("deprecation")
 		public String actualizarVenta() {
 			FacesContext context = FacesContext.getCurrentInstance();
 			String mensajeVenta = mensajeUtil.mostrarMensajeGrabarVenta(atributoUtil, temporales);

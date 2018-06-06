@@ -144,6 +144,7 @@ public class RegistroVentaBean implements Serializable {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public void grabarVenta() {
 
 		FacesContext context = FacesContext.getCurrentInstance();

@@ -3,7 +3,7 @@ package com.tresg.ventas.interfaz;
 
 import java.util.List;
 
-import com.tresg.incluido.jpa.ProductoJPA;
+import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.jpa.VentaJPA;
 
 public interface VentaDAO {
@@ -24,7 +24,7 @@ public interface VentaDAO {
 	String actualizarVenta(VentaJPA venta);
 
 	// Actualiza stock en almacen cuando item de venta es retirada de la lista
-	void actualizarItemVentaEliminada(ProductoJPA producto);
+	void actualizarItemVentaEliminada(DetalleVentaJPA dv);
 
 	// CU anular venta
 	String anularVenta(int venta);

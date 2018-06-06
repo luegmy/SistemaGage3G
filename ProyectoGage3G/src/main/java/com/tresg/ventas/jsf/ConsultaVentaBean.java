@@ -1,10 +1,6 @@
 package com.tresg.ventas.jsf;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
