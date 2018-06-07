@@ -207,9 +207,10 @@ public class GestionaBean implements Serializable {
 			if ((detalleJPA.getId().getCodProducto()) == codigo) {
 				monto = detalleJPA.getPrecio().multiply(detalleJPA.getCantidad());
 				it.remove();
+				// servicio que actualiza el stock en almacen
+				sVenta.actualizaItemVentaEliminada(detalleJPA);
 			}
-			// servicio que actualiza el stock en almacen
-			sVenta.actualizaItemVentaEliminada(detalleJPA);
+			
 		}
 		atributo.setTotal(atributo.getTotal().subtract(monto));
 		atributo.setSubtotal(atributo.getTotal().divide(new java.math.BigDecimal("1.18"), 2, RoundingMode.HALF_EVEN));

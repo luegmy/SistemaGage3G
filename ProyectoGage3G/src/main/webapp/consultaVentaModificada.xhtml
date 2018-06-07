@@ -598,10 +598,8 @@
 							<div class="col-12 col-sm-4 col-md-2">
 								<div class="form-group">
 									<p:commandLink action="#{ventaActualizaBean.cancelarVenta}"
-									actionListener="consultaVentaModificada" onclick="PF('dlgActualizaVenta').hide();"
-										immediate="true" update="formActualizaVenta" styleClass="#{r.rojo}">
-										<i class="fa fa-fw fa-plus-circle"></i>
-											
+									onclick="PF('dlgActualizaVenta').hide();" styleClass="#{r.gris}">
+										<i class="fa fa-fw fa-plus-circle"></i>										
 										<p:outputLabel value=" Cancelar" />
 									</p:commandLink>
 								</div>
@@ -624,8 +622,8 @@
 				<h:form>
 					<p:commandLink action="#{ventaActualizaBean.cancelarVenta}"
 						onclick="PF('dlgMensaje').hide();" immediate="true"
-						update="formActualizaVenta" styleClass="#{r.rojo}">
-						<p:graphicImage url="imagenes/exit.png" width="25" height="25" />
+						update="formActualizaVenta" styleClass="#{r.gris}">
+						<i class="fa fa-fw fa-sign-out"></i>
 						<p:outputLabel value=" Salir" />
 					</p:commandLink>
 				</h:form>

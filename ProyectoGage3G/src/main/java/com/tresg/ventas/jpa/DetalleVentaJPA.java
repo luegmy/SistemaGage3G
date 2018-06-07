@@ -19,15 +19,19 @@ import com.tresg.incluido.jpa.ProductoJPA;
 @NamedQueries({
 		@NamedQuery(name = "detalleVenta.listarProductoXVenta", query = "select d.producto.codProducto,d.producto.descripcion,sum(d.cantidad),sum(d.cantidad * d.precio) from DetalleVentaJPA d where d.venta.fecha between :p and :q group by d.producto.codProducto"),
 
-		@NamedQuery(name = "detalleVenta.listarProductoXCliente", query = "select d from DetalleVentaJPA d where d.venta.cliente.nombre like :p ") })
+		@NamedQuery(name = "detalleVenta.listarProductoXCliente", query = "select d from DetalleVentaJPA d where d.venta.cliente.nombre like :p "),
+		
+@NamedQuery(name="detalleVenta.eliminarItemDetalle", query="delete from DetalleVentaJPA d where d.producto.codProducto =:p and d.venta.numComprobante=:v")})
 
 public class DetalleVentaJPA implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	public static final String ELIMINAR_ITEM_DETALLEVENTA = "detalleVenta.eliminarItemDetalle";
 	public static final String LISTAR_PRODUCTOS_VENTAS = "detalleVenta.listarProductoXVenta";
 	public static final String CANTIDAD_ACUMULADA_PRODUCTOS_VENTAS = "detalleVenta.obtenerCantidadAcumuladaProductoXVenta";
 	public static final String MONTO_PRODUCTOS_VENTAS = "detalleVenta.obtenerMontoProductoXVenta";
 	public static final String LISTAR_PRODUCTOS_CLIENTES = "detalleVenta.listarProductoXCliente";
+	
 
 	@EmbeddedId
 	private DetalleVentaJPAPK id;
