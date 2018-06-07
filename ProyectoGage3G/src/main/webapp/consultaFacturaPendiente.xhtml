@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO VENTA</ui:define>
+	<ui:define name="content">
+		<div class="container-fluid">
+			<h:form id="formCobro">
+				<p:fieldset legend="FACTURAS POR COBRAR">
+				<div class="row justify-content-md-center">
+						<div class="col-xs-12 col-sm-4">
+							<p:tabView dynamic="true" cache="true" id="tabVenta"
+								effect="fade">
+								<p:ajax event="tabChange" update=":formCobro:msgRangoFecha" />
+								<p:tab title="Fecha">
+									<p:calendar value="#{ventaFacturaBean.fecha}"
+										pattern="dd-MM-yyyy" id="fecha" locale="es">
+										<p:ajax event="dateSelect" update=":formCobro:tabla :formCobro:acumulado"
+											listener="#{ventaFacturaBean.listarCobranzaXFecha()}" />
+									</p:calendar>
+								</p:tab>
+								<p:tab title="Rango de fecha">
+									<p:calendar value="#{ventaFacturaBean.fechaIni}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<p:ajax event="dateSelect" update="ffinal"
+											listener="#{ventaFacturaBean.listarCobranzaXRangoFecha()}" />
+									</p:calendar>
+									<p:calendar id="ffinal"
+										value="#{ventaFacturaBean.fechaFin}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<p:ajax event="dateSelect"
+											update=":formCobro:tabla :formCobro:msgRangoFecha :formCobro:acumulado"
+											listener="#{ventaFacturaBean.listarCobranzaXRangoFecha()}" />
+									</p:calendar>
+								</p:tab>
+								<p:tab title="Cliente">
+									<p:inputText
+										value="#{ventaFacturaBean.nombreCliente}"
+										id="nombre" placeholder="Ingrese cliente">
+										<p:ajax event="keyup" update=":formCobro:tabla :formCobro:acumulado"
+											listener="#{ventaFacturaBean.listarCobranzaXCliente()}" />
+									</p:inputText>
+								</p:tab>
+							</p:tabView>
+							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
+							</div>
+							<div class="col-12 col-sm-2">
+							<p:outputLabel value="Monto total :" for="acumulado" />
+							<h3>
+								<p:outputLabel value="#{ventaFacturaBean.acumulado}"
+									id="acumulado">
+									<f:convertNumber type="currency" currencySymbol="S/" />
+								</p:outputLabel>
+							</h3>
+						</div>
+						
+
+					</div>
+					<p:dataTable value="#{ventaFacturaBean.cobranzas}" var="t"
+						id="tabla" paginator="true" widgetVar="cobranzaTabla"
+						rowsPerPageTemplate="5,10,15,20,25" rows="25" reflow="true"
+						emptyMessage="No hay facturas por cobrar">
+						<f:facet name="header">
+							<p:outputPanel styleClass="text-center">
+								<h:outputText value="BUSQUEDA :" />
+								<p:inputText id="globalFilter"
+									onkeyup="PF('cobranzaTabla').filter()"
+									placeholder="Filtrar cliente" />
+							</p:outputPanel>
+						</f:facet>
+						<p:column width="40%" filterBy="#{t.venta.cliente.nombre}">
+							<f:facet name="header">
+								<h:outputText value="CLIENTE" />
+							</f:facet>
+							<h:outputText value="#{t.venta.cliente.nombre}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="CDP" />
+							</f:facet>
+							<h:outputText value="#{t.venta.comprobante.descripcion}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="NUMERO" />
+							</f:facet>
+							<h:outputText value="#{t.id.numComprobante%10000000}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="FECHA" />
+							</f:facet>
+							<h:outputText value="#{t.fecha}">
+								<f:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="HORA" />
+							</f:facet>
+							<h:outputText value="#{t.hora}">
+								<f:convertDateTime pattern="hh - mm - ss" />
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="LETRA" />
+							</f:facet>
+							<h:outputText value="#{t.id.numCobranza}">
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="MONTO" />
+							</f:facet>
+							<h:outputText value="#{t.venta.monto}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="PAGADO" />
+							</f:facet>
+							<h:outputText value="#{t.montoPago}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="SALDO" />
+							</f:facet>
+							<h:outputText value="#{t.montoSaldo}" />
+						</p:column>
+						<p:column width="5%">
+							<f:facet name="header">
+								<h:outputText value="COBRO" />
+							</f:facet>
+							<p:commandLink action="CONSULTAR_FACTURA_CREDITO"
+								actionListener="#{ventaFacturaBean.cargarNumeroComprobante}"
+								update="dialogo" oncomplete="PF('dlgCobranza').show();"
+								styleClass="btn btn-danger" disabled="#{t.montoSaldo.intValue()==0}">
+								<i class="fa fa-fw fa-dollar"></i>
+								<f:attribute value="#{t.id.numComprobante}" name="codigo" />
+
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+
+			<p:dialog header="COBRO DE LETRAS" widgetVar="dlgCobranza"
+				closable="false" id="dialogo" showEffect="scale" appendTo="@(body)"
+				hideEffect="explode" positionType="center" modal="true">
+				<h:form id="formPago">
+					<h:panelGroup id="pnlCobranza">
+						<div class="modal-body">
+
+							<div class="form-group">
+								<h:outputText value="Nro. Comprobante" />
+								<h:inputText value="#{ventaFacturaBean.numeroComprobante%10000000}"
+									disabled="true" styleClass="form-control" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="Monto a pagar" />
+								<h:inputText value="#{ventaFacturaBean.monto}"
+									styleClass="form-control" />
+								<p:messages for="mensajeMonto" />
+							</div>
+
+							<div class="row">
+								<div class="col">
+									
+										<p:commandLink
+											actionListener="#{ventaFacturaBean.actualizarFacturaCredito}"
+											action="CONSULTAR_FACTURA_CREDITO"
+											update="formPago:pnlCobranza" styleClass="#{r.azul}">
+											<i class="fa fa-fw fa-money"></i>
+											<h:outputText value="Cobrar" />
+										</p:commandLink>
+									
+								</div>
+
+								<div class="col">
+									
+										<p:commandLink onclick="PF('dlgCobranza').hide();"
+											update="formCobro:tabla formPago:msgPago"
+											styleClass="#{r.rojo}">
+											<i class="fa fa-fw fa-sign-out"></i>
+											<h:outputText value="Salir" />
+										</p:commandLink>
+									
+								</div>
+							</div>
+						</div>
+
+						<p:messages for="mensajeCobranza" id="msgPago" />
+					</h:panelGroup>
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

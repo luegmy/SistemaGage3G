@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
 		@NamedQuery(name = "cobranza.monto", query = "select c.montoSaldo from CobranzaJPA c where c.id.numComprobante=:p and c.id.numCobranza=(select max(k.id.numCobranza)from CobranzaJPA k where k.id.numComprobante=:p)"),
 		@NamedQuery(name = "cobranza.numero", query = "select max(c.id.numCobranza)+1 from CobranzaJPA c where c.id.numComprobante= :p"),
-		@NamedQuery(name = "cobranza.listarCobranza", query = "select c from CobranzaJPA c where c.venta.pago.codPago=2 order by c.id.numComprobante,c.id.numCobranza") })
+		@NamedQuery(name = "cobranza.listarCobranza", query = "select c from CobranzaJPA c") })
 public class CobranzaJPA implements Serializable {
 
 	/**

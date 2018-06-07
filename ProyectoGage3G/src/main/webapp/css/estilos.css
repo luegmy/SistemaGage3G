@@ -56,6 +56,12 @@
 	color: white;
 }
 
+.container-fluid .input-group-text {
+	background-color: #17a2b8;
+	border-color: #17a2b8;
+	color: white;
+}
+
 /* layout */
 .ui-layout-north {
 	background: #17a2b8;

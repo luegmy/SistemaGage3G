@@ -11,7 +11,6 @@ import javax.persistence.Query;
 import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.almacen.jpa.DetalleAlmacenJPAPK;
 import com.tresg.incluido.jpa.EstadoJPA;
-import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.util.formato.Formateo;
 import com.tresg.util.jpa.JpaUtil;
 import com.tresg.util.stock.ActualizarExistencia;

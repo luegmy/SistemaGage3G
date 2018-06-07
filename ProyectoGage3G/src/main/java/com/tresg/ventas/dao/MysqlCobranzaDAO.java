@@ -1,15 +1,15 @@
 package com.tresg.ventas.dao;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import com.tresg.incluido.jpa.EstadoJPA;
-import com.tresg.incluido.jpa.MediosPagoJPA;
+import com.tresg.util.formato.Formateo;
+import com.tresg.util.jpa.JpaUtil;
 import com.tresg.ventas.interfaz.CobranzaDAO;
 import com.tresg.ventas.jpa.CobranzaFacturaJPAPK;
 import com.tresg.ventas.jpa.CobranzaJPA;
@@ -17,25 +17,33 @@ import com.tresg.ventas.jpa.VentaJPA;
 
 public class MysqlCobranzaDAO implements CobranzaDAO {
 
-	EntityManagerFactory emf = null;
 	EntityManager em = null;
 
 	private void open() {
-		emf = Persistence.createEntityManagerFactory("tresg");
-		em = emf.createEntityManager();
+		em = JpaUtil.getEntityManager();
 	}
 
 	private void close() {
 		em.close();
-		emf.close();
 	}
+	
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CobranzaJPA> listarFacturasPorCobrar() {
+		open();
+		Query q = em.createNamedQuery(CobranzaJPA.LISTAR_COBRANZA);
+
+		return q.getResultList();
+	}
+	
 	@Override
 	public String actualizarFacturaCredito(CobranzaJPA cobranza) {
 		open();
 
 		String mensaje;
 		CobranzaFacturaJPAPK cf = null;
+		Formateo formatoHora=new Formateo();
 
 		em.getTransaction().begin();
 		try {
@@ -59,7 +67,8 @@ public class MysqlCobranzaDAO implements CobranzaDAO {
 				cf.setNumCobranza(numero);
 				cf.setNumComprobante(cobranza.getId().getNumComprobante());
 
-				cobranza.setFecha(new java.sql.Date(new java.util.Date().getTime()));
+				cobranza.setFecha(new Date());
+				cobranza.setHora(formatoHora.obtenerHora());
 				cobranza.setMontoPago(cobranza.getMontoPago());
 				cobranza.setMontoSaldo(saldo);
 				cobranza.setId(cf);
@@ -72,14 +81,10 @@ public class MysqlCobranzaDAO implements CobranzaDAO {
 
 			if (saldo.compareTo(BigDecimal.ZERO) == 0) {
 
-				MediosPagoJPA objPago = new MediosPagoJPA();
-				objPago.setCodPago(1);
-				
 				EstadoJPA objEstado=new EstadoJPA();
-				objEstado.setCodEstado(1);
+				objEstado.setCodEstado(9);
 
 				VentaJPA objVenta = em.find(VentaJPA.class, cobranza.getId().getNumComprobante());
-				objVenta.setPago(objPago);
 				objVenta.setEstado(objEstado);
 
 				em.merge(objVenta);
@@ -92,22 +97,6 @@ public class MysqlCobranzaDAO implements CobranzaDAO {
 		}
 		close();
 		return mensaje;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<CobranzaJPA> listarFacturasPorCobrar() {
-		open();
-		Query q = em.createNamedQuery(CobranzaJPA.LISTAR_COBRANZA);
-		
-		List<CobranzaJPA>lista=q.getResultList();
-		CobranzaJPA objCobranza = null;
-		for (CobranzaJPA m : lista) {
-			objCobranza=em.find(CobranzaJPA.class, m.getId());
-		}
-		em.refresh(objCobranza);
-
-		return lista;
 	}
 
 }

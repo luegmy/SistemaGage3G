@@ -104,7 +104,7 @@
 								actionListener="#{ventaActualizaBean.mostrarDetalleVenta}"
 								action="consultaVentaModificada" update="formEditaVenta"
 								oncomplete="PF('dlgDetalle').show();"
-								styleClass="btn btn-info btn-md">
+								styleClass="btn btn-info">
 								<i class="fa fa-fw fa-eye"></i>
 								<f:attribute value="#{t.numComprobante}" name="numeroDetalle" />
 							</p:commandLink>
@@ -112,7 +112,7 @@
 								oncomplete="PF('dlgActualizaVenta').show();"
 								action="consultaVentaModificada"
 								actionListener="#{ventaActualizaBean.cargarVenta}"
-								styleClass="btn btn-primary btn-md">
+								styleClass="btn btn-primary">
 								<i class="fa fa-fw fa-edit"></i>
 								<f:attribute value="#{t.numComprobante}" name="numeroEdicion" />
 							</p:commandLink>
@@ -121,7 +121,7 @@
 								action="consultaVentaModificada"
 								update=":formEditaVenta:dialogoAnula" title="Anular venta"
 								oncomplete="PF('dlgAnulacion').show();"
-								styleClass="btn btn-secondary btn-md"
+								styleClass="btn btn-danger"
 								disabled="#{t.estado.codEstado==3}">
 								<i class="fa fa-fw fa-times-circle"></i>
 								<f:attribute value="#{t.numComprobante}" name="numeroCargar" />

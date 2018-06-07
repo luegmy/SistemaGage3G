@@ -9,4 +9,9 @@ public class VentasBusinessDelegate {
 		
 	}
 	
+	public static CobranzaBusinessService getCobranzaService(){
+		return new CobranzaService();
+		
+	}
+	
 }

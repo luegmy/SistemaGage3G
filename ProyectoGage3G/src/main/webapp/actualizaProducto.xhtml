@@ -42,9 +42,8 @@
 					<p:dataTable id="tablaProducto" value="#{productoBean.productos}"
 						var="p"
 						emptyMessage="No existe el producto #{productoBean.descripcionProducto}, has click en boton nuevo"
-						paginator="true"
-						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						rowsPerPageTemplate="5,10,15,20,25,50" rows="25" reflow="true">
+						paginator="true" rowsPerPageTemplate="5,10,15,20,25,50" rows="25"
+						reflow="true">
 
 						<p:column headerText="CODIGO">
 							<h:outputText value="#{p.codProducto}" />
@@ -65,25 +64,22 @@
 							<h:outputText value="#{p.medida.descripcion}" />
 						</p:column>
 						<p:column width="8%" styleClass="text-center">
-							<div class="btn-group">
-								<p:commandLink actionListener="#{productoBean.editarProducto}"
-									update="dialogo" action="ACTUALIZAR_PRODUCTO"
-									oncomplete="PF('dlgProducto').show();"
-									styleClass="#{r.celeste}">
-									<i class="fa fa-fw fa-edit"></i>
-									<f:attribute value="#{p.codProducto}" name="codigo" />
-								</p:commandLink>
-							</div>
-							<div class="btn-group">
-								<p:commandLink actionListener="#{productoBean.eliminarProducto}"
-									styleClass="#{r.rojo}" action="ACTUALIZAR_PRODUCTO"
-									update="tablaProducto">
-									<p:confirm header="Confirmacion"
-										message="Estas seguro de eliminar?" icon="ui-icon-alert" />
-									<i class="fa fa-fw fa-trash"></i>
-									<f:attribute value="#{p.codProducto}" name="codigo" />
-								</p:commandLink>
-							</div>
+							<p:commandLink actionListener="#{productoBean.editarProducto}"
+								update="dialogo" action="ACTUALIZAR_PRODUCTO"
+								oncomplete="PF('dlgProducto').show();" styleClass="btn btn-primary">
+								<i class="fa fa-fw fa-edit"></i>
+								<f:attribute value="#{p.codProducto}" name="codigo" />
+							</p:commandLink>
+
+							<p:commandLink actionListener="#{productoBean.eliminarProducto}"
+								styleClass="btn btn-danger" action="ACTUALIZAR_PRODUCTO"
+								update="tablaProducto">
+								<p:confirm header="Confirmacion"
+									message="Estas seguro de eliminar?" icon="ui-icon-alert" />
+								<i class="fa fa-fw fa-trash"></i>
+								<f:attribute value="#{p.codProducto}" name="codigo" />
+							</p:commandLink>
+
 						</p:column>
 					</p:dataTable>
 

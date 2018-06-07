@@ -13,8 +13,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
-import org.primefaces.component.datatable.DataTable;
-
 import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.service.ComboService_I;
@@ -27,7 +25,6 @@ public class ClienteBean implements Serializable{
 
 
 	private static final long serialVersionUID = 1L;
-	DataTable tbCliente;
 	// parametro de busqueda para la lista clientes
 	private String busqueda="";
 
@@ -160,7 +157,6 @@ public class ClienteBean implements Serializable{
 
 	public List<ClienteJPA> getClientes() {
 		clientes = new ArrayList<>();
-		//this.tbCliente.reset();
 		sCliente.listaCliente().stream()
 		.filter(c->c.getNombre().toLowerCase().contains(busqueda))
 		.forEach(clientes::add);
@@ -189,14 +185,6 @@ public class ClienteBean implements Serializable{
 
 	public void setCorreo(String correo) {
 		this.correo = correo;
-	}
-
-	public DataTable getTbCliente() {
-		return tbCliente;
-	}
-
-	public void setTbCliente(DataTable tbCliente) {
-		this.tbCliente = tbCliente;
 	}
 
 }
