@@ -14,4 +14,9 @@ public class VentasBusinessDelegate {
 		
 	}
 	
+	public static ConsultarVentaBusinessService getConsultarVentaService(){
+		return new ConsultarVentaService();
+		
+	}
+	
 }

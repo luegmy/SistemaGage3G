@@ -13,8 +13,10 @@ import com.tresg.incluido.interfaz.UnidadMedidaDAO;
 import com.tresg.seguridad.dao.MysqlUsuarioDAO;
 import com.tresg.seguridad.interfaz.UsuarioDAO;
 import com.tresg.ventas.dao.MysqlCobranzaDAO;
+import com.tresg.ventas.dao.MysqlDetalleVentaDAO;
 import com.tresg.ventas.dao.MysqlVentaDAO;
 import com.tresg.ventas.interfaz.CobranzaDAO;
+import com.tresg.ventas.interfaz.DetalleVentaDAO;
 import com.tresg.ventas.interfaz.VentaDAO;
 
 public class MySqlDAOFactory extends DAOFactory {
@@ -51,6 +53,11 @@ public class MySqlDAOFactory extends DAOFactory {
 	@Override
 	public VentaDAO getVentaDAO() {
 		return new MysqlVentaDAO();
+	}
+	
+	@Override
+	public DetalleVentaDAO getDetalleVentaDAO() {
+		return new MysqlDetalleVentaDAO();
 	}
 	
 	@Override

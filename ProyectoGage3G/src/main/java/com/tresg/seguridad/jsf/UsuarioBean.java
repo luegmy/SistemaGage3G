@@ -172,11 +172,6 @@ public class UsuarioBean implements Serializable{
 		item.setIcon("ui-icon-clipboard");
 		ventaSubmenu.addElement(item);
 
-		item = new DefaultMenuItem("Guia de remision");
-		item.setUrl("registroGuiaRemision.xhtml");
-		item.setIcon("ui-icon-document");
-		ventaSubmenu.addElement(item);
-
 		modelo.addElement(ventaSubmenu);
 
 		DefaultSubMenu contactoSubmenu = new DefaultSubMenu(menuContacto);
@@ -345,11 +340,6 @@ public class UsuarioBean implements Serializable{
 		item = new DefaultMenuItem("Venta por cobrar");
 		item.setUrl("consultaFacturaPendiente.xhtml");
 		item.setIcon("ui-icon-clipboard");
-		ventaSubmenu.addElement(item);
-
-		item = new DefaultMenuItem("Guia de remision");
-		item.setUrl("registroGuiaRemision.xhtml");
-		item.setIcon("ui-icon-document");
 		ventaSubmenu.addElement(item);
 
 		modelo.addElement(ventaSubmenu);

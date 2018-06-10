@@ -70,72 +70,42 @@
 								<h:outputText value="BUSQUEDA :" />
 								<p:inputText id="globalFilter"
 									onkeyup="PF('cobranzaTabla').filter()"
-									placeholder="Filtrar cliente" />
+									placeholder="Filtrar busqueda" />
 							</p:outputPanel>
 						</f:facet>
-						<p:column width="40%" filterBy="#{t.venta.cliente.nombre}">
-							<f:facet name="header">
-								<h:outputText value="CLIENTE" />
-							</f:facet>
+						<p:column width="40%" filterBy="#{t.venta.cliente.nombre}" headerText="CLIENTE">
 							<h:outputText value="#{t.venta.cliente.nombre}" />
 						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="CDP" />
-							</f:facet>
+						<p:column headerText="CDP">
 							<h:outputText value="#{t.venta.comprobante.descripcion}" />
 						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="NUMERO" />
-							</f:facet>
+						<p:column headerText="NUMERO" filterBy="#{t.id.numComprobante}">
 							<h:outputText value="#{t.id.numComprobante%10000000}" />
 						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="FECHA" />
-							</f:facet>
+						<p:column headerText="FECHA">
 							<h:outputText value="#{t.fecha}">
 								<f:convertDateTime pattern="dd-MM-yyyy" />
 							</h:outputText>
 						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="HORA" />
-							</f:facet>
+						<p:column headerText="HORA">
 							<h:outputText value="#{t.hora}">
 								<f:convertDateTime pattern="hh - mm - ss" />
 							</h:outputText>
 						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="LETRA" />
-							</f:facet>
+						<p:column headerText="LETRA">
 							<h:outputText value="#{t.id.numCobranza}">
 							</h:outputText>
 						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="MONTO" />
-							</f:facet>
+						<p:column headerText="MONTO">
 							<h:outputText value="#{t.venta.monto}" />
 						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="PAGADO" />
-							</f:facet>
+						<p:column headerText="PAGADO">
 							<h:outputText value="#{t.montoPago}" />
 						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="SALDO" />
-							</f:facet>
+						<p:column headerText="SALDO">
 							<h:outputText value="#{t.montoSaldo}" />
 						</p:column>
-						<p:column width="5%">
-							<f:facet name="header">
-								<h:outputText value="COBRO" />
-							</f:facet>
+						<p:column width="5%" headerText="COBRO">
 							<p:commandLink action="CONSULTAR_FACTURA_CREDITO"
 								actionListener="#{ventaFacturaBean.cargarNumeroComprobante}"
 								update="dialogo" oncomplete="PF('dlgCobranza').show();"

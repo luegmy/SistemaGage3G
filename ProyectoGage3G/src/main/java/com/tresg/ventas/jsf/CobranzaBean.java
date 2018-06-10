@@ -31,6 +31,7 @@ public class CobranzaBean implements Serializable {
 	private Date fechaIni=new Date();
 	private Date fechaFin=new Date();
 	private String nombreCliente;
+	@SuppressWarnings("unused")
 	private double acumulado;
 
 	CobranzaBusinessService sCobranza = VentasBusinessDelegate.getCobranzaService();

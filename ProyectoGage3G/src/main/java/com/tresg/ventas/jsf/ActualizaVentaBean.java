@@ -65,12 +65,10 @@ public class ActualizaVentaBean implements Serializable {
 	}
 
 	public void listarVentaXFecha() {
-
 		ventas = listaUtil.listarVentaPorFecha(atributoUtil.getFecha());
 	}
 
 	public void listarVentaRangoFecha() {
-		
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		if (atributoUtil.getFechaFin().before(atributoUtil.getFechaIni())) {
@@ -78,26 +76,22 @@ public class ActualizaVentaBean implements Serializable {
 					"La fecha final no puede ser menor a fecha inicial", null));
 		}
 		ventas = listaUtil.listarVentaPorRangoFecha(atributoUtil.getFechaIni(), atributoUtil.getFechaFin());
-
 	}
 
 	public void listarVentaXCliente() {
-		
 		ventas = listaUtil.listarPorCliente(atributoUtil.getCliente().getNombre());
-
 	}
 
 	public void mostrarDetalleVenta(ActionEvent e) {
 		int numero = (int) e.getComponent().getAttributes().get("numeroDetalle");
 		detalles = listaUtil.mostrarDetalleVenta(numero);
-
 	}
 
 	public void cargarVenta(ActionEvent e) {
 
 		int numero = (int) e.getComponent().getAttributes().get("numeroEdicion");
 		ProductoJPA objProducto;
-		
+
 		VentaJPA objVenta = sVenta.muestraDetalleVenta(numero);
 		atributoUtil.setNumeroComprobante(objVenta.getNumComprobante() % 10000000);
 		atributoUtil.getCliente().setCodCliente(objVenta.getCliente().getCodCliente());
@@ -111,16 +105,16 @@ public class ActualizaVentaBean implements Serializable {
 		for (DetalleVentaJPA d : objVenta.getDetalles()) {
 			objProducto = sProducto.buscaProductoPorCodigo(d.getId().getPolvo());
 			if (objProducto != null) {
-				d.setDescripcion(d.getProducto().getDescripcion().concat(" ").concat
-						 (d.getProducto().getTipo().getDescripcion()).concat(" ").concat
-						 (objProducto.getTipo().getDescripcion()).concat(" ").concat
-						 (objProducto.getDescripcion()));				
-						
+				d.setDescripcion(
+						d.getProducto().getDescripcion().concat(" ").concat(d.getProducto().getTipo().getDescripcion())
+								.concat(" ").concat(objProducto.getTipo().getDescripcion()).concat(" ")
+								.concat(objProducto.getDescripcion()));
+
 			} else {
-				d.setDescripcion(d.getProducto().getDescripcion().concat(" ").concat
-						 (d.getProducto().getTipo().getDescripcion()));
+				d.setDescripcion(d.getProducto().getDescripcion().concat(" ")
+						.concat(d.getProducto().getTipo().getDescripcion()));
 			}
-				
+
 			temporales.add(d);
 
 			atributoUtil.setTotal(atributoUtil.getTotal().add(d.getPrecio().multiply(d.getCantidad())));
@@ -130,104 +124,103 @@ public class ActualizaVentaBean implements Serializable {
 	}
 
 	// Metodo donde se agrega los atributos del cliente en las respectivas
-		// cajas de texto del formulario venta
-		public void seleccionarCliente(SelectEvent event) {
-			clienteSeleccionado = (ClienteJPA) event.getObject();
-			atributoUtil.getCliente().setCodCliente(clienteSeleccionado.getCodCliente());
-			atributoUtil.getCliente().setNombre(clienteSeleccionado.getNombre());
-			atributoUtil.getCliente().setDireccion(clienteSeleccionado.getDireccion());
-			atributoUtil.getCliente().setNroDocumento(clienteSeleccionado.getNroDocumento());
+	// cajas de texto del formulario venta
+	public void seleccionarCliente(SelectEvent event) {
+		clienteSeleccionado = (ClienteJPA) event.getObject();
+		atributoUtil.getCliente().setCodCliente(clienteSeleccionado.getCodCliente());
+		atributoUtil.getCliente().setNombre(clienteSeleccionado.getNombre());
+		atributoUtil.getCliente().setDireccion(clienteSeleccionado.getDireccion());
+		atributoUtil.getCliente().setNroDocumento(clienteSeleccionado.getNroDocumento());
+	}
+
+	public void listarCliente() {
+		atributoUtil.setClientes(gestionUtil.listarCliente(atributoUtil.getCliente().getNombre()));
+	}
+
+	// Metodo donde se agrega los atributos del producto en las respectivas
+	// cajas de texto del formulario venta
+	public void seleccionarProducto(SelectEvent event) {
+		productoSeleccionado = (DetalleAlmacenJPA) event.getObject();
+		atributoUtil.setCodigoProducto(productoSeleccionado.getId().getCodProducto());
+		atributoUtil.setCodigoTipo(productoSeleccionado.getProducto().getTipo().getCodTipo());
+		atributoUtil.setDescripcionProducto(productoSeleccionado.getProducto().getDescripcion().concat(" ")
+				.concat(productoSeleccionado.getProducto().getTipo().getDescripcion()));
+		atributoUtil.setPrecio(productoSeleccionado.getProducto().getPrecioVenta());
+
+	}
+
+	public void listarProducto() {
+		atributoUtil.setProductos(gestionUtil.listarProducto(atributoUtil.getDescripcionProducto()));
+	}
+
+	// Metodo para añadir elementos al datatable de detalle venta
+	public void agregarProductoVenta() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		String mensajeAgregar = mensajeUtil.mostrarMensajeAgregarVenta(atributoUtil, temporales);
+
+		if (!"".equals(mensajeAgregar)) {
+			context.addMessage(mensajeAgregar, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					mensajeUtil.mostrarMensajeError(mensajeAgregar, atributoUtil), null));
+		} else {
+			temporales.add(gestionUtil.retornarProductoVenta(atributoUtil));
+			gestionUtil.iterarListaVenta(temporales, atributoUtil);
+			gestionUtil.limpiarProductoVenta(atributoUtil);
 		}
 
-		public void listarCliente() {
-			atributoUtil.setClientes(gestionUtil.listarCliente(atributoUtil.getCliente().getNombre()));
-		}
+	}
 
-		// Metodo donde se agrega los atributos del producto en las respectivas
-		// cajas de texto del formulario venta
-		public void seleccionarProducto(SelectEvent event) {
-			productoSeleccionado = (DetalleAlmacenJPA) event.getObject();
-			atributoUtil.setCodigoProducto(productoSeleccionado.getId().getCodProducto());
-			atributoUtil.setCodigoTipo(productoSeleccionado.getProducto().getTipo().getCodTipo());
-			atributoUtil.setDescripcionProducto(productoSeleccionado.getProducto().getDescripcion().concat(" ")
-					.concat(productoSeleccionado.getProducto().getTipo().getDescripcion()));
-			atributoUtil.setPrecio(productoSeleccionado.getProducto().getPrecioVenta());
+	public void quitarListaProducto(ActionEvent e) {
+		int codigo = (int) e.getComponent().getAttributes().get("codigo");
+		BigDecimal cantidad = (BigDecimal) e.getComponent().getAttributes().get("cantidad");
 
-		}
+		gestionUtil.quitarListaProductoModificado(codigo, cantidad, temporales, atributoUtil);
 
-		public void listarProducto() {
-			atributoUtil.setProductos(gestionUtil.listarProducto(atributoUtil.getDescripcionProducto()));
-		}
+	}
 
-		// Metodo para añadir elementos al datatable de detalle venta
-		public void agregarProductoVenta() {
+	public void editarProducto(ActionEvent e) {
+		int codigoProducto = (int) e.getComponent().getAttributes().get("codigo");
 
-			FacesContext context = FacesContext.getCurrentInstance();
-			String mensajeAgregar = mensajeUtil.mostrarMensajeAgregarVenta(atributoUtil, temporales);
+		gestionUtil.editarProductoVenta(codigoProducto, temporales, atributoUtil);
 
-			if (!"".equals(mensajeAgregar)) {
-				context.addMessage(mensajeAgregar, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						mensajeUtil.mostrarMensajeError(mensajeAgregar, atributoUtil), null));
-			} else {
-				temporales.add(gestionUtil.retornarProductoVenta(atributoUtil));
-				gestionUtil.iterarListaVenta(temporales, atributoUtil);
-				gestionUtil.limpiarProductoVenta(atributoUtil);
-			}
+	}
+
+	@SuppressWarnings("deprecation")
+	public String actualizarVenta() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		String mensajeVenta = mensajeUtil.mostrarMensajeGrabarVenta(atributoUtil, temporales);
+
+		if (!"".equals(mensajeVenta)) {
+			context.addMessage(mensajeVenta, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					mensajeUtil.mostrarMensajeError(mensajeVenta, atributoUtil), null));
+		} else {
+
+			context.addMessage("mensajeActualizaVenta", new FacesMessage(FacesMessage.SEVERITY_INFO,
+					sVenta.actualizaVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
+			RequestContext.getCurrentInstance().execute("PF('dlgMensaje').show();");
 
 		}
+		return "consultaVentaModificada.xhtml";
+	}
 
-		public void quitarListaProducto(ActionEvent e) {
-			int codigo = (int) e.getComponent().getAttributes().get("codigo");
-			BigDecimal cantidad = (BigDecimal) e.getComponent().getAttributes().get("cantidad");
+	public String cancelarVenta() {
+		temporales.clear();
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.getExternalContext().getSessionMap().remove("ventaActualizaBean");
+		return "consultaVentaModificada.xhtml";
+	}
 
-			gestionUtil.quitarListaProductoModificado(codigo, cantidad, temporales, atributoUtil);
+	// metodo para anular venta
+	public void cargarNumeroComprobante(ActionEvent e) {
+		int codigo = (Integer) e.getComponent().getAttributes().get("numeroCargar");
+		atributoUtil.setNumeroComprobante(codigo);
+	}
 
-		}
-
-		public void editarProducto(ActionEvent e) {
-			int codigoProducto = (int) e.getComponent().getAttributes().get("codigo");
-
-			gestionUtil.editarProductoVenta(codigoProducto, temporales, atributoUtil);
-
-		}
-
-		@SuppressWarnings("deprecation")
-		public String actualizarVenta() {
-			FacesContext context = FacesContext.getCurrentInstance();
-			String mensajeVenta = mensajeUtil.mostrarMensajeGrabarVenta(atributoUtil, temporales);
-
-			if (!"".equals(mensajeVenta)) {
-				context.addMessage(mensajeVenta, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						mensajeUtil.mostrarMensajeError(mensajeVenta, atributoUtil), null));
-			} else {
-				
-				context.addMessage("mensajeActualizaVenta", new FacesMessage(FacesMessage.SEVERITY_INFO,
-						sVenta.actualizaVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
-				RequestContext.getCurrentInstance().execute("PF('dlgMensaje').show();");
-
-			}
-			return "consultaVentaModificada.xhtml";
-		}
-
-		public String cancelarVenta() {
-			temporales.clear();
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.getExternalContext().getSessionMap().remove("ventaActualizaBean");
-			return "consultaVentaModificada.xhtml";
-		}
-
-		// metodo para anular venta
-		public void cargarNumeroComprobante(ActionEvent e) {
-			int codigo = (Integer) e.getComponent().getAttributes().get("numeroCargar");
-			atributoUtil.setNumeroComprobante(codigo);
-		}
-
-		public void anularVenta() {
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage("mensajeAnulacion", new FacesMessage(FacesMessage.SEVERITY_INFO,
-					sVenta.anulaVenta(atributoUtil.getNumeroComprobante()), null));
-		}
-		
+	public void anularVenta() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage("mensajeAnulacion", new FacesMessage(FacesMessage.SEVERITY_INFO,
+				sVenta.anulaVenta(atributoUtil.getNumeroComprobante()), null));
+	}
 
 	public DataTable getTbVenta() {
 		return tbVenta;
