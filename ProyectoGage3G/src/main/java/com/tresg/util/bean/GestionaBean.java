@@ -72,7 +72,7 @@ public class GestionaBean implements Serializable {
 				formato.obtenerTalonario(atributo.getCodigoComprobante(), atributo.getNumeroComprobante()));
 
 		DetalleVentaJPA objDetalle = new DetalleVentaJPA();
-		objDetalle.setDescripcion(atributo.getDescripcionProducto());
+		objDetalle.setDescripcionProducto(atributo.getDescripcionProducto());
 		objDetalle.setCantidad(atributo.getCantidad());
 		objDetalle.setPrecio(atributo.getPrecio());
 		objDetalle.setId(pk);

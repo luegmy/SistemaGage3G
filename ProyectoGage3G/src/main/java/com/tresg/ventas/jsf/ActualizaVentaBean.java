@@ -103,18 +103,6 @@ public class ActualizaVentaBean implements Serializable {
 		atributoUtil.setCodigoPago(objVenta.getPago().getCodPago());
 
 		for (DetalleVentaJPA d : objVenta.getDetalles()) {
-			objProducto = sProducto.buscaProductoPorCodigo(d.getId().getPolvo());
-			if (objProducto != null) {
-				d.setDescripcion(
-						d.getProducto().getDescripcion().concat(" ").concat(d.getProducto().getTipo().getDescripcion())
-								.concat(" ").concat(objProducto.getTipo().getDescripcion()).concat(" ")
-								.concat(objProducto.getDescripcion()));
-
-			} else {
-				d.setDescripcion(d.getProducto().getDescripcion().concat(" ")
-						.concat(d.getProducto().getTipo().getDescripcion()));
-			}
-
 			temporales.add(d);
 
 			atributoUtil.setTotal(atributoUtil.getTotal().add(d.getPrecio().multiply(d.getCantidad())));

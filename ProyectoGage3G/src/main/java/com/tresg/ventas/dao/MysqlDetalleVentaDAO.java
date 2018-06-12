@@ -55,8 +55,8 @@ public class MysqlDetalleVentaDAO implements DetalleVentaDAO {
 			Object[] arr = lista.get(i);
 			DetalleVentaJPA obj=new DetalleVentaJPA();
 			for (int j = 0; j < arr.length; j++) {
-				//obj.setCodigoTipo((int) (arr[0]));
-				obj.setDescripcion(arr[1].toString());
+				obj.setCodigoProducto((int) (arr[0]));
+				obj.setDescripcionProducto(arr[1].toString());
 				//obj.setDescripcionTipo(arr[2].toString());
 				obj.setCantidad(new BigDecimal(arr[3].toString()));
 				obj.setPrecio(new BigDecimal(arr[4].toString()));
