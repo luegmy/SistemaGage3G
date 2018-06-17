@@ -23,7 +23,7 @@ public class DetalleMovimientoJPA implements Serializable {
 	private double precio;
 
 	@Transient
-	private String descripcion;
+	private String descripcionProducto;
 
 	@ManyToOne
 	@JoinColumn(name = "nroMovimiento", nullable = false, insertable = false, updatable = false)
@@ -59,12 +59,12 @@ public class DetalleMovimientoJPA implements Serializable {
 		this.precio = precio;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public String getDescripcionProducto() {
+		return descripcionProducto;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setDescripcionProducto(String descripcionProducto) {
+		this.descripcionProducto = descripcionProducto;
 	}
 
 	public MovimientoJPA getMovimiento() {

@@ -3,7 +3,6 @@ package com.tresg.almacen.jsf;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -23,7 +22,6 @@ import com.tresg.almacen.jpa.DetalleMovimientoJPAPK;
 import com.tresg.almacen.jpa.MovimientoJPA;
 import com.tresg.almacen.jpa.TipoMovimientoJPA;
 import com.tresg.almacen.service.AlmacenBusinessDelegate;
-import com.tresg.almacen.service.ConsultarAlmacenBusinessService;
 import com.tresg.almacen.service.RegistrarAlmacenBusinessService;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
@@ -32,8 +30,6 @@ import com.tresg.incluido.service.GestionarProductoService_I;
 import com.tresg.incluido.service.IncluidoBusinessDelegate;
 import com.tresg.seguridad.jpa.UsuarioJPA;
 import com.tresg.util.formato.Formateo;
-import com.tresg.ventas.service.ConsultarVentaBusinessService;
-import com.tresg.ventas.service.VentasBusinessDelegate;
 
 @ManagedBean(name = "almacenBean")
 @SessionScoped
@@ -53,7 +49,7 @@ public class RegistroAlmacenBean implements Serializable {
 	private List<SelectItem> comprobantes;
 	private int codigoComprobante;
 
-	private int NumeroComprobante;
+	private int numeroComprobante;
 
 	private Date fecha = new Date();
 
@@ -92,9 +88,6 @@ public class RegistroAlmacenBean implements Serializable {
 	public void cargarComprobante() {
 		setNumeroComprobante(sAlmacen.generaNumeroNota());
 	}
-	
-
-
 
 	public void agregarProductoAlmacen() {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -121,8 +114,8 @@ public class RegistroAlmacenBean implements Serializable {
 
 			DetalleMovimientoJPA objDetalle = new DetalleMovimientoJPA();
 			objDetalle.setCantidad(cantidad);
-			objDetalle
-					.setDescripcion(producto.getDescripcion().concat(" ").concat(producto.getTipo().getDescripcion()));
+			objDetalle.setDescripcionProducto(
+					producto.getDescripcion().concat(" ").concat(producto.getTipo().getDescripcion()));
 			objDetalle.setId(dmpk);
 
 			temporales.add(objDetalle);
@@ -144,7 +137,7 @@ public class RegistroAlmacenBean implements Serializable {
 				if ((detalleJPA.getId().getCodProducto()) == aux) {
 					it.remove();
 					context.addMessage("mensajeLista", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Ya ingres�" + detalleJPA.getDescripcion(), null));
+							"Ya ingres�" + detalleJPA.getDescripcionProducto(), null));
 				}
 			}
 			// Almacenar en una lista auxiliar los codigos de los productos
@@ -174,26 +167,27 @@ public class RegistroAlmacenBean implements Serializable {
 	}
 
 	// Para grabar ingreso/salida del producto
+	@SuppressWarnings("deprecation")
 	public String grabarAlmacen() {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		TipoMovimientoJPA objTipoMovimiento = new TipoMovimientoJPA();
 		objTipoMovimiento.setCodMovimiento(codigoTipoMovimiento);
-	
+
 		UsuarioJPA objUsuario = new UsuarioJPA();
 		objUsuario.setCodUsuario(usuario);
 
 		ComprobanteJPA objComprobante = new ComprobanteJPA();
 		objComprobante.setCodComprobante(codigoComprobante);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+		Formateo formatoHora = new Formateo();
 
 		MovimientoJPA objMovimiento = new MovimientoJPA();
 		objMovimiento.setNroMovimiento(getNumeroDocumento());
 		objMovimiento.setComprobante(objComprobante);
-		objMovimiento.setNumComprobante(NumeroComprobante);
+		objMovimiento.setNumComprobante(numeroComprobante);
 		objMovimiento.setFecha(fecha);
-		objMovimiento.setHora(sdf.format(new java.util.Date()));
+		objMovimiento.setHora(formatoHora.obtenerHora());
 		objMovimiento.setTipoMovimiento(objTipoMovimiento);
 		objMovimiento.setUsuario(objUsuario);
 		objMovimiento.setObservacion(observacion);
@@ -214,7 +208,7 @@ public class RegistroAlmacenBean implements Serializable {
 		} else if (codigoComprobante == 0) {
 			context.addMessage("mensajeComprobante",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el tipo de comprobante", null));
-		} else if (NumeroComprobante == 0 && codigoComprobante != 2) {
+		} else if (numeroComprobante == 0 && codigoComprobante != 2) {
 			context.addMessage("mensajeNumeroComprobante",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el numero de comprobante", null));
 		} else if (temporales.isEmpty()) {
@@ -251,9 +245,8 @@ public class RegistroAlmacenBean implements Serializable {
 	// lista despegable de productos
 	public List<SelectItem> getProductos() {
 		productos = new ArrayList<>();
-		sProducto.listaProducto().stream()
-		.collect(Collectors.toMap(ProductoJPA::getCodProducto,ProductoJPA::getDescripcion)) ;
-		//.forEach(p -> productos.add(new SelectItem(p.getCodProducto(), p.getDescripcion())));
+		sProducto.listaProducto().stream().filter(p -> p.getTipo().getCodTipo() == codigoTipoProducto)
+				.forEach(p -> productos.add(new SelectItem(p.getCodProducto(), p.getDescripcion())));
 		return productos;
 	}
 
@@ -312,11 +305,11 @@ public class RegistroAlmacenBean implements Serializable {
 	}
 
 	public int getNumeroComprobante() {
-		return NumeroComprobante;
+		return numeroComprobante;
 	}
 
-	public void setNumeroComprobante(int NumeroComprobante) {
-		this.NumeroComprobante = NumeroComprobante;
+	public void setNumeroComprobante(int numeroComprobante) {
+		this.numeroComprobante = numeroComprobante;
 	}
 
 	public int getNumeroDocumento() {

@@ -182,15 +182,18 @@
 						<p:dataTable value="#{almacenBean.temporales}" var="t" id="tabla"
 							emptyMessage=" " reflow="true"
 							rendered="#{almacenBean.temporales.size() > 0 eq true}">
+							<p:column headerText="ALMACEN">
+								<p:outputLabel value="#{t.id.codAlmacen}" />
+							</p:column>
 							<p:column width="60%" headerText="PRODUCTO">
-								<p:outputLabel value="#{t.descripcion}" />
+								<p:outputLabel value="#{t.descripcionProducto}" />
 							</p:column>
 							<p:column headerText="CANTIDAD">
 								<p:outputLabel value="#{t.cantidad}" />
 							</p:column>
 
 						</p:dataTable>
-						<div class="row">
+						<div class="row justify-content-md-center">
 
 							<div class="col-12 col-sm-6 col-md-2">
 								<div class="form-group">

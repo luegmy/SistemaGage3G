@@ -359,41 +359,19 @@
 							emptyMessage=" " reflow="true"
 							rendered="#{ventaBean.temporales.size() > 0 eq true}">
 							<p:column width="5%">
-								<f:facet name="header">
-									<p:outputLabel value="" />
-								</f:facet>
 								<p:outputLabel value="#{t.id.codProducto}" />
-								<h:inputHidden value="#{t.id.polvo}" />
 							</p:column>
-							<p:column width="50%">
-								<f:facet name="header">
-									<p:outputLabel value="DESCRIPCION" />
-								</f:facet>
-								<p:outputLabel value="#{t.descripcion}" />
+							<p:column width="50%" headerText="DESCRIPCION">
+								<p:outputLabel value="#{t.descripcionProducto}" />
 							</p:column>
 
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="PRECIO" />
-								</f:facet>
+							<p:column headerText="PRECIO">
 								<p:outputLabel value="#{t.precio}" />
 							</p:column>
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="CANTIDAD" />
-								</f:facet>
+							<p:column headerText="CANTIDAD">
 								<p:outputLabel value="#{t.cantidad}" />
 							</p:column>
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="IMPORTE" />
-								</f:facet>
-								<p:outputLabel value="#{t.precio * t.cantidad}" />
-							</p:column>
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="IGV Venta" />
-								</f:facet>
+							<p:column headerText="IMPORTE">
 								<p:outputLabel value="#{t.precio * t.cantidad}" />
 							</p:column>
 							<p:column width="8%">
