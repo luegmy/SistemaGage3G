@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO ALMACEN</ui:define>
+	<ui:define name="content">
+		<f:loadBundle var="r" basename="recursos" />
+		<div class="container-fluid">
+			<h:form id="formAlmacen">
+				<p:fieldset legend="REGISTRO DE MOVIMIENTOS DE ALMACEN">
+					<div class="row">
+						<div class="col-xs-12 col-sm-8 col-md-8">
+							<p:panel id="pnlAlmacen">
+								<div class="row">
+								<div class="col-xs-6 col-sm-6 col-md-3">
+										<div class="form-group">
+											<p:outputLabel value="Fecha" for="fecha" />
+											<p:calendar value="#{almacenBean.fecha}" pattern="dd-MM-yyyy"
+												id="fecha" styleClass="form-control input-sm" locale="es">
+												<p:ajax event="dateSelect" />
+											</p:calendar>
+										</div>
+									</div>
+									<div class="col-xs-6 col-sm-6 col-md-3">
+										<div class="form-group">
+											<p:outputLabel value="#{r.movimiento}" />
+											<p:selectOneMenu value="#{almacenBean.codigoTipoMovimiento}"
+												id="movimiento" styleClass="form-control input-sm">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems value="#{almacenBean.movimientos}" />
+												<p:ajax event="change"
+													update="msgMovimiento pnlAlmacen pnlDetalle" />
+											</p:selectOneMenu>
+											<p:messages for="mensajeTipoMovimiento" id="msgMovimiento" />
+										</div>
+									</div>
+									<div class="col-xs-6 col-sm-6 col-md-3">
+										<div class="form-group">
+											<p:outputLabel value="Almacen" />
+											<p:selectOneMenu value="#{almacenBean.codigoOrigen}"
+												id="origen" styleClass="form-control input-sm">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems value="#{almacenBean.almacenes}" />
+												<p:ajax event="change"
+													update="msgAlmacenOrigen msgAlmacenIgual msgAlmacenTransfer1 pnlComprobante" />
+											</p:selectOneMenu>
+											<p:messages for="mensajeAlmacenOrigen" id="msgAlmacenOrigen" />
+											<p:messages for="mensajeAlmacenTransferencia"
+												id="msgAlmacenTransfer1" />
+
+										</div>
+
+									</div>
+									<div class="col-xs-6 col-sm-6 col-md-3">
+										<div class="form-group">
+											<p:outputLabel value="Destino" />
+											<p:selectOneMenu value="#{almacenBean.codigoDestino}"
+												id="destino" styleClass="form-control input-sm"
+												disabled="#{almacenBean.codigoTipoMovimiento!=3}">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems value="#{almacenBean.almacenes}" />
+												<p:ajax event="change"
+													update="msgAlmacenIgual msgAlmacenTransfer2" />
+											</p:selectOneMenu>
+											<p:messages for="mensajeAlmacenTransferencia"
+												id="msgAlmacenTransfer2" />
+										</div>
+
+									</div>
+								</div>
+							</p:panel>
+						</div>
+						<div class="col-xs-12 col-sm-4 col-md-4">
+							<p:panel id="pnlComprobante">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-6">
+										<div class="form-group">
+											<p:outputLabel value="Comprobante" />
+											<p:selectOneMenu value="#{almacenBean.codigoComprobante}"
+												id="motivo" styleClass="form-control input-sm"
+												disabled="#{almacenBean.codigoOrigen==0}">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems value="#{almacenBean.comprobantes}" />
+												<p:ajax event="change"
+													update="msgComprobante documento pnlDetalle"
+													listener="#{almacenBean.cargarComprobante}" />
+											</p:selectOneMenu>
+											<p:messages for="mensajeComprobante" id="msgComprobante" />
+										</div>
+									</div>
+
+									<div class="col-xs-12 col-sm-12 col-md-6">
+										<div class="form-group">
+											<p:outputLabel value="Numero" />
+
+											<p:selectOneMenu
+												disabled="#{almacenBean.codigoComprobante==2 or 
+												almacenBean.codigoOrigen==0}"
+												value="#{almacenBean.codigoNumeroComprobante}"
+												id="documento" styleClass="form-control input-sm">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems value="#{almacenBean.numeroComprobantes}" />
+												<p:ajax event="change"
+													update="msgNumeroComprobante pnlTabla"
+													listener="#{almacenBean.cargarMovimiento}" />
+											</p:selectOneMenu>
+
+											<p:messages for="mensajeNumeroComprobante"
+												id="msgNumeroComprobante" />
+										</div>
+									</div>
+									<div class="col-sm-0">
+										<h:inputHidden value="#{almacenBean.usuario}" />
+									</div>
+									<p:messages for="mensajeAlmacenIgual" id="msgAlmacenIgual" />
+								</div>
+
+							</p:panel>
+						</div>
+					</div>
+
+					<br></br>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12">
+							<p:panel id="pnlDetalle"
+								visible="#{almacenBean.codigoTipoMovimiento==3 || almacenBean.codigoComprobante==2}">
+								<div class="row">
+									<div class="col-xs-12 col-sm-4 col-md-2">
+										<div class="form-group">
+											<p:outputLabel value="#{r.tipo}" />
+											<p:selectOneMenu value="#{almacenBean.codigoTipoProducto}"
+												styleClass="form-control input-sm" id="tipo">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems value="#{almacenBean.tiposProductos}" />
+												<p:ajax event="change" update="producto msgTipo" />
+											</p:selectOneMenu>
+											<p:messages for="mensajeTipo" id="msgTipo" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-8 col-md-6">
+										<div class="form-group">
+											<p:outputLabel value="#{r.producto}" />
+											<p:selectOneMenu value="#{almacenBean.codigoProducto}"
+												id="producto" filter="true" filterMatchMode="startsWith"
+												styleClass="form-control input-sm">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems value="#{almacenBean.productos}" />
+												<p:ajax event="change" update="msgProducto" />
+											</p:selectOneMenu>
+											<p:messages for="mensajeProducto" id="msgProducto" />
+										</div>
+									</div>
+									<div class="col-xs-6 col-sm-4 col-md-2">
+										<div class="form-group">
+											<p:outputLabel value="#{r.cantidad}" />
+											<p:inputText value="#{almacenBean.cantidad}" id="cantidad"
+												size="12" label="Cantidad"
+												styleClass="form-control input-sm">
+												<p:ajax event="keyup" update="msgCantidad" />
+											</p:inputText>
+											<p:messages for="mensajeAgregarCantidad" id="msgCantidad" />
+										</div>
+									</div>
+									<div class="col-xs-6 col-sm-8 col-md-2">
+										<div class="form-group">
+											<p:commandLink title="Agregar producto"
+												actionListener="#{almacenBean.agregarProductoAlmacen}"
+												styleClass="#{r.azul}"
+												update="pnlDetalle formAlmacen:pnlTabla">
+												<p:graphicImage url="imagenes/carrito.png" width="25" />
+												<p:outputLabel value=" Agregar" />
+											</p:commandLink>
+										</div>
+									</div>
+
+								</div>
+
+								<p:messages for="mensajeLista" />
+								<p:messages for="mensajeRegistroAlmacen" />
+							</p:panel>
+						</div>
+					</div>
+					<br />
+					<p:outputPanel id="pnlTabla">
+						<p:dataTable value="#{almacenBean.temporales}" var="t" id="tabla"
+							emptyMessage=" " reflow="true"
+							rendered="#{almacenBean.temporales.size() > 0 eq true}">
+							<p:column width="60%">
+								<f:facet name="header">
+									<p:outputLabel value="PRODUCTO" />
+								</f:facet>
+								<p:outputLabel value="#{t.descripcion}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<p:outputLabel value="CANTIDAD" />
+								</f:facet>
+								<p:outputLabel value="#{t.cantidad}" />
+							</p:column>
+
+						</p:dataTable>
+						<div class="row">
+
+							<div class="col-xs-12 col-sm-6 col-md-2">
+								<div class="form-group">
+									<p:commandLink action="#{almacenBean.grabarAlmacen}"
+										styleClass="#{r.verde}" update="formAlmacen dlg">
+										<p:graphicImage url="imagenes/save.png" width="25" height="25" />
+										<h:outputLabel value="Grabar"></h:outputLabel>
+									</p:commandLink>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-2">
+								<div class="form-group">
+									<h:commandLink action="#{almacenBean.cancelarAlmacen}"
+										immediate="true" styleClass="#{r.naranja}">
+										<p:graphicImage url="imagenes/cancel.png" width="25"
+											height="25" />
+										<h:outputLabel value="Cancelar"></h:outputLabel>
+									</h:commandLink>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-2">
+								<div class="form-group">
+									<h:link outcome="home.xhtml" styleClass="#{r.rojo}">
+										<p:graphicImage url="imagenes/exit.png" width="25" height="25" />
+										<h:outputLabel value="Salir"></h:outputLabel>
+									</h:link>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-2">
+								<h:commandLink styleClass="#{r.celeste}" value="Exportar ">
+									<p:graphicImage value="/imagenes/excel.png" width="25"
+										height="25" />
+									<p:dataExporter type="xls" target="tabla" fileName="almacenes" />
+								</h:commandLink>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-4">
+										<div class="form-group">
+											<p:outputLabel value="Observacion:" />
+											<p:inputTextarea
+												value="#{almacenBean.observacion}"
+												id="observacion" styleClass="form-control input-sm" rows="1"
+												cols="20" maxlength="100">
+											</p:inputTextarea>
+										</div>
+									</div>
+
+						</div>
+					</p:outputPanel>
+
+				</p:fieldset>
+			</h:form>
+
+			<p:dialog header="MENSAJE DEL SISTEMA" widgetVar="dlgMensaje"
+				id="dlg" closable="false" showEffect="clip" hideEffect="clip"
+				responsive="true" modal="true" appendTo="@(body)">
+				<p:messages for="mensajeRegistroAlmacen" />
+				<h:form>
+					<p:commandLink action="#{almacenBean.cancelarAlmacen}"
+						onclick="PF('dlgMensaje').hide();" immediate="true"
+						update="formAlmacen" styleClass="#{r.rojo}">
+						<p:graphicImage url="imagenes/exit.png" width="25" height="25" />
+						<p:outputLabel value=" Salir" />
+					</p:commandLink>
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>
