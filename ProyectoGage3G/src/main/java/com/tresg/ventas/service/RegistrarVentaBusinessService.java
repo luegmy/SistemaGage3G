@@ -9,7 +9,7 @@ public interface RegistrarVentaBusinessService {
 
 	public List<VentaJPA> listaVenta();
 	
-	public VentaJPA muestraDetalleVenta(int comprobante);
+	public VentaJPA obtieneVenta(int comprobante);
 
 	public int compruebaExistenciaProducto(int producto);
 

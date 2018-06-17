@@ -13,7 +13,7 @@ public interface VentaDAO {
 	List<VentaJPA> listarVenta();
 	
 	// mostrar el detalle de la VENTA
-	VentaJPA mostrarDetalleVenta(int comprobante);
+	VentaJPA obtenerVenta(int comprobante);
 	
 	int comprobarExistenciaProducto(int producto);
 

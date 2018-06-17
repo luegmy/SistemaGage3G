@@ -2,6 +2,12 @@ package com.tresg.factoria;
 
 import com.tresg.incluido.dao.MysqlTipoProdiuctoDAO;
 import com.tresg.incluido.dao.MysqlUnidadMedidaDAO;
+import com.tresg.almacen.dao.MysqlAlmacenDAO;
+import com.tresg.almacen.dao.MysqlDetalleAlmacenDAO;
+import com.tresg.almacen.dao.MysqlDetalleMovimientoDAO;
+import com.tresg.almacen.interfaz.AlmacenDAO;
+import com.tresg.almacen.interfaz.DetalleAlmacenDAO;
+import com.tresg.almacen.interfaz.DetalleMovimientoDAO;
 import com.tresg.incluido.dao.MysqlClienteDAO;
 import com.tresg.incluido.dao.MysqlComboDAO;
 import com.tresg.incluido.dao.MysqlProductoDAO;
@@ -64,11 +70,30 @@ public class MySqlDAOFactory extends DAOFactory {
 	public CobranzaDAO getCobranzaDAO() {
 		return new MysqlCobranzaDAO();
 	}
+	
+	@Override
+	public AlmacenDAO getAlmacenDAO() {
+		return new MysqlAlmacenDAO();
+	}
+
+	@Override
+	public DetalleAlmacenDAO getDetalleAlmacenDAO() {
+		return new MysqlDetalleAlmacenDAO();
+	}
+	
+	@Override
+	public DetalleMovimientoDAO getDetalleMovimientoDAO() {
+		return new MysqlDetalleMovimientoDAO();
+	}
+
+
 
 	@Override
 	public UsuarioDAO getUsuarioDAO() {
 		return new MysqlUsuarioDAO();
 	}
+
+	
 
 	
 }

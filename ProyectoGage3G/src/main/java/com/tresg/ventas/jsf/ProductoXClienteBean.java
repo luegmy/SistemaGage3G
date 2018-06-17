@@ -3,20 +3,15 @@ package com.tresg.ventas.jsf;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.event.ActionEvent;
 
 import org.primefaces.component.datatable.DataTable;
 
 import com.tresg.ventas.jpa.DetalleVentaJPA;
-import com.tresg.ventas.jpa.VentaJPA;
 import com.tresg.ventas.service.ConsultarVentaBusinessService;
-import com.tresg.ventas.service.ConsultarVentaService;
-import com.tresg.ventas.service.RegistrarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;
 
 @ManagedBean(name = "productoClienteBean")

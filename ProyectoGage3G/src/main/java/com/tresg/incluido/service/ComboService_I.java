@@ -3,6 +3,7 @@ package com.tresg.incluido.service;
 import java.util.List;
 
 import com.tresg.almacen.jpa.AlmacenJPA;
+import com.tresg.almacen.jpa.TipoMovimientoJPA;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
@@ -13,11 +14,13 @@ import com.tresg.seguridad.jpa.RolJPA;
 
 public interface ComboService_I {
 	
-	public List<TipoProductoJPA> listaTipoProducto() ;
+	public List<TipoProductoJPA> comboTipoProducto() ;
 
-	public List<UnidadMedidaJPA> listaUnidadMedida();
+	public List<UnidadMedidaJPA> comboUnidadMedida();
 
-	public List<AlmacenJPA> listaAlamcen();
+	public List<AlmacenJPA> comboAlamcen();
+	
+	public List<TipoMovimientoJPA> comboTipoMovimiento();
 
 	public List<DocumentoIdentidadJPA> comboIdentidad();
 

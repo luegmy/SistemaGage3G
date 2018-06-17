@@ -18,8 +18,8 @@ public class RegistrarVentaService implements RegistrarVentaBusinessService {
 	}
 	
 	@Override
-	public VentaJPA muestraDetalleVenta(int comprobante) {
-		return iVentaDAO.mostrarDetalleVenta(comprobante);
+	public VentaJPA obtieneVenta(int comprobante) {
+		return iVentaDAO.obtenerVenta(comprobante);
 	}
 
 	@Override

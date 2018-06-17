@@ -18,7 +18,6 @@ import org.primefaces.event.SelectEvent;
 
 import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.incluido.jpa.ClienteJPA;
-import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.service.ComboService_I;
 import com.tresg.incluido.service.GestionarProductoService_I;
 import com.tresg.incluido.service.IncluidoBusinessDelegate;
@@ -90,9 +89,8 @@ public class ActualizaVentaBean implements Serializable {
 	public void cargarVenta(ActionEvent e) {
 
 		int numero = (int) e.getComponent().getAttributes().get("numeroEdicion");
-		ProductoJPA objProducto;
 
-		VentaJPA objVenta = sVenta.muestraDetalleVenta(numero);
+		VentaJPA objVenta = sVenta.obtieneVenta(numero);
 		atributoUtil.setNumeroComprobante(objVenta.getNumComprobante() % 10000000);
 		atributoUtil.getCliente().setCodCliente(objVenta.getCliente().getCodCliente());
 		atributoUtil.getCliente().setDireccion(objVenta.getCliente().getDireccion());

@@ -47,10 +47,9 @@ public class MysqlVentaDAO implements VentaDAO {
 	}
 
 	@Override
-	public VentaJPA mostrarDetalleVenta(int comprobante) {
+	public VentaJPA obtenerVenta(int comprobante) {
 		open();
 		VentaJPA objVenta = em.find(VentaJPA.class, comprobante);
-		em.refresh(objVenta);
 
 		return objVenta;
 	}

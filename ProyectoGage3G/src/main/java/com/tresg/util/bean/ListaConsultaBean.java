@@ -17,7 +17,7 @@ public class ListaConsultaBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	RegistrarVentaBusinessService sVenta = VentasBusinessDelegate.getRegistrarVentaService();
-	ConsultarVentaBusinessService sConsultaVenta=VentasBusinessDelegate.getConsultarVentaService();
+	ConsultarVentaBusinessService sConsultaVenta = VentasBusinessDelegate.getConsultarVentaService();
 
 	public List<VentaJPA> listarVentaPorFecha(Date fecha) {
 		List<VentaJPA> ventas = new ArrayList<>();
@@ -62,8 +62,7 @@ public class ListaConsultaBean implements Serializable {
 	}
 
 	public double acumuladoVentaXFecha(Date fecha) {
-		return sVenta.listaVenta().stream()
-				.filter(f -> fecha.equals(f.getFecha()) && f.getEstado().getCodEstado() == 1)
+		return sVenta.listaVenta().stream().filter(f -> fecha.equals(f.getFecha()) && f.getEstado().getCodEstado() == 1)
 				.mapToDouble(m -> m.getMonto().doubleValue()).sum();
 	}
 
@@ -76,18 +75,15 @@ public class ListaConsultaBean implements Serializable {
 	}
 
 	public double acumuladoXCliente(String cliente) {
-		return sVenta.listaVenta().stream()
-				.filter(v -> v.getCliente().getNombre().toLowerCase().contains(cliente))
+		return sVenta.listaVenta().stream().filter(v -> v.getCliente().getNombre().toLowerCase().contains(cliente))
 				.mapToDouble(m -> m.getMonto().doubleValue()).sum();
 	}
 
 	public List<DetalleVentaJPA> mostrarDetalleVenta(int numero) {
-		
+
 		List<DetalleVentaJPA> detalles = new ArrayList<>();
-		sConsultaVenta.listaDetalleVenta().stream().filter(d->d.getVenta().getNumComprobante()==numero).forEach(detalles::add);
-		/*for (DetalleVentaJPA d : sVenta.muestraDetalleVenta(numero).getDetalles()) {
-			detalles.add(d);
-		}*/
+		sConsultaVenta.listaDetalleVenta().stream().filter(d -> d.getVenta().getNumComprobante() == numero)
+				.forEach(detalles::add);
 		return detalles;
 	}
 }

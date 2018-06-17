@@ -20,6 +20,10 @@
 		<class>com.tresg.almacen.jpa.AlmacenJPA</class>
 		<class>com.tresg.almacen.jpa.DetalleAlmacenJPA</class>
 		<class>com.tresg.almacen.jpa.DetalleAlmacenJPAPK</class>
+		<class>com.tresg.almacen.jpa.TipoMovimientoJPA</class>
+		<class>com.tresg.almacen.jpa.MovimientoJPA</class>
+		<class>com.tresg.almacen.jpa.DetalleMovimientoJPA</class>
+		<class>com.tresg.almacen.jpa.DetalleMovimientoJPAPK</class>
 				
 		<class>com.tresg.ventas.jpa.VentaJPA</class>
 		<class>com.tresg.ventas.jpa.DetalleVentaJPA</class>
@@ -28,6 +32,9 @@
 		
 		<class>com.tresg.seguridad.jpa.UsuarioJPA</class>
 		<class>com.tresg.seguridad.jpa.RolJPA</class>
+		
+		
+		
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

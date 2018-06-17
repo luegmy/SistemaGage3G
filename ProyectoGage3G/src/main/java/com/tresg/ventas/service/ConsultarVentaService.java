@@ -1,6 +1,5 @@
 package com.tresg.ventas.service;
 
-import java.util.Date;
 import java.util.List;
 
 import com.tresg.factoria.DAOFactory;
@@ -16,9 +15,6 @@ public class ConsultarVentaService implements ConsultarVentaBusinessService {
 	@Override
 	public List<DetalleVentaJPA> listaDetalleVenta() {
 		return iDetalleVentaDAO.listarDetalleVenta();
-	}
-	
-
-	
+	}	
 
 }

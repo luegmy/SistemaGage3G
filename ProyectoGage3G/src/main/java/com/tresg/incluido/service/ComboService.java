@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.tresg.almacen.jpa.AlmacenJPA;
+import com.tresg.almacen.jpa.TipoMovimientoJPA;
 import com.tresg.factoria.DAOFactory;
 import com.tresg.incluido.interfaz.ComboDAO;
 import com.tresg.incluido.jpa.ComprobanteJPA;
@@ -24,19 +25,24 @@ public class ComboService implements ComboService_I,Serializable {
 	ComboDAO iComboDAO = fabrica.getComboDAO();
 	
 	@Override
-	public List<TipoProductoJPA> listaTipoProducto() {
-		return iComboDAO.listarTipoProducto();
+	public List<TipoProductoJPA> comboTipoProducto() {
+		return iComboDAO.comboTipoProducto();
 	}
 
 	@Override
-	public List<UnidadMedidaJPA> listaUnidadMedida() {
-		return iComboDAO.listarUnidadMedida();
+	public List<UnidadMedidaJPA> comboUnidadMedida() {
+		return iComboDAO.comboUnidadMedida();
 	}
 
 
 	@Override
-	public List<AlmacenJPA> listaAlamcen() {
-		return iComboDAO.listarAlamcen();
+	public List<AlmacenJPA> comboAlamcen() {
+		return iComboDAO.comboAlamcen();
+	}
+	
+	@Override
+	public List<TipoMovimientoJPA> comboTipoMovimiento() {
+		return iComboDAO.comboTipoMovimiento();
 	}
 	
 	@Override
@@ -63,4 +69,6 @@ public class ComboService implements ComboService_I,Serializable {
 	public List<RolJPA> comboRol() {
 		return iComboDAO.comboRol();
 	}
+
+	
 }

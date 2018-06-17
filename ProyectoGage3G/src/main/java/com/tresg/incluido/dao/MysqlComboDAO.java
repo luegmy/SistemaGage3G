@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.tresg.almacen.jpa.AlmacenJPA;
+import com.tresg.almacen.jpa.TipoMovimientoJPA;
 import com.tresg.incluido.interfaz.ComboDAO;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
@@ -25,7 +26,7 @@ public class MysqlComboDAO implements ComboDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TipoProductoJPA> listarTipoProducto() {
+	public List<TipoProductoJPA> comboTipoProducto() {
 		open();
 		Query q = em.createNamedQuery("tipo.comboTipoProducto");
 
@@ -34,7 +35,7 @@ public class MysqlComboDAO implements ComboDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<UnidadMedidaJPA> listarUnidadMedida() {
+	public List<UnidadMedidaJPA> comboUnidadMedida() {
 		open();
 
 		Query q = em.createNamedQuery("medida.comboUnidadMedida");
@@ -45,9 +46,18 @@ public class MysqlComboDAO implements ComboDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<AlmacenJPA> listarAlamcen() {
+	public List<AlmacenJPA> comboAlamcen() {
 		open();
 		Query q = em.createNamedQuery(AlmacenJPA.COMBO_ALMACEN);
+
+		return q.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TipoMovimientoJPA> comboTipoMovimiento() {
+		open();
+		Query q = em.createNamedQuery("tipoMovimiento.comboMovimiento");
 
 		return q.getResultList();
 	}

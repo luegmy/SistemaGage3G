@@ -1,6 +1,10 @@
 
 package com.tresg.factoria;
 
+import com.sun.faces.context.AlwaysPuttingSessionMap;
+import com.tresg.almacen.interfaz.AlmacenDAO;
+import com.tresg.almacen.interfaz.DetalleAlmacenDAO;
+import com.tresg.almacen.interfaz.DetalleMovimientoDAO;
 import com.tresg.incluido.interfaz.ClienteDAO;
 import com.tresg.incluido.interfaz.ComboDAO;
 import com.tresg.incluido.interfaz.ProductoDAO;
@@ -37,6 +41,10 @@ public abstract class DAOFactory{
     public abstract VentaDAO getVentaDAO();
     public abstract DetalleVentaDAO getDetalleVentaDAO();
     public abstract CobranzaDAO getCobranzaDAO();
+    
+    public abstract AlmacenDAO getAlmacenDAO();
+    public abstract DetalleAlmacenDAO getDetalleAlmacenDAO();
+    public abstract DetalleMovimientoDAO getDetalleMovimientoDAO();
     
     public abstract UsuarioDAO getUsuarioDAO();
    

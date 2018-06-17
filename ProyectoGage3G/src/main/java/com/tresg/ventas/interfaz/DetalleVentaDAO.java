@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.tresg.ventas.jpa.DetalleVentaJPA;
-import com.tresg.ventas.jpa.VentaJPA;
 
 public interface DetalleVentaDAO {
 	

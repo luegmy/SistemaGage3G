@@ -3,6 +3,7 @@ package com.tresg.incluido.interfaz;
 import java.util.List;
 
 import com.tresg.almacen.jpa.AlmacenJPA;
+import com.tresg.almacen.jpa.TipoMovimientoJPA;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
@@ -13,11 +14,13 @@ import com.tresg.seguridad.jpa.RolJPA;
 
 public interface ComboDAO {
 
-	List<TipoProductoJPA> listarTipoProducto() ;
+	List<TipoProductoJPA> comboTipoProducto() ;
 	
-	List<UnidadMedidaJPA> listarUnidadMedida();
+	List<UnidadMedidaJPA> comboUnidadMedida();
 
-	List<AlmacenJPA> listarAlamcen();
+	List<AlmacenJPA> comboAlamcen();
+	
+	List<TipoMovimientoJPA> comboTipoMovimiento();
 
 	List<DocumentoIdentidadJPA> comboIdentidad();
 

@@ -157,7 +157,7 @@ public class ProductoBean implements Serializable {
 	// lista despegable tipo de productos
 	public List<SelectItem> getTiposProductos() {
 		tiposProductos = new ArrayList<>();
-		for (TipoProductoJPA p : sCombo.listaTipoProducto()) {
+		for (TipoProductoJPA p : sCombo.comboTipoProducto()) {
 			tiposProductos.add(new SelectItem(p.getCodTipo(), p.getDescripcion()));
 		}
 		return tiposProductos;
@@ -177,7 +177,7 @@ public class ProductoBean implements Serializable {
 
 	public List<SelectItem> getMedidas() {
 		medidas = new ArrayList<>();
-		for (UnidadMedidaJPA u : sCombo.listaUnidadMedida()) {
+		for (UnidadMedidaJPA u : sCombo.comboUnidadMedida()) {
 			medidas.add(new SelectItem(u.getCodMedida(), u.getDescripcion()));
 		}
 		return medidas;
