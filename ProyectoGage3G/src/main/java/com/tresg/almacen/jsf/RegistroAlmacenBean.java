@@ -1,7 +1,6 @@
 package com.tresg.almacen.jsf;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -122,7 +121,7 @@ public class RegistroAlmacenBean implements Serializable {
 		}
 
 		// Crear una lista auxiliar
-		List<Integer> auxLista = new ArrayList<>();
+		List<String> auxLista = new ArrayList<>();
 
 		// Recorrer la lista principal
 		Iterator<DetalleMovimientoJPA> it = temporales.iterator();
@@ -130,20 +129,25 @@ public class RegistroAlmacenBean implements Serializable {
 			DetalleMovimientoJPA detalleJPA = it.next();
 
 			// Recorrer la lista principal auxiliar
-			Iterator<Integer> itaux = auxLista.iterator();
+			Iterator<String> itaux = auxLista.iterator();
 			while (itaux.hasNext()) {
-				int aux = (int) itaux.next();
+				String aux = (String) itaux.next();
 				// Realizar la compracion de listas
-				if ((detalleJPA.getId().getCodProducto()) == aux) {
+				if (aux.equals(String.valueOf(detalleJPA.getId().getCodProducto())
+						.concat(String.valueOf(detalleJPA.getId().getCodAlmacen())))) {
 					it.remove();
-					context.addMessage("mensajeLista", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Ya ingres�" + detalleJPA.getDescripcionProducto(), null));
+					context.addMessage("mensajeLista",
+							new FacesMessage(FacesMessage.SEVERITY_ERROR,
+									"Ya ingreso ".concat(detalleJPA.getDescripcionProducto()).concat(" ")
+											.concat("en almacen").concat(" ")
+											.concat(String.valueOf(detalleJPA.getId().getCodAlmacen())),
+									null));
 				}
 			}
-			// Almacenar en una lista auxiliar los codigos de los productos
-			// ingresados
+			// Almacenar en una lista auxiliar los codigos ingresados
 			// para su posterior comparacion con la lista principal
-			auxLista.add(detalleJPA.getId().getCodProducto());
+			auxLista.add(String.valueOf(detalleJPA.getId().getCodProducto())
+					.concat(String.valueOf(detalleJPA.getId().getCodAlmacen())));
 		}
 
 		limpiar();
@@ -210,7 +214,7 @@ public class RegistroAlmacenBean implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el tipo de comprobante", null));
 		} else if (numeroComprobante == 0 && codigoComprobante != 2) {
 			context.addMessage("mensajeNumeroComprobante",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el numero de comprobante", null));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ingrese el numero de comprobante", null));
 		} else if (temporales.isEmpty()) {
 			context.addMessage("mensajeLista", new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Agregue un producto a la lista, pulse el boton AGREGAR", null));

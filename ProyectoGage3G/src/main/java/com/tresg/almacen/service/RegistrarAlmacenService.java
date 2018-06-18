@@ -1,10 +1,8 @@
 package com.tresg.almacen.service;
 
 
-import java.util.List;
 
 import com.tresg.almacen.interfaz.AlmacenDAO;
-import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.almacen.jpa.MovimientoJPA;
 import com.tresg.factoria.DAOFactory;
 

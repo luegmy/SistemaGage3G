@@ -98,6 +98,8 @@
 											<p:outputLabel value="#{r.numero}" for="comprobante"/>
 											<p:inputText value="#{almacenBean.numeroComprobante}"
 												id="comprobante" styleClass="form-control">
+												<p:ajax event="change"
+													update="msgNumeroComprobante"/>
 											</p:inputText>
 
 											<p:messages for="mensajeNumeroComprobante"
@@ -171,9 +173,7 @@
 									</div>
 
 								</div>
-
 								<p:messages for="mensajeLista" />
-								<p:messages for="mensajeRegistroAlmacen" />
 							</p:panel>
 						</div>
 					</div>

@@ -20,7 +20,6 @@ public class DetalleMovimientoJPA implements Serializable {
 	private DetalleMovimientoJPAPK id;
 
 	private int cantidad;
-	private double precio;
 
 	@Transient
 	private String descripcionProducto;
@@ -49,14 +48,6 @@ public class DetalleMovimientoJPA implements Serializable {
 
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
-	}
-
-	public double getPrecio() {
-		return precio;
-	}
-
-	public void setPrecio(double precio) {
-		this.precio = precio;
 	}
 
 	public String getDescripcionProducto() {
