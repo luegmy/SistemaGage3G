@@ -15,14 +15,14 @@ import com.tresg.incluido.jpa.ProductoJPA;
 @Entity
 @Table(name = "tb_detalle_almacen")
 @NamedQueries({
-		@NamedQuery(name = "detalleAlmacen.comprobarStockAlmacen", query = "select sum(d.existencia) from DetalleAlmacenJPA d where d.producto.codProducto = :p1"),
-		@NamedQuery(name = "detalleAlmacen.actualizarAlmacenDecremento", query = "update DetalleAlmacenJPA d set d.existencia=d.existencia - :p1 where d.id= :p2"),
-		@NamedQuery(name = "detalleAlmacen.actualizarAlmacenIncremento", query = "update DetalleAlmacenJPA d set d.existencia=d.existencia + :p1 where d.id= :p2"),
-		@NamedQuery(name = "detalleAlmacen.actualizarProductoNacional", query = "update DetalleAlmacenJPA d set d.existencia=d.existencia - :x "
-				+ "where d.id.codAlmacen=4"),
-		@NamedQuery(name = "detalleAlmacen.desactualizarProductoNacional", query = "update DetalleAlmacenJPA d set d.existencia=d.existencia + :x "
-				+ "where d.id.codAlmacen=4"),
-		@NamedQuery(name = "detalleAlmacen.listarProductoPorAlmacen", query = "select d from DetalleAlmacenJPA d where d.producto.descripcion like :x") })
+		@NamedQuery(name = "detalleAlmacen.comprobarStockAlmacen", 
+				query = "select sum(d.existencia) from DetalleAlmacenJPA d where d.producto.codProducto = :p1"),
+		@NamedQuery(name = "detalleAlmacen.actualizarAlmacenDecremento", 
+				query = "update DetalleAlmacenJPA d set d.existencia=d.existencia - :p1 where d.id= :p2"),
+		@NamedQuery(name = "detalleAlmacen.actualizarAlmacenIncremento", 
+				query = "update DetalleAlmacenJPA d set d.existencia=d.existencia + :p1 where d.id= :p2"),
+		@NamedQuery(name = "detalleAlmacen.listarDetalleAlmacen", 
+				query = "select d from DetalleAlmacenJPA d") })
 
 public class DetalleAlmacenJPA implements Serializable {
 
@@ -31,9 +31,7 @@ public class DetalleAlmacenJPA implements Serializable {
 	public static final String VERIFICAR_EXISTENCIA = "detalleAlmacen.comprobarStockAlmacen";
 	public static final String ACTUALIZAR_ALMACEN_DECREMENTO = "detalleAlmacen.actualizarAlmacenDecremento";
 	public static final String ACTUALIZAR_ALMACEN_INCREMENTO = "detalleAlmacen.actualizarAlmacenIncremento";
-	public static final String ACTUALIZAR_ACCESORIO_EXTINTOR_NACIONAL = "detalleAlmacen.actualizarProductoNacional";
-	public static final String DESACTUALIZAR_ACCESORIO_EXTINTOR_NACIONAL = "detalleAlmacen.desactualizarProductoNacional";
-	public static final String LISTAR_PRODUCTO_POR_ALMACEN = "detalleAlmacen.listarProductoPorAlmacen";
+	public static final String LISTAR_DETALLE_ALMACEN= "detalleAlmacen.listarDetalleAlmacen";
 
 	@EmbeddedId
 	private DetalleAlmacenJPAPK id;

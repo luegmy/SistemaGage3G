@@ -63,17 +63,22 @@
 						<p:column headerText="U.M">
 							<h:outputText value="#{p.medida.descripcion}" />
 						</p:column>
-						<p:column width="8%" styleClass="text-center">
+						<p:column width="12%" styleClass="text-center">
 							<p:commandLink actionListener="#{productoBean.editarProducto}"
-								update="dialogo" action="ACTUALIZAR_PRODUCTO"
+								update="dialogo" action="actualizaProducto" title="Editar"
 								oncomplete="PF('dlgProducto').show();" styleClass="btn btn-primary">
 								<i class="fa fa-fw fa-edit"></i>
 								<f:attribute value="#{p.codProducto}" name="codigo" />
 							</p:commandLink>
-
+							<p:commandLink actionListener="#{productoBean.mostrarExistenciaXAlmacen}"
+								update="formProducto" action="actualizaProducto" title="Existencias"
+								oncomplete="PF('dlgExistencia').show();" styleClass="btn btn-info">
+								<i class="fa fa-fw fa-cubes"></i>
+								<f:attribute value="#{p.codProducto}" name="codigo" />
+							</p:commandLink>
 							<p:commandLink actionListener="#{productoBean.eliminarProducto}"
-								styleClass="btn btn-danger" action="ACTUALIZAR_PRODUCTO"
-								update="tablaProducto">
+								styleClass="btn btn-danger" action="actualizaProducto"
+								update="tablaProducto" title="Eliminar">
 								<p:confirm header="Confirmacion"
 									message="Estas seguro de eliminar?" icon="ui-icon-alert" />
 								<i class="fa fa-fw fa-trash"></i>
@@ -82,7 +87,6 @@
 
 						</p:column>
 					</p:dataTable>
-
 
 					<p:confirmDialog global="true">
 						<p:commandButton value="Si" update="pnlProducto tablaProducto"
@@ -93,6 +97,28 @@
 
 					<p:messages for="mensajeProductoEliminado"
 						id="msgProductoEliminado" />
+						
+						
+					<!--  EXISTENCIAS EN ALMACEN-->
+					<p:dialog header="EXISTENCIA" widgetVar="dlgExistencia"
+					 showEffect="scale" hideEffect="explode" position="right center"
+						modal="true" appendTo="@(body)">
+						<p:dataTable var="d" value="#{productoBean.existencias}"
+							reflow="true">
+							<p:column headerText="ALMACEN">
+								<h:outputText value="#{d.almacen.descripcion}" />
+							</p:column>
+							<p:column headerText="PRODUCTO">
+								<h:outputText value="#{d.producto.descripcion}" />
+							</p:column>
+							<p:column headerText="TIPO">
+								<h:outputText value="#{d.producto.tipo.descripcion}" />
+							</p:column>
+							<p:column headerText="CANTIDAD">
+								<h:outputText value="#{d.existencia}" />
+							</p:column>
+						</p:dataTable>
+					</p:dialog>
 				</p:fieldset>
 
 			</h:form>
@@ -178,7 +204,7 @@
 									<p:commandLink onclick="PF('dlgProducto').hide();"
 										update="formProductoNuevo" immediate="true"
 										action="ACTUALIZAR_PRODUCTO" styleClass="#{r.gris}"
-										actionListener="#{productoBean.cancelarProducto}">
+										actionListener="#{productoBean.limpiar()}">
 										<i class="fa fa-fw fa-sign-out"></i>
 										<h:outputText value=" Salir" />
 									</p:commandLink>

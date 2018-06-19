@@ -22,9 +22,9 @@ public class MysqlDetalleAlmacenDAO implements DetalleAlmacenDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DetalleAlmacenJPA> listarProductoPorAlmacen(String descripcion) {
+	public List<DetalleAlmacenJPA> listarDetalleAlmacen() {
 		open();
-		Query q=em.createNamedQuery(DetalleAlmacenJPA.LISTAR_PRODUCTO_POR_ALMACEN).setParameter("x", "%"+ descripcion+ "%");
+		Query q=em.createNamedQuery(DetalleAlmacenJPA.LISTAR_DETALLE_ALMACEN);
 		List<DetalleAlmacenJPA>lista=q.getResultList();
 		DetalleAlmacenJPA objDetalle=null;
 		for (DetalleAlmacenJPA d : lista) {

@@ -1,7 +1,6 @@
 
 package com.tresg.factoria;
 
-import com.sun.faces.context.AlwaysPuttingSessionMap;
 import com.tresg.almacen.interfaz.AlmacenDAO;
 import com.tresg.almacen.interfaz.DetalleAlmacenDAO;
 import com.tresg.almacen.interfaz.DetalleMovimientoDAO;

@@ -12,6 +12,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import com.tresg.almacen.jpa.DetalleAlmacenJPA;
+import com.tresg.almacen.service.AlmacenBusinessDelegate;
+import com.tresg.almacen.service.ConsultarAlmacenBusinessService;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
@@ -29,7 +32,7 @@ public class ProductoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// Formulario buscar
-	private String descripcionProducto="";
+	private String descripcionProducto = "";
 	private List<ProductoJPA> productos;
 
 	// Formulario producto
@@ -43,8 +46,11 @@ public class ProductoBean implements Serializable {
 	private List<SelectItem> tiposProductos;
 	private List<SelectItem> medidas;
 
+	private List<DetalleAlmacenJPA> existencias;
+
 	GestionarProductoService_I sProducto = IncluidoBusinessDelegate.getGestionarProductoService();
 	ComboService_I sCombo = IncluidoBusinessDelegate.getComboService();
+	ConsultarAlmacenBusinessService sConsultaAlmacen = AlmacenBusinessDelegate.getConsultarAlmacenService();
 
 	// Metodo donde se agrega los atributos del producto en las respectivas
 	// cajas de texto del formulario producto
@@ -99,8 +105,12 @@ public class ProductoBean implements Serializable {
 		codigoMedida = 0;
 	}
 
-	public void cancelarProducto() {
-		limpiar();
+	public void mostrarExistenciaXAlmacen(ActionEvent e) {
+		existencias=new ArrayList<>();
+		int codigo = (int) e.getComponent().getAttributes().get("codigo");
+		sConsultaAlmacen.listaDetalleAlmacen().stream().filter(d -> d.getId().getCodProducto() == codigo)
+				.forEach(existencias::add);
+
 	}
 
 	public void setProductos(List<ProductoJPA> productos) {
@@ -118,7 +128,7 @@ public class ProductoBean implements Serializable {
 	public List<ProductoJPA> getProductos() {
 		productos = new ArrayList<>();
 		sProducto.listaProducto().stream().filter(p -> p.getDescripcion().toLowerCase().contains(descripcionProducto))
-				 .forEach(productos::add);
+				.forEach(productos::add);
 		return productos;
 	}
 
@@ -193,6 +203,14 @@ public class ProductoBean implements Serializable {
 
 	public void setCodigoMedida(int codigoMedida) {
 		this.codigoMedida = codigoMedida;
+	}
+
+	public List<DetalleAlmacenJPA> getExistencias() {
+		return existencias;
+	}
+
+	public void setExistencias(List<DetalleAlmacenJPA> existencias) {
+		this.existencias = existencias;
 	}
 
 }

@@ -16,9 +16,13 @@ import com.tresg.incluido.jpa.ProductoJPA;
 
 @Entity
 @Table(name = "tb_detalle_venta")
-@NamedQueries({ @NamedQuery(name = "detalleVenta.listarDetalleVenta", query = "select d from DetalleVentaJPA d"),
-		@NamedQuery(name = "detalleVenta.listarProductoXVenta", query = "select d.producto.codProducto,d.producto.descripcion,sum(d.cantidad),sum(d.cantidad * d.precio) from DetalleVentaJPA d where d.venta.fecha between :p and :q group by d.producto.codProducto"),
-		@NamedQuery(name = "detalleVenta.eliminarItemDetalle", query = "delete from DetalleVentaJPA d where d.producto.codProducto =:p and d.venta.numComprobante=:v") })
+@NamedQueries({
+		@NamedQuery(name = "detalleVenta.listarDetalleVenta", 
+					query = "select d from DetalleVentaJPA d"),
+		@NamedQuery(name = "detalleVenta.listarProductoXVenta", 
+					query = "select d.producto.codProducto,d.producto.descripcion,sum(d.cantidad),sum(d.cantidad * d.precio) from DetalleVentaJPA d where d.venta.fecha between :p and :q group by d.producto.codProducto"),
+		@NamedQuery(name = "detalleVenta.eliminarItemDetalle", 
+					query = "delete from DetalleVentaJPA d where d.producto.codProducto =:p and d.venta.numComprobante=:v") })
 
 public class DetalleVentaJPA implements Serializable {
 

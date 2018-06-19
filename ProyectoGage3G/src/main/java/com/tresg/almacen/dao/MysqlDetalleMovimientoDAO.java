@@ -33,7 +33,7 @@ public class MysqlDetalleMovimientoDAO implements DetalleMovimientoDAO {
 	@Override
 	public List<DetalleAlmacenJPA> listarProductoPorAlmacen(String descripcion) {
 		open();
-		Query q=em.createNamedQuery(DetalleAlmacenJPA.LISTAR_PRODUCTO_POR_ALMACEN).setParameter("x", "%"+ descripcion+ "%");
+		Query q=em.createNamedQuery(DetalleAlmacenJPA.LISTAR_DETALLE_ALMACEN).setParameter("x", "%"+ descripcion+ "%");
 		List<DetalleAlmacenJPA>lista=q.getResultList();
 		DetalleAlmacenJPA objDetalle=null;
 		for (DetalleAlmacenJPA d : lista) {

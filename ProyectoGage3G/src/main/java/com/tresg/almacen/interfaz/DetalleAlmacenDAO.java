@@ -7,8 +7,8 @@ import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 
 public interface DetalleAlmacenDAO {
 
-	//CU incluido para ventas
-	List<DetalleAlmacenJPA> listarProductoPorAlmacen(String descripcion);
+	//CU excluido para productos
+	List<DetalleAlmacenJPA> listarDetalleAlmacen();
 
 
 }
