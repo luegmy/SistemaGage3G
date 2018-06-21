@@ -1,13 +1,10 @@
 package com.tresg.ventas.dao;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TemporalType;
 
 import com.tresg.util.jpa.JpaUtil;
 import com.tresg.ventas.interfaz.DetalleVentaDAO;
@@ -40,14 +37,12 @@ public class MysqlDetalleVentaDAO implements DetalleVentaDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DetalleVentaJPA> consultarDetalleProductoPorVenta(Date fechaIni, Date fechaFin) {
+	public List<DetalleVentaJPA> consultarDetalleProductoPorVenta() {
 		open();
 		
 		List<DetalleVentaJPA>detalles=new ArrayList<>();
 		
 		Query q = em.createNamedQuery(DetalleVentaJPA.LISTAR_PRODUCTOS_VENTAS);
-		q.setParameter("p", fechaIni,TemporalType.DATE);
-		q.setParameter("q", fechaFin,TemporalType.DATE);
 		
 		List<Object[]> lista=q.getResultList();
 		
@@ -57,9 +52,9 @@ public class MysqlDetalleVentaDAO implements DetalleVentaDAO {
 			for (int j = 0; j < arr.length; j++) {
 				obj.setCodigoProducto((int) (arr[0]));
 				obj.setDescripcionProducto(arr[1].toString());
-				//obj.setDescripcionTipo(arr[2].toString());
-				obj.setCantidad(new BigDecimal(arr[3].toString()));
-				obj.setPrecio(new BigDecimal(arr[4].toString()));
+				obj.setDescripcionTipoProducto(arr[2].toString());
+				obj.setCantidadSuma((int)arr[3]);
+				obj.setCantidadMonto((double) arr[4]);
 			}
 			
 			detalles.add(obj);

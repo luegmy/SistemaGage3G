@@ -20,7 +20,7 @@ import com.tresg.incluido.jpa.ProductoJPA;
 		@NamedQuery(name = "detalleVenta.listarDetalleVenta", 
 					query = "select d from DetalleVentaJPA d"),
 		@NamedQuery(name = "detalleVenta.listarProductoXVenta", 
-					query = "select d.producto.codProducto,d.producto.descripcion,sum(d.cantidad),sum(d.cantidad * d.precio) from DetalleVentaJPA d where d.venta.fecha between :p and :q group by d.producto.codProducto"),
+					query = "select d.producto.codProducto,d.producto.descripcion,sum(d.cantidad),sum(d.cantidad * d.precio) from DetalleVentaJPA d group by d.producto.codProducto"),
 		@NamedQuery(name = "detalleVenta.eliminarItemDetalle", 
 					query = "delete from DetalleVentaJPA d where d.producto.codProducto =:p and d.venta.numComprobante=:v") })
 
@@ -48,9 +48,15 @@ public class DetalleVentaJPA implements Serializable {
 
 	// para mostrar la descripcion y codigo del producto en el detalle
 	@Transient
+	private int codigoProducto;
+	@Transient
 	private String descripcionProducto;
 	@Transient
-	private int codigoProducto;
+	private String descripcionTipoProducto;
+	@Transient
+	private int cantidadSuma;
+	@Transient
+	private double cantidadMonto;
 
 	public DetalleVentaJPAPK getId() {
 		return id;
@@ -100,6 +106,14 @@ public class DetalleVentaJPA implements Serializable {
 		this.descripcionProducto = descripcionProducto;
 	}
 
+	public String getDescripcionTipoProducto() {
+		return descripcionTipoProducto;
+	}
+
+	public void setDescripcionTipoProducto(String descripcionTipoProducto) {
+		this.descripcionTipoProducto = descripcionTipoProducto;
+	}
+
 	public int getCodigoProducto() {
 		return codigoProducto;
 	}
@@ -107,9 +121,21 @@ public class DetalleVentaJPA implements Serializable {
 	public void setCodigoProducto(int codigoProducto) {
 		this.codigoProducto = codigoProducto;
 	}
+	
+	public int getCantidadSuma() {		
+		return cantidadSuma;
+	}
 
-	public String getProductoDescripcion() {
-		return producto.getDescripcion().concat(" ").concat(producto.getTipo().getDescripcion());
+	public void setCantidadSuma(int cantidadSuma) {
+		this.cantidadSuma = cantidadSuma;
+	}
+
+	public double getCantidadMonto() {
+		return cantidadMonto;
+	}
+
+	public void setCantidadMonto(double cantidadMonto) {
+		this.cantidadMonto = cantidadMonto;
 	}
 
 	@Override
@@ -136,5 +162,6 @@ public class DetalleVentaJPA implements Serializable {
 			return false;
 		return true;
 	}
+	
 
 }

@@ -194,11 +194,6 @@ public class UsuarioBean implements Serializable{
 		item.setIcon("ui-icon-bookmark");
 		almacenSubmenu.addElement(item);
 
-		item = new DefaultMenuItem("Existencias");
-		item.setUrl("consultaAlmacen.xhtml");
-		item.setIcon("ui-icon-star");
-		almacenSubmenu.addElement(item);
-
 		item = new DefaultMenuItem("Kardex");
 		item.setUrl("consultaKardex.xhtml");
 		item.setIcon("ui-icon-flag");
@@ -349,11 +344,6 @@ public class UsuarioBean implements Serializable{
 		item = new DefaultMenuItem("Movimientos");
 		item.setUrl("registroAlmacen.xhtml");
 		item.setIcon("ui-icon-bookmark");
-		almacenSubmenu.addElement(item);
-
-		item = new DefaultMenuItem("Existencias");
-		item.setUrl("consultaAlmacen.xhtml");
-		item.setIcon("ui-icon-star");
 		almacenSubmenu.addElement(item);
 
 		item = new DefaultMenuItem("Kardex");

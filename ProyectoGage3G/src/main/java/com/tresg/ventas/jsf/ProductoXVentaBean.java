@@ -1,17 +1,12 @@
 package com.tresg.ventas.jsf;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import org.primefaces.component.datatable.DataTable;
 
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.service.ConsultarVentaBusinessService;
@@ -23,15 +18,72 @@ public class ProductoXVentaBean {
 
 	// lista los detalles de dicha venta
 	private List<DetalleVentaJPA> detalles;
+	private Date fecha = new Date();
 	private Date fechaIni = new Date();
 	private Date fechaFin = new Date();
+	
+	
+	private int acumulador = 0;
+	private double monto = 0;
 
 	ConsultarVentaBusinessService sConsultaVenta = VentasBusinessDelegate.getConsultarVentaService();
 
-	public List<DetalleVentaJPA> getDetalles() {
+	public ProductoXVentaBean() {
 		detalles = new ArrayList<>();
+	}
+	
+	public void listarProductoVentaPorFecha() {
+		detalles = new ArrayList<>();
+		sConsultaVenta.listaDetalleVenta().stream().filter(f -> fecha.equals(f.getVenta().getFecha()))
+		.forEach(detalles::add);
 
+	}
+
+	public int sumaPorFecha() {
+		int aux = acumulador ;
+        acumulador = 0;
+        return aux;
+	}
+	
+	public double montoPorFecha() {
+		double aux = monto ;
+        monto = 0;
+        return aux;
+	}
+	
+	public void valorAcumulado(int valor)
+    {
+        acumulador += valor;
+    }
+	
+	public void montoAcumulado(Double valor)
+    {
+        monto += valor*acumulador;
+    }
+
+	public void listarProductoVentaPorRangoFecha() {
+		detalles = new ArrayList<>();
+		sConsultaVenta.listaDetalleVenta().stream()
+				.filter(f -> (f.getVenta().getFecha().after(fechaIni) || fechaIni.equals(f.getVenta().getFecha()))
+						&& (f.getVenta().getFecha().before(fechaFin) || fechaFin.equals(f.getVenta().getFecha())))
+				.forEach(detalles::add);
+
+	}
+
+	public List<DetalleVentaJPA> getDetalles() {
 		return detalles;
+	}
+
+	public void setDetalles(List<DetalleVentaJPA> detalles) {
+		this.detalles = detalles;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 
 	public Date getFechaIni() {
@@ -48,10 +100,6 @@ public class ProductoXVentaBean {
 
 	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
-	}
-
-	public void setDetalles(List<DetalleVentaJPA> detalles) {
-		this.detalles = detalles;
 	}
 
 }
