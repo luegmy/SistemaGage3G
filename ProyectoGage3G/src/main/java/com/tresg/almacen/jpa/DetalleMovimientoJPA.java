@@ -7,14 +7,18 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tb_detalle_movimiento")
+@NamedQuery(name = "detalleMovimiento.listarDetalleMovimiento", query = "select d from DetalleMovimientoJPA d")
+
 public class DetalleMovimientoJPA implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	public static final String LISTAR_DETALLE_MOVIMIENTOS = "detalleMovimiento.listarDetalleMovimiento";
 
 	@EmbeddedId
 	private DetalleMovimientoJPAPK id;

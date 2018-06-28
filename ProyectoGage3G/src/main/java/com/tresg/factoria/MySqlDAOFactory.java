@@ -2,10 +2,10 @@ package com.tresg.factoria;
 
 import com.tresg.incluido.dao.MysqlTipoProdiuctoDAO;
 import com.tresg.incluido.dao.MysqlUnidadMedidaDAO;
-import com.tresg.almacen.dao.MysqlAlmacenDAO;
+import com.tresg.almacen.dao.MysqlMovimientoDAO;
 import com.tresg.almacen.dao.MysqlDetalleAlmacenDAO;
 import com.tresg.almacen.dao.MysqlDetalleMovimientoDAO;
-import com.tresg.almacen.interfaz.AlmacenDAO;
+import com.tresg.almacen.interfaz.MovimientoDAO;
 import com.tresg.almacen.interfaz.DetalleAlmacenDAO;
 import com.tresg.almacen.interfaz.DetalleMovimientoDAO;
 import com.tresg.incluido.dao.MysqlClienteDAO;
@@ -72,8 +72,8 @@ public class MySqlDAOFactory extends DAOFactory {
 	}
 	
 	@Override
-	public AlmacenDAO getAlmacenDAO() {
-		return new MysqlAlmacenDAO();
+	public MovimientoDAO getMovimientoDAO() {
+		return new MysqlMovimientoDAO();
 	}
 
 	@Override

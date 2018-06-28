@@ -1,12 +1,11 @@
 package com.tresg.almacen.dao;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import com.tresg.almacen.interfaz.AlmacenDAO;
+import com.tresg.almacen.interfaz.MovimientoDAO;
 import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.almacen.jpa.DetalleAlmacenJPAPK;
 import com.tresg.almacen.jpa.DetalleMovimientoJPA;
@@ -14,20 +13,20 @@ import com.tresg.almacen.jpa.MovimientoJPA;
 import com.tresg.util.jpa.JpaUtil;
 import com.tresg.util.stock.ActualizarExistencia;
 
-
-public class MysqlAlmacenDAO implements AlmacenDAO {
+public class MysqlMovimientoDAO implements MovimientoDAO {
 
 	EntityManager em = null;
+
 	private void open() {
-		 em = JpaUtil.getEntityManager();
+		em = JpaUtil.getEntityManager();
 	}
-	
+
 	private void close() {
-		 em.close();
+		em.close();
 	}
-	
+
 	// clase utilitaria para actualizar el stock en almacen
-		ActualizarExistencia existenciaUtil = new ActualizarExistencia();
+	ActualizarExistencia existenciaUtil = new ActualizarExistencia();
 
 	@Override
 	public int obtenerNumero() {
@@ -71,7 +70,7 @@ public class MysqlAlmacenDAO implements AlmacenDAO {
 		} catch (RuntimeException e) {
 			em.getTransaction().rollback();
 			throw e;
-		}	
+		}
 
 		DetalleAlmacenJPA da;
 		DetalleAlmacenJPAPK dapk;
@@ -96,14 +95,14 @@ public class MysqlAlmacenDAO implements AlmacenDAO {
 					da.setExistencia(t.getCantidad());
 					em.persist(da);
 				}
-				
+
 				mensaje = "Se registro la entrada de productos";
-				
+
 			} else if (movimiento.getTipoMovimiento().getCodMovimiento() == 1) {
 				existenciaUtil.actualizarAlmacenDecremento(new BigDecimal(t.getCantidad()), da);
-				
+
 				mensaje = "Se registro la salida de productos";
-				
+
 			} else {
 
 				actualizarTransferencia(destino, da, t.getCantidad(), t.getId().getCodProducto());
@@ -116,26 +115,9 @@ public class MysqlAlmacenDAO implements AlmacenDAO {
 		return mensaje;
 
 	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<MovimientoJPA> listarMovimiento() {
-		open();	
-		
-		Query q=em.createNamedQuery(MovimientoJPA.LISTAR_MOVIMIENTOS);
-		List<MovimientoJPA>lista=q.getResultList();
-		MovimientoJPA objMovimiento = null;
-		for (MovimientoJPA m : lista) {
-			objMovimiento=em.find(MovimientoJPA.class, m.getNroMovimiento());
-		}
-		em.refresh(objMovimiento);
-		return lista;
-	}	
-
 
 	void actualizarTransferencia(int destino, DetalleAlmacenJPA da, int cantidad, int producto) {
 
-		
 		existenciaUtil = new ActualizarExistencia();
 		DetalleAlmacenJPAPK dapkDestino = new DetalleAlmacenJPAPK();
 		DetalleAlmacenJPA daDestino = new DetalleAlmacenJPA();
@@ -155,7 +137,5 @@ public class MysqlAlmacenDAO implements AlmacenDAO {
 		}
 
 	}
-
-	
 
 }

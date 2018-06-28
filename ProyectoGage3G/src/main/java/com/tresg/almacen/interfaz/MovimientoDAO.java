@@ -1,11 +1,9 @@
 package com.tresg.almacen.interfaz;
 
 
-import java.util.List;
-
 import com.tresg.almacen.jpa.MovimientoJPA;
 
-public interface AlmacenDAO {
+public interface MovimientoDAO {
 
 	// CU Registrar ingreso o salida almacen
 	// obtener el numero del movimiento
@@ -15,8 +13,6 @@ public interface AlmacenDAO {
 	int generarNumeroNota();
 
 	String registrarMovimiento(MovimientoJPA movimiento, int destino);
-	
-	// CU Consultar kardex
-	List<MovimientoJPA> listarMovimiento() ;
+
 
 }

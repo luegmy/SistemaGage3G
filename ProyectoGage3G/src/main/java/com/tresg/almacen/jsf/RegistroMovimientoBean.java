@@ -21,7 +21,7 @@ import com.tresg.almacen.jpa.DetalleMovimientoJPAPK;
 import com.tresg.almacen.jpa.MovimientoJPA;
 import com.tresg.almacen.jpa.TipoMovimientoJPA;
 import com.tresg.almacen.service.AlmacenBusinessDelegate;
-import com.tresg.almacen.service.RegistrarAlmacenBusinessService;
+import com.tresg.almacen.service.RegistrarMovimientoBusinessService;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.service.ComboService_I;
@@ -32,7 +32,7 @@ import com.tresg.util.formato.Formateo;
 
 @ManagedBean(name = "almacenBean")
 @SessionScoped
-public class RegistroAlmacenBean implements Serializable {
+public class RegistroMovimientoBean implements Serializable {
 
 	/**
 	 * 
@@ -75,12 +75,12 @@ public class RegistroAlmacenBean implements Serializable {
 	public static final String AGREGAR_ALMACEN = "AGREGAR_ALMACEN";
 
 	// Instanciar los services
-	RegistrarAlmacenBusinessService sAlmacen = AlmacenBusinessDelegate.getRegistrarAlmacenService();
+	RegistrarMovimientoBusinessService sAlmacen = AlmacenBusinessDelegate.getRegistrarAlmacenService();
 	GestionarProductoService_I sProducto = IncluidoBusinessDelegate.getGestionarProductoService();
 	ComboService_I sCombo = IncluidoBusinessDelegate.getComboService();
 
 	// Constructor
-	public RegistroAlmacenBean() {
+	public RegistroMovimientoBean() {
 		temporales = new ArrayList<>();
 	}
 

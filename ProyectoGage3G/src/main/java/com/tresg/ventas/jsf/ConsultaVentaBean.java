@@ -9,8 +9,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.primefaces.component.datatable.DataTable;
-
 import com.tresg.util.bean.AtributoBean;
 import com.tresg.util.bean.ListaConsultaBean;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
@@ -26,9 +24,6 @@ public class ConsultaVentaBean implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// para limpiar el filtro de una datatable
-	DataTable tbVenta;
-
 	// lista las ventas
 	private List<VentaJPA> ventas;
 
@@ -36,19 +31,21 @@ public class ConsultaVentaBean implements Serializable{
 	private List<DetalleVentaJPA> detalles;
 
 	// mostrar el monto de la lista de ventas
-	private double acumulado;
+	private double acumuladoContado;
+	private double acumuladoCredito;
+	private double acumuladoDeposito;
 
 	ListaConsultaBean listaUtil = new ListaConsultaBean();
 	AtributoBean atributoUtil = new AtributoBean();
 
 	public void listarVentaXFecha() {
-		this.tbVenta.reset();
-		ventas = listaUtil.listarVentaPorFechaContado(atributoUtil.getFecha());
-		acumulado=listaUtil.acumuladoVentaXFecha(atributoUtil.getFecha());
+		ventas = listaUtil.listarVentaPorFecha(atributoUtil.getFecha());
+		acumuladoContado=listaUtil.acumuladoContadoVentaXFecha(atributoUtil.getFecha());
+		acumuladoCredito=listaUtil.acumuladoCreditoVentaXFecha(atributoUtil.getFecha());
+		acumuladoDeposito=listaUtil.acumuladoDepositoVentaXFecha(atributoUtil.getFecha());
 	}
 
 	public void listarVentaRangoFecha() {
-		this.tbVenta.reset();
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		if (atributoUtil.getFechaFin().before(atributoUtil.getFechaIni())) {
@@ -56,26 +53,19 @@ public class ConsultaVentaBean implements Serializable{
 					"La fecha final no puede ser menor a fecha inicial", null));
 		}
 		ventas = listaUtil.listarVentaPorRangoFecha(atributoUtil.getFechaIni(), atributoUtil.getFechaFin());
-		acumulado=listaUtil.acumuladoVentaXRangoFecha(atributoUtil.getFechaIni(), atributoUtil.getFechaFin());
+		acumuladoContado=listaUtil.acumuladoContadoVentaXRangoFecha(atributoUtil.getFechaIni(), atributoUtil.getFechaFin());
+		acumuladoCredito=listaUtil.acumuladoCreditoVentaXRangoFecha(atributoUtil.getFechaIni(), atributoUtil.getFechaFin());
+		acumuladoDeposito=listaUtil.acumuladoDepositoVentaXRangoFecha(atributoUtil.getFechaIni(), atributoUtil.getFechaFin());
 	}
 
 	public void listarVentaXCliente() {
-		this.tbVenta.reset();
 		ventas = listaUtil.listarPorCliente(atributoUtil.getCliente().getNombre());
-		acumulado=listaUtil.acumuladoXCliente(atributoUtil.getCliente().getNombre());
+		acumuladoContado=listaUtil.acumuladoXCliente(atributoUtil.getCliente().getNombre());
 	}
 
 	public void mostrarDetalleVenta(ActionEvent e) {
 		int numero = (int) e.getComponent().getAttributes().get("numeroDetalle");
 		detalles = listaUtil.mostrarDetalleVenta(numero);
-	}
-
-	public DataTable getTbVenta() {
-		return tbVenta;
-	}
-
-	public void setTbVenta(DataTable tbVenta) {
-		this.tbVenta = tbVenta;
 	}
 
 	public List<VentaJPA> getVentas() {
@@ -94,12 +84,30 @@ public class ConsultaVentaBean implements Serializable{
 		this.detalles = detalles;
 	}
 
-	public double getAcumulado() {
-		return acumulado;
+	
+
+	public double getAcumuladoContado() {
+		return acumuladoContado;
 	}
 
-	public void setAcumulado(double acumulado) {
-		this.acumulado = acumulado;
+	public void setAcumuladoContado(double acumuladoContado) {
+		this.acumuladoContado = acumuladoContado;
+	}
+
+	public double getAcumuladoCredito() {
+		return acumuladoCredito;
+	}
+
+	public void setAcumuladoCredito(double acumuladoCredito) {
+		this.acumuladoCredito = acumuladoCredito;
+	}
+
+	public double getAcumuladoDeposito() {
+		return acumuladoDeposito;
+	}
+
+	public void setAcumuladoDeposito(double acumuladoDeposito) {
+		this.acumuladoDeposito = acumuladoDeposito;
 	}
 
 	public ListaConsultaBean getListaUtil() {

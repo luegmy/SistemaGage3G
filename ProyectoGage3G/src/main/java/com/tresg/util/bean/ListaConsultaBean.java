@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.jpa.VentaJPA;
@@ -26,16 +25,16 @@ public class ListaConsultaBean implements Serializable {
 
 	}
 
-	public List<VentaJPA> listarVentaPorFechaContado(Date fecha) {
+/*	public List<VentaJPA> listarVentaPorFechaContado(Date fecha) {
 		List<VentaJPA> ventas = new ArrayList<>();
 		sVenta.listaVenta().stream().filter(f -> fecha.equals(f.getFecha()))
 				.collect(Collectors.toCollection(ArrayList::new)).stream()
 				.filter(e -> e.getEstado().getCodEstado() == 1).forEach(ventas::add);
 		return ventas;
 
-	}
+	}*/
 
-	public List<VentaJPA> listarVentaPorRangoFecha(Date fechaIni, Date fechaFin) {
+/*	public List<VentaJPA> listarVentaPorRangoFechaContado(Date fechaIni, Date fechaFin) {
 		List<VentaJPA> ventas = new ArrayList<>();
 		sVenta.listaVenta().stream()
 				.filter(f -> (f.getFecha().after(fechaIni) || fechaIni.equals(f.getFecha()))
@@ -44,9 +43,9 @@ public class ListaConsultaBean implements Serializable {
 				.filter(e -> e.getEstado().getCodEstado() == 1).forEach(ventas::add);
 		return ventas;
 
-	}
+	}*/
 
-	public List<VentaJPA> listarVentaPorRangoFechaContado(Date fechaIni, Date fechaFin) {
+	public List<VentaJPA> listarVentaPorRangoFecha(Date fechaIni, Date fechaFin) {
 		List<VentaJPA> ventas = new ArrayList<>();
 		sVenta.listaVenta().stream().filter(f -> (f.getFecha().after(fechaIni) || fechaIni.equals(f.getFecha()))
 				&& (f.getFecha().before(fechaFin) || fechaFin.equals(f.getFecha()))).forEach(ventas::add);
@@ -61,16 +60,42 @@ public class ListaConsultaBean implements Serializable {
 		return ventas;
 	}
 
-	public double acumuladoVentaXFecha(Date fecha) {
-		return sVenta.listaVenta().stream().filter(f -> fecha.equals(f.getFecha()) && f.getEstado().getCodEstado() == 1)
+	public double acumuladoContadoVentaXFecha(Date fecha) {
+		return sVenta.listaVenta().stream().filter(f -> (fecha.equals(f.getFecha()) && f.getEstado().getCodEstado()==1))
+				.mapToDouble(m -> m.getMonto().doubleValue()).sum();
+	}
+	
+	public double acumuladoDepositoVentaXFecha(Date fecha) {
+		return sVenta.listaVenta().stream().filter(f -> (fecha.equals(f.getFecha()) && f.getEstado().getCodEstado()==8))
+				.mapToDouble(m -> m.getMonto().doubleValue()).sum();
+	}
+	
+	public double acumuladoCreditoVentaXFecha(Date fecha) {
+		return sVenta.listaVenta().stream().filter(f -> (fecha.equals(f.getFecha()) && f.getEstado().getCodEstado()==2))
 				.mapToDouble(m -> m.getMonto().doubleValue()).sum();
 	}
 
-	public double acumuladoVentaXRangoFecha(Date fechaIni, Date fechaFin) {
+	public double acumuladoContadoVentaXRangoFecha(Date fechaIni, Date fechaFin) {
 		return sVenta.listaVenta().stream()
 				.filter(f -> (f.getFecha().after(fechaIni) || fechaIni.equals(f.getFecha()))
 						&& (f.getFecha().before(fechaFin) || fechaFin.equals(f.getFecha()))
 						&& f.getEstado().getCodEstado() == 1)
+				.mapToDouble(m -> m.getMonto().doubleValue()).sum();
+	}
+	
+	public double acumuladoCreditoVentaXRangoFecha(Date fechaIni, Date fechaFin) {
+		return sVenta.listaVenta().stream()
+				.filter(f -> (f.getFecha().after(fechaIni) || fechaIni.equals(f.getFecha()))
+						&& (f.getFecha().before(fechaFin) || fechaFin.equals(f.getFecha()))
+						&& f.getEstado().getCodEstado() == 2)
+				.mapToDouble(m -> m.getMonto().doubleValue()).sum();
+	}
+	
+	public double acumuladoDepositoVentaXRangoFecha(Date fechaIni, Date fechaFin) {
+		return sVenta.listaVenta().stream()
+				.filter(f -> (f.getFecha().after(fechaIni) || fechaIni.equals(f.getFecha()))
+						&& (f.getFecha().before(fechaFin) || fechaFin.equals(f.getFecha()))
+						&& f.getEstado().getCodEstado() == 8)
 				.mapToDouble(m -> m.getMonto().doubleValue()).sum();
 	}
 

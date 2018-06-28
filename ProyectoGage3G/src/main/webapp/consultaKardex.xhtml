@@ -7,24 +7,13 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
-	<ui:define name="head">Capelo</ui:define>
+	<ui:define name="title">MODULO ALMACEN</ui:define>
 	<ui:define name="content">
 		<div class="container-fluid">
 			<p:fieldset legend="KARDEX POR ALMACEN">
 				<h:form id="formMovimientos">
 					<div class="row">
-						<div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-1">
-							<div class="form-group">
-								<h:outputText value="#{r.almacen}  " />
-								<p:selectOneMenu value="#{kardexConsultaBean.codigoAlmacen}"
-									styleClass="form-control input-sm">
-									<f:selectItem itemValue="" itemLabel="--Seleccione--" />
-									<f:selectItems value="#{kardexConsultaBean.almacenes}" />
-									<p:ajax event="change" update="tabla"
-										listener="#{kardexConsultaBean.listarMovimientoXFecha}" />
-								</p:selectOneMenu>
-							</div>
-						</div>
+
 						<div class="col-xs-12 col-sm-6 col-md-6 col-md-offset-1">
 							<p:tabView dynamic="true" cache="true" style="width:80%">
 								<p:ajax event="tabChange"
@@ -33,8 +22,7 @@
 								<p:tab title="Fecha">
 									<p:calendar value="#{kardexConsultaBean.fecha}"
 										pattern="dd-MM-yyyy" id="fecha">
-										<p:ajax event="dateSelect" 
-											update=":formMovimientos:tabla"
+										<p:ajax event="dateSelect" update=":formMovimientos:tabla"
 											listener="#{kardexConsultaBean.listarMovimientoXFecha}" />
 									</p:calendar>
 								</p:tab>
@@ -66,9 +54,10 @@
 					<br />
 					<p:dataTable id="tabla" value="#{kardexConsultaBean.movimientos}"
 						var="t" emptyMessage="No hay movimientos registrados"
-						reflow="true" paginator="true" rows="15"
-						binding="#{kardexConsultaBean.tbKardex}">
-
+						reflow="true" paginator="true" rows="15">
+						<p:column headerText="ALMACEN">
+							<h:outputText value="#{t.detalleAlmacen.almacen.descripcion}" />
+						</p:column>
 						<p:column width="8%" headerText="FECHA">
 							<h:outputText value="#{t.movimiento.fecha}">
 								<f:convertDateTime pattern="dd - MM - yyyy" />
@@ -80,22 +69,27 @@
 							</h:outputText>
 						</p:column>
 						<p:column headerText="NUMERO">
-							<h:outputText value="#{t.movimiento.compra.numComprobante % 10000000}" />
+							<h:outputText value="#{t.movimiento.numComprobante % 10000000}" />
 						</p:column>
 						<p:column headerText="CDP">
-							<h:outputText value="#{t.movimiento.compra.comprobante.descripcion}" />
+							<h:outputText value="#{t.movimiento.comprobante.descripcion}" />
 						</p:column>
 						<p:column width="40%" headerText="PRODUCTO">
 							<h:outputText value="#{t.detalleAlmacen.producto.descripcion}" />
 						</p:column>
 						<p:column headerText="TIPO">
-							<h:outputText value="#{t.detalleAlmacen.producto.tipo.descripcion}" />
+							<h:outputText
+								value="#{t.detalleAlmacen.producto.tipo.descripcion}" />
 						</p:column>
-						<p:column headerText="CANTIDAD">
-							<h:outputText value="#{t.cantidad}" />
+						
+						<p:column exportable="false" headerText="ENTRADA">
+							<h:outputText value="#{t.movimiento.tipoMovimiento.codMovimiento eq 2 ? t.cantidad : 0}"/>
 						</p:column>
-						<p:column exportable="false" headerText="E/S">
-							<h:outputText value="#{t.movimiento.tipoMovimiento.descripcion}" />
+						<p:column exportable="false" headerText="SALIDA">
+							<h:outputText value="#{t.movimiento.tipoMovimiento.codMovimiento eq 1 ? t.cantidad : 0}"/>
+						</p:column>
+						<p:column headerText="SALDO">
+							<h:outputText value="#{t.detalleAlmacen.existencia}" />
 						</p:column>
 						<p:column exportable="false" headerText="OBS">
 							<h:outputLink value="#" id="obs">

@@ -4,7 +4,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
 	<ui:define name="title">MODULO VENTAS</ui:define>
@@ -42,21 +43,11 @@
 							</p:tabView>
 							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
 						</div>
-
 					</div>
 
 
 					<p:dataTable id="tabla" value="#{productoVentaBean.detalles}"
-						sortBy="#{t.producto.codProducto}" var="t"
-						paginatorTemplate="{Exportar}" paginator="true">
-
-						<f:facet name="{Exportar}">
-							<h:commandLink styleClass="btn btn-success" title="Exportar">
-								<i class="fa fa-fw fa-file-excel-o"></i>
-								<p:outputLabel value=" Exportar" />
-								<p:dataExporter type="pdf" target="tabla" fileName="ventas" />
-							</h:commandLink>
-						</f:facet>
+						sortBy="#{t.producto.codProducto}" var="t">
 
 						<p:column headerText="CDP"
 							sortBy="#{t.venta.comprobante.descripcion}">
@@ -77,7 +68,7 @@
 							sortBy="#{t.producto.tipo.descripcion}">
 							<h:outputText value="#{t.producto.tipo.descripcion}" />
 						</p:column>
-						<p:column headerText="CANTIDAD" sortBy="#{t.cantidad}">	
+						<p:column headerText="CANTIDAD" sortBy="#{t.cantidad}">
 							#{productoVentaBean.valorAcumulado(t.cantidad)}						
 							<h:outputText value="#{t.cantidad}">
 								<f:converter converterId="javax.faces.Integer" />

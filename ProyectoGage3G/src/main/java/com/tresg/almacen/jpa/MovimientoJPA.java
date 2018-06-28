@@ -22,9 +22,11 @@ import com.tresg.seguridad.jpa.UsuarioJPA;
 @Entity
 @Table(name = "tb_movimiento")
 @NamedQueries({
-		@NamedQuery(name = "movimiento.maxNumeroMovimiento", query = "select max(m.nroMovimiento)+1 from MovimientoJPA m"),
-		@NamedQuery(name = "movimiento.maxNumeroMovimientoNota", query = "select max(m.numComprobante)+1 from MovimientoJPA m where m.comprobante.codComprobante=2"),
-		@NamedQuery(name = "movimiento.listarMovimiento", query = "select distinct m from MovimientoJPA m join fetch m.detalles") })
+		@NamedQuery(name = "movimiento.maxNumeroMovimiento", 
+				query = "select max(m.nroMovimiento)+1 from MovimientoJPA m"),
+		@NamedQuery(name = "movimiento.maxNumeroMovimientoNota", 
+				query = "select max(m.numComprobante)+1 from MovimientoJPA m where m.comprobante.codComprobante=2")
+		 })
 
 public class MovimientoJPA implements Serializable {
 
@@ -32,7 +34,6 @@ public class MovimientoJPA implements Serializable {
 
 	public static final String MAXIMO_NUMERO_MOVIMIENTO = "movimiento.maxNumeroMovimiento";
 	public static final String NUMERACION_MOVIMIENTO_NOTA = "movimiento.maxNumeroMovimientoNota";
-	public static final String LISTAR_MOVIMIENTOS = "movimiento.listarMovimiento";
 
 	@Id
 	private int nroMovimiento;

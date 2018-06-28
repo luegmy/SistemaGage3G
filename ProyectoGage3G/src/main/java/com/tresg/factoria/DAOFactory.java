@@ -1,7 +1,7 @@
 
 package com.tresg.factoria;
 
-import com.tresg.almacen.interfaz.AlmacenDAO;
+import com.tresg.almacen.interfaz.MovimientoDAO;
 import com.tresg.almacen.interfaz.DetalleAlmacenDAO;
 import com.tresg.almacen.interfaz.DetalleMovimientoDAO;
 import com.tresg.incluido.interfaz.ClienteDAO;
@@ -41,7 +41,7 @@ public abstract class DAOFactory{
     public abstract DetalleVentaDAO getDetalleVentaDAO();
     public abstract CobranzaDAO getCobranzaDAO();
     
-    public abstract AlmacenDAO getAlmacenDAO();
+    public abstract MovimientoDAO getMovimientoDAO();
     public abstract DetalleAlmacenDAO getDetalleAlmacenDAO();
     public abstract DetalleMovimientoDAO getDetalleMovimientoDAO();
     

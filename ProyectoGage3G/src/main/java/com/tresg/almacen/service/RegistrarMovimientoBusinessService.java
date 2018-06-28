@@ -2,7 +2,7 @@ package com.tresg.almacen.service;
 
 import com.tresg.almacen.jpa.MovimientoJPA;
 
-public interface RegistrarAlmacenBusinessService {
+public interface RegistrarMovimientoBusinessService {
 
 	public int obtieneNumero();
 	public int generaNumeroNota();

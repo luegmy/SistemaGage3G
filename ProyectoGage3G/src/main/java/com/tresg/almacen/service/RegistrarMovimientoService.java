@@ -2,14 +2,14 @@ package com.tresg.almacen.service;
 
 
 
-import com.tresg.almacen.interfaz.AlmacenDAO;
+import com.tresg.almacen.interfaz.MovimientoDAO;
 import com.tresg.almacen.jpa.MovimientoJPA;
 import com.tresg.factoria.DAOFactory;
 
-public class RegistrarAlmacenService implements RegistrarAlmacenBusinessService{
+public class RegistrarMovimientoService implements RegistrarMovimientoBusinessService{
 	
 	DAOFactory fabrica=DAOFactory.getDAOFactory(DAOFactory.MYSQL);
-	AlmacenDAO iAlmacen=fabrica.getAlmacenDAO();
+	MovimientoDAO iAlmacen=fabrica.getMovimientoDAO();
 
 
 	@Override

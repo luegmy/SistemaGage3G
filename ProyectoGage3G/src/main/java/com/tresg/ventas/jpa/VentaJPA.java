@@ -30,7 +30,7 @@ import com.tresg.seguridad.jpa.UsuarioJPA;
 @Table(name = "tb_venta")
 @NamedQueries({ @NamedQuery(name = "venta.listarVentas", query = "select v from VentaJPA v"),
 
-		@NamedQuery(name = "venta.actualizarVentaEstado", query = "update VentaJPA v set v.estado=:x where v.numComprobante=:y") })
+		@NamedQuery(name = "venta.actualizarVentaEstado", query = "update VentaJPA v set v.estado=:x , v.monto=0 where v.numComprobante=:y") })
 
 public class VentaJPA implements Serializable {
 
