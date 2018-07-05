@@ -13,8 +13,8 @@ public class RegistrarMovimientoService implements RegistrarMovimientoBusinessSe
 
 
 	@Override
-	public String registraMovimiento(MovimientoJPA movimiento,int destino) {
-		return iAlmacen.registrarMovimiento(movimiento,destino);
+	public String registraMovimiento(MovimientoJPA movimiento) {
+		return iAlmacen.registrarMovimiento(movimiento);
 	}
 
 	@Override

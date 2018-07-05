@@ -12,7 +12,7 @@ public interface MovimientoDAO {
 	// generar la numeracion de la nota de movimiento
 	int generarNumeroNota();
 
-	String registrarMovimiento(MovimientoJPA movimiento, int destino);
+	String registrarMovimiento(MovimientoJPA movimiento);
 
 
 }

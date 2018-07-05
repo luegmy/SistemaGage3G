@@ -95,11 +95,10 @@
 
 									<div class="col-12 col-sm-12 col-md-6">
 										<div class="form-group">
-											<p:outputLabel value="#{r.numero}" for="comprobante"/>
+											<p:outputLabel value="#{r.numero}" for="comprobante" />
 											<p:inputText value="#{almacenBean.numeroComprobante}"
 												id="comprobante" styleClass="form-control">
-												<p:ajax event="change"
-													update="msgNumeroComprobante"/>
+												<p:ajax event="change" update="msgNumeroComprobante" />
 											</p:inputText>
 
 											<p:messages for="mensajeNumeroComprobante"
@@ -153,8 +152,7 @@
 										<div class="form-group">
 											<p:outputLabel value="#{r.cantidad}" />
 											<p:inputText value="#{almacenBean.cantidad}" id="cantidad"
-												size="12" label="Cantidad"
-												styleClass="form-control">
+												size="12" label="Cantidad" styleClass="form-control">
 												<p:ajax event="keyup" update="msgCantidad" />
 											</p:inputText>
 											<p:messages for="mensajeAgregarCantidad" id="msgCantidad" />
@@ -193,8 +191,24 @@
 							</p:column>
 
 						</p:dataTable>
-						<div class="row justify-content-md-center">
 
+
+						<p:dataTable value="#{almacenBean.transferencias}" var="t"
+							id="tabla2" emptyMessage=" " reflow="true"
+							rendered="#{almacenBean.codigoTipoMovimiento==3}">
+							<p:column headerText="ALMACEN">
+								<p:outputLabel value="#{t.id.codAlmacen}" />
+							</p:column>
+							<p:column width="60%" headerText="PRODUCTO">
+								<p:outputLabel value="#{t.descripcionProducto}" />
+							</p:column>
+							<p:column headerText="CANTIDAD">
+								<p:outputLabel value="#{t.cantidad}" />
+							</p:column>
+
+						</p:dataTable>
+
+						<div class="row justify-content-md-center">
 							<div class="col-12 col-sm-6 col-md-2">
 								<div class="form-group">
 									<p:commandLink action="#{almacenBean.grabarAlmacen}"
@@ -217,8 +231,8 @@
 								<div class="form-group">
 									<p:outputLabel value="Observacion:" />
 									<p:inputTextarea value="#{almacenBean.observacion}"
-										id="observacion" styleClass="form-control"
-										rows="1" cols="20" maxlength="100">
+										id="observacion" styleClass="form-control" rows="1" cols="20"
+										maxlength="100">
 									</p:inputTextarea>
 								</div>
 							</div>
@@ -233,10 +247,19 @@
 				id="dlg" closable="false" showEffect="clip" hideEffect="clip"
 				responsive="true" modal="true" appendTo="@(body)">
 				<p:messages for="mensajeRegistroAlmacen" />
-				<h:form>
+				<h:form id="form">
+					<p:commandLink action="#{almacenBean.grabarTransferencia()}"
+						styleClass="#{r.azul} my-4"
+						disabled="#{almacenBean.codigoTipoMovimiento!=3}"
+						onclick="PF('dlgMensaje').hide();" immediate="true"
+						update="formAlmacen">
+						<i class="fa fa-fw fa-arrow-right"></i>
+						<h:outputLabel value="Transferir" />
+					</p:commandLink>
 					<p:commandLink action="#{almacenBean.cancelarAlmacen}"
 						onclick="PF('dlgMensaje').hide();" immediate="true"
-						update="formAlmacen" styleClass="#{r.rojo}">
+						update="formAlmacen" styleClass="#{r.rojo}"
+						disabled="#{almacenBean.codigoTipoMovimiento==3}">
 						<i class="fa fa-fw fa-sign-out"></i>
 						<p:outputLabel value=" Salir" />
 					</p:commandLink>

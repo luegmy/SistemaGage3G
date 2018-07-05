@@ -71,15 +71,13 @@ public class UsuarioBean implements Serializable{
 			context.addMessage("mensajeLogin", new FacesMessage(FacesMessage.SEVERITY_INFO, "Clave incorrecta", null));
 			return login;
 		} else {
-			if (objUsuario.getRol().getCodRol() == 1) {
-				menuTodo();
-
-			}
-			if (objUsuario.getRol().getCodRol() == 2) {
+			if (objUsuario.getRol().getCodRol() == 1 || objUsuario.getRol().getCodRol()==2) {
 				menuVenta();
+				menuAlmacen();
 				menuProducto();
-				menuCotizacion();
+				menuContacto();
 				menuReporte();
+
 			}
 			if (objUsuario.getRol().getCodRol() == 3) {
 				menuAlmacen();
@@ -162,7 +160,7 @@ public class UsuarioBean implements Serializable{
 		item.setIcon("ui-icon-cart");
 		ventaSubmenu.addElement(item);
 
-		item = new DefaultMenuItem("Venta realizada");
+		item = new DefaultMenuItem("Modificar venta");
 		item.setUrl("consultaVentaModificada.xhtml");
 		item.setIcon("ui-icon-calculator");
 		ventaSubmenu.addElement(item);
@@ -173,15 +171,6 @@ public class UsuarioBean implements Serializable{
 		ventaSubmenu.addElement(item);
 
 		modelo.addElement(ventaSubmenu);
-
-		DefaultSubMenu contactoSubmenu = new DefaultSubMenu(menuContacto);
-
-		item = new DefaultMenuItem("Cliente");
-		item.setUrl("actualizaCliente.xhtml");
-		item.setIcon("ui-icon-person");
-		contactoSubmenu.addElement(item);
-
-		modelo.addElement(contactoSubmenu);
 
 	}
 
@@ -194,59 +183,15 @@ public class UsuarioBean implements Serializable{
 		item.setIcon("ui-icon-bookmark");
 		almacenSubmenu.addElement(item);
 
-		item = new DefaultMenuItem("Kardex");
+		item = new DefaultMenuItem("Consulta movimiento");
 		item.setUrl("consultaKardex.xhtml");
 		item.setIcon("ui-icon-flag");
 		almacenSubmenu.addElement(item);
 		
 		modelo.addElement(almacenSubmenu);
 
-		DefaultSubMenu contactoSubmenu = new DefaultSubMenu(menuContacto);
-
-		item = new DefaultMenuItem("Proveedor");
-		item.setUrl("actualizaProveedor.xhtml");
-		item.setIcon(icono);
-		contactoSubmenu.addElement(item);
-
-		modelo.addElement(contactoSubmenu);
-
-	}
-	
-	public void menuCompra() {
-		
-		DefaultSubMenu compraSubmenu = new DefaultSubMenu(menuCompra);
-
-		DefaultMenuItem item = new DefaultMenuItem("Registrar compra");
-		item.setUrl("registroCompra.xhtml");
-		item.setIcon("ui-icon-newwin");
-		compraSubmenu.addElement(item);
-		
-		item = new DefaultMenuItem("Consultar compra");
-		item.setUrl("consultaCompra.xhtml");
-		item.setIcon("ui-icon-newwin");
-		compraSubmenu.addElement(item);
-		
-		modelo.addElement(compraSubmenu);
-
 	}
 
-	public void menuCotizacion() {
-		
-		DefaultSubMenu cotizacionSubmenu = new DefaultSubMenu(menuCotizacion);
-
-		DefaultMenuItem item = new DefaultMenuItem(menuCotizacion);
-		item.setUrl("registroCotizacion.xhtml");
-		item.setIcon("ui-icon-copy");
-		cotizacionSubmenu.addElement(item);
-
-		item = new DefaultMenuItem("Consultas");
-		item.setUrl("consultaCotizacion.xhtml");
-		item.setIcon("ui-icon-note");
-		cotizacionSubmenu.addElement(item);
-
-		modelo.addElement(cotizacionSubmenu);
-
-	}
 
 	public void menuContacto() {
 		
@@ -254,16 +199,6 @@ public class UsuarioBean implements Serializable{
 
 		DefaultMenuItem item = new DefaultMenuItem("Cliente");
 		item.setUrl("actualizaCliente.xhtml");
-		item.setIcon(icono);
-		contactoSubmenu.addElement(item);
-
-		item = new DefaultMenuItem("Proveedor");
-		item.setUrl("actualizaProveedor.xhtml");
-		item.setIcon(icono);
-		contactoSubmenu.addElement(item);
-
-		item = new DefaultMenuItem("Empleado");
-		item.setUrl("actualizaUsuario.xhtml");
 		item.setIcon(icono);
 		contactoSubmenu.addElement(item);
 
@@ -317,54 +252,7 @@ public class UsuarioBean implements Serializable{
 
 	}
 
-	public void menuTodo() {
-		
 
-		DefaultSubMenu ventaSubmenu = new DefaultSubMenu(menuVenta);
-
-		DefaultMenuItem item = new DefaultMenuItem("Registrar venta");
-		item.setUrl("registroVenta.xhtml");
-		item.setIcon("ui-icon-cart");
-		ventaSubmenu.addElement(item);
-
-		item = new DefaultMenuItem("Venta realizada");
-		item.setUrl("consultaVentaModificada.xhtml");
-		item.setIcon("ui-icon-calculator");
-		ventaSubmenu.addElement(item);
-
-		item = new DefaultMenuItem("Venta por cobrar");
-		item.setUrl("consultaFacturaPendiente.xhtml");
-		item.setIcon("ui-icon-clipboard");
-		ventaSubmenu.addElement(item);
-
-		modelo.addElement(ventaSubmenu);
-
-		DefaultSubMenu almacenSubmenu = new DefaultSubMenu(menuAlamcen);
-
-		item = new DefaultMenuItem("Movimientos");
-		item.setUrl("registroAlmacen.xhtml");
-		item.setIcon("ui-icon-bookmark");
-		almacenSubmenu.addElement(item);
-
-		item = new DefaultMenuItem("Kardex");
-		item.setUrl("consultaKardex.xhtml");
-		item.setIcon("ui-icon-flag");
-		almacenSubmenu.addElement(item);
-		
-		item = new DefaultMenuItem("Inventario");
-		item.setUrl("registroInventario.xhtml");
-		item.setIcon("ui-icon-star");
-		almacenSubmenu.addElement(item);
-
-		modelo.addElement(almacenSubmenu);
-
-		menuCompra();
-		menuCotizacion();
-		menuContacto();
-		menuProducto();
-		menuReporte();
-
-	}
 
 	public List<UsuarioJPA> getUsuarios() {
 		usuarios = new ArrayList<>();

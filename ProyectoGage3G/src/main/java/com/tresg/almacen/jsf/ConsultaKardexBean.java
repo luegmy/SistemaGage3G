@@ -10,8 +10,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.component.datatable.DataTable;
-
 import com.tresg.almacen.jpa.DetalleMovimientoJPA;
 import com.tresg.almacen.service.AlmacenBusinessDelegate;
 import com.tresg.almacen.service.ConsultarMovimientoBusinessService;
@@ -27,9 +25,6 @@ public class ConsultaKardexBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// para limpiar el filtro de una datatable
-	DataTable tbKardex;
-
 	// filtrar por fecha en kardex
 	private Date fecha = new Date();
 	private Date fechaIni = new Date();
@@ -43,8 +38,6 @@ public class ConsultaKardexBean implements Serializable {
 	public void listarMovimientoXFecha() {
 		movimientos = new ArrayList<>();
 
-		this.tbKardex.reset();
-
 		sAlmacen.listaMovimiento().stream().filter(f -> fecha.equals(f.getMovimiento().getFecha()))
 				.forEach(movimientos::add);
 
@@ -54,7 +47,6 @@ public class ConsultaKardexBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 		movimientos = new ArrayList<>();
 
-		this.tbKardex.reset();
 		if (fechaFin.before(fechaIni)) {
 			context.addMessage("mensajeRangoFecha", new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"La fecha final no puede ser menor a fecha inicial", null));
@@ -93,12 +85,5 @@ public class ConsultaKardexBean implements Serializable {
 		this.movimientos = movimientos;
 	}
 
-	public DataTable getTbKardex() {
-		return tbKardex;
-	}
-
-	public void setTbKardex(DataTable tbKardex) {
-		this.tbKardex = tbKardex;
-	}
 
 }

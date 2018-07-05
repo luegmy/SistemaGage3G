@@ -6,6 +6,6 @@ public interface RegistrarMovimientoBusinessService {
 
 	public int obtieneNumero();
 	public int generaNumeroNota();
-	public String registraMovimiento(MovimientoJPA movimiento, int destino);
+	public String registraMovimiento(MovimientoJPA movimiento);
 
 }

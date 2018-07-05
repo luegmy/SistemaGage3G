@@ -66,6 +66,8 @@ public class RegistroMovimientoBean implements Serializable {
 
 	// Para anadir elementos a la datatable
 	private List<DetalleMovimientoJPA> temporales;
+	
+	private List<DetalleMovimientoJPA> transferencias;
 
 	// Atributo de la tabla detalle_almacen
 	private int codigoProducto;
@@ -82,11 +84,13 @@ public class RegistroMovimientoBean implements Serializable {
 	// Constructor
 	public RegistroMovimientoBean() {
 		temporales = new ArrayList<>();
+		transferencias=new ArrayList<>();
 	}
 
 	public void cargarComprobante() {
 		setNumeroComprobante(sAlmacen.generaNumeroNota());
 	}
+	
 
 	public void agregarProductoAlmacen() {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -105,6 +109,21 @@ public class RegistroMovimientoBean implements Serializable {
 		else {
 
 			ProductoJPA producto = sProducto.buscaProductoPorCodigo(codigoProducto);
+			if(codigoDestino!=0) {
+				
+				DetalleMovimientoJPAPK dmpk2 = new DetalleMovimientoJPAPK();
+				dmpk2.setCodAlmacen(codigoDestino);
+				dmpk2.setCodProducto(codigoProducto);
+				dmpk2.setNroMovimiento(getNumeroDocumento());
+
+				DetalleMovimientoJPA objDetalle2 = new DetalleMovimientoJPA();
+				objDetalle2.setDescripcionProducto(
+						producto.getDescripcion().concat(" ").concat(producto.getTipo().getDescripcion()));
+				objDetalle2.setCantidad(cantidad);
+				objDetalle2.setId(dmpk2);
+
+				transferencias.add(objDetalle2);
+			}
 
 			DetalleMovimientoJPAPK dmpk = new DetalleMovimientoJPAPK();
 			dmpk.setCodAlmacen(codigoOrigen);
@@ -118,6 +137,9 @@ public class RegistroMovimientoBean implements Serializable {
 			objDetalle.setId(dmpk);
 
 			temporales.add(objDetalle);
+			
+
+			
 		}
 
 		// Crear una lista auxiliar
@@ -219,13 +241,47 @@ public class RegistroMovimientoBean implements Serializable {
 			context.addMessage("mensajeLista", new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Agregue un producto a la lista, pulse el boton AGREGAR", null));
 		} else {
-			context.addMessage("mensajeRegistroAlmacen", new FacesMessage(FacesMessage.SEVERITY_INFO,
-					sAlmacen.registraMovimiento(objMovimiento, codigoDestino), null));
-
+				context.addMessage("mensajeRegistroAlmacen", new FacesMessage(FacesMessage.SEVERITY_INFO,
+						sAlmacen.registraMovimiento(objMovimiento), null));
+			
 			RequestContext.getCurrentInstance().execute("PF('dlgMensaje').show();");
+			
 
 		}
 		return AGREGAR_ALMACEN;
+	}
+	
+
+	public String grabarTransferencia() {
+
+		TipoMovimientoJPA objTipoMovimiento = new TipoMovimientoJPA();
+		objTipoMovimiento.setCodMovimiento(2);
+
+		UsuarioJPA objUsuario = new UsuarioJPA();
+		objUsuario.setCodUsuario(usuario);
+
+		ComprobanteJPA objComprobante = new ComprobanteJPA();
+		objComprobante.setCodComprobante(codigoComprobante);
+
+		Formateo formatoHora = new Formateo();
+
+		MovimientoJPA objMovimiento = new MovimientoJPA();
+		objMovimiento.setNroMovimiento(getNumeroDocumento());
+		objMovimiento.setComprobante(objComprobante);
+		objMovimiento.setNumComprobante(numeroComprobante);
+		objMovimiento.setFecha(fecha);
+		objMovimiento.setHora(formatoHora.obtenerHora());
+		objMovimiento.setTipoMovimiento(objTipoMovimiento);
+		objMovimiento.setUsuario(objUsuario);
+		objMovimiento.setObservacion(observacion);
+		objMovimiento.setDetalles(transferencias);
+		
+		
+		sAlmacen.registraMovimiento(objMovimiento);
+		cancelarAlmacen();
+		return AGREGAR_ALMACEN;
+		
+		
 	}
 
 	public String cancelarAlmacen() {
@@ -374,6 +430,16 @@ public class RegistroMovimientoBean implements Serializable {
 
 	public void setTemporales(List<DetalleMovimientoJPA> temporales) {
 		this.temporales = temporales;
+	}
+	
+
+	public List<DetalleMovimientoJPA> getTransferencias() {
+
+		return transferencias;
+	}
+
+	public void setTransferencias(List<DetalleMovimientoJPA> transferencias) {
+		this.transferencias = transferencias;
 	}
 
 	public int getCodigoProducto() {

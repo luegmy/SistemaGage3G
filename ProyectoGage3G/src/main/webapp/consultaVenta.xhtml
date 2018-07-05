@@ -14,7 +14,7 @@
 			<h:form id="formConsultaVenta">
 				<p:fieldset legend="CONSULTA VENTA">
 					<div class="row justify-content-md-center">
-						<div class="col-12 col-sm-8 col-md-6">
+						<div class="col-12 col-sm-6">
 							<p:tabView dynamic="true" cache="true" id="tabVenta"
 								effect="fade">
 								<p:ajax event="tabChange"
@@ -55,19 +55,19 @@
 							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
 						</div>
 
-						<div class="col-12 col-sm-4 col-md-2">
-							<p:panelGrid columns="2" id="acumulado">
-								<p:outputLabel value="Monto contado" for="acumuladoCo" />
-								<p:outputLabel value="#{ventaConsultaBean.acumuladoContado}"
-									id="acumuladoCo" />
-								<p:outputLabel value="Monto deposito" for="acumuladoD" />
-								<p:outputLabel value="#{ventaConsultaBean.acumuladoDeposito}"
-									id="acumuladoD" />
-								<p:outputLabel value="Monto credito" for="acumuladoCr" />
-								<p:outputLabel value="#{ventaConsultaBean.acumuladoCredito}"
-									id="acumuladoCr" />
-							</p:panelGrid>
-
+						<div class="col-12 col-sm-4">
+						<p:panel id="acumulado">
+							<h3><p:outputLabel value="Contado" for="acumuladoCo" />
+							<span class="badge badge-secondary"><p:outputLabel value="#{ventaConsultaBean.acumuladoContado}"
+									id="acumuladoCo" /></span></h3>
+							
+								<h3><p:outputLabel value="Deposito" for="acumuladoD" />
+							<span class="badge badge-secondary"><p:outputLabel value="#{ventaConsultaBean.acumuladoDeposito}"
+									id="acumuladoD" /></span></h3>
+							<h3><p:outputLabel value="Credito" for="acumuladoCr" />
+							<span class="badge badge-secondary"><p:outputLabel value="#{ventaConsultaBean.acumuladoCredito}"
+									id="acumuladoCr" /></span></h3>								
+</p:panel>
 						</div>
 
 					</div>

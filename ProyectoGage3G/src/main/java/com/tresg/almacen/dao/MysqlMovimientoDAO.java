@@ -59,7 +59,7 @@ public class MysqlMovimientoDAO implements MovimientoDAO {
 	}
 
 	@Override
-	public String registrarMovimiento(MovimientoJPA movimiento, int destino) {
+	public String registrarMovimiento(MovimientoJPA movimiento) {
 		open();
 
 		String mensaje = "";
@@ -104,8 +104,8 @@ public class MysqlMovimientoDAO implements MovimientoDAO {
 				mensaje = "Se registro la salida de productos";
 
 			} else {
+				existenciaUtil.actualizarAlmacenDecremento(new BigDecimal(t.getCantidad()), da);
 
-				actualizarTransferencia(destino, da, t.getCantidad(), t.getId().getCodProducto());
 				mensaje = "Se registro la transferencia de productos";
 			}
 		}
@@ -116,26 +116,5 @@ public class MysqlMovimientoDAO implements MovimientoDAO {
 
 	}
 
-	void actualizarTransferencia(int destino, DetalleAlmacenJPA da, int cantidad, int producto) {
-
-		existenciaUtil = new ActualizarExistencia();
-		DetalleAlmacenJPAPK dapkDestino = new DetalleAlmacenJPAPK();
-		DetalleAlmacenJPA daDestino = new DetalleAlmacenJPA();
-
-		dapkDestino.setCodAlmacen(destino);
-		dapkDestino.setCodProducto(producto);
-		daDestino.setId(dapkDestino);
-
-		DetalleAlmacenJPA daAux = em.find(DetalleAlmacenJPA.class, daDestino.getId());
-		if (daAux != null) {
-			existenciaUtil.actualizarAlmacenIncremento(new BigDecimal(cantidad), daDestino);
-			existenciaUtil.actualizarAlmacenDecremento(new BigDecimal(cantidad), da);
-		} else {
-			existenciaUtil.actualizarAlmacenDecremento(new BigDecimal(cantidad), da);
-			daDestino.setExistencia(cantidad);
-			em.persist(daDestino);
-		}
-
-	}
 
 }
