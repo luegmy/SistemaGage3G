@@ -11,14 +11,15 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import com.tresg.almacen.jpa.DetalleMovimientoJPA;
+import com.tresg.almacen.jpa.MovimientoJPA;
 import com.tresg.almacen.service.AlmacenBusinessDelegate;
 import com.tresg.almacen.service.ConsultarMovimientoBusinessService;
 import com.tresg.incluido.service.ComboService_I;
 import com.tresg.incluido.service.IncluidoBusinessDelegate;
 
-@ManagedBean(name = "kardexConsultaBean")
+@ManagedBean(name = "movimientoConsultaBean")
 @SessionScoped
-public class ConsultaKardexBean implements Serializable {
+public class ConsultaMovimientoBean implements Serializable {
 
 	/**
 	 * 
@@ -38,8 +39,14 @@ public class ConsultaKardexBean implements Serializable {
 	public void listarMovimientoXFecha() {
 		movimientos = new ArrayList<>();
 
-		sAlmacen.listaMovimiento().stream().filter(f -> fecha.equals(f.getMovimiento().getFecha()))
-				.forEach(movimientos::add);
+		for (MovimientoJPA m : sAlmacen.listaMovimientos()) {
+			if (fecha.equals(m.getFecha())) {
+				for (DetalleMovimientoJPA d : m.getDetalles()) {
+					movimientos.add(d);
+				}
+				
+			}			
+		}
 
 	}
 

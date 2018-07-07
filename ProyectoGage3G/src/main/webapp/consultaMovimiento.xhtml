@@ -20,25 +20,25 @@
 									update=":formMovimientos:msgRangoFecha" />
 
 								<p:tab title="Fecha">
-									<p:calendar value="#{kardexConsultaBean.fecha}"
+									<p:calendar value="#{movimientoConsultaBean.fecha}"
 										pattern="dd-MM-yyyy" id="fecha">
 										<p:ajax event="dateSelect" update=":formMovimientos:tabla"
-											listener="#{kardexConsultaBean.listarMovimientoXFecha}" />
+											listener="#{movimientoConsultaBean.listarMovimientoXFecha}" />
 									</p:calendar>
 								</p:tab>
 
 								<p:tab title="Rango de fecha">
-									<p:calendar value="#{kardexConsultaBean.fechaIni}"
+									<p:calendar value="#{movimientoConsultaBean.fechaIni}"
 										pattern="dd-MM-yyyy" pages="3" locale="es">
 										<p:ajax event="dateSelect" update="ffinal"
-											listener="#{kardexConsultaBean.listarMovimientoXRangoFecha}" />
+											listener="#{movimientoConsultaBean.listarMovimientoXRangoFecha}" />
 									</p:calendar>
 
-									<p:calendar id="ffinal" value="#{kardexConsultaBean.fechaFin}"
+									<p:calendar id="ffinal" value="#{movimientoConsultaBean.fechaFin}"
 										pattern="dd-MM-yyyy" pages="3" locale="es">
 										<p:ajax event="dateSelect"
 											update=":formMovimientos:tabla :formMovimientos:msgRangoFecha"
-											listener="#{kardexConsultaBean.listarMovimientoXRangoFecha}" />
+											listener="#{movimientoConsultaBean.listarMovimientoXRangoFecha}" />
 									</p:calendar>
 								</p:tab>
 							</p:tabView>
@@ -52,9 +52,10 @@
 						</div>
 					</div>
 					<br />
-					<p:dataTable id="tabla" value="#{kardexConsultaBean.movimientos}"
+					<p:dataTable id="tabla" value="#{movimientoConsultaBean.movimientos}"
 						var="t" emptyMessage="No hay movimientos registrados"
-						reflow="true" paginator="true" rows="15">
+						reflow="true" paginator="true" rows="25">
+						
 						<p:column headerText="ALMACEN">
 							<h:outputText value="#{t.detalleAlmacen.almacen.descripcion}" />
 						</p:column>
@@ -71,25 +72,23 @@
 						<p:column headerText="NUMERO">
 							<h:outputText value="#{t.movimiento.numComprobante % 10000000}" />
 						</p:column>
-						<p:column headerText="CDP">
+						<p:column headerText="DOC.">
 							<h:outputText value="#{t.movimiento.comprobante.descripcion}" />
 						</p:column>
-						<p:column width="40%" headerText="PRODUCTO">
+						<p:column width="30%" headerText="PRODUCTO">
 							<h:outputText value="#{t.detalleAlmacen.producto.descripcion}" />
 						</p:column>
 						<p:column headerText="TIPO">
 							<h:outputText
 								value="#{t.detalleAlmacen.producto.tipo.descripcion}" />
 						</p:column>
-						
-						<p:column exportable="false" headerText="ENTRADA">
-							<h:outputText value="#{t.movimiento.tipoMovimiento.codMovimiento eq 2 ? t.cantidad : 0}"/>
+						<p:column headerText="MOVIM.">
+							<h:outputText
+								value="#{t.movimiento.tipoMovimiento.descripcion}" />
 						</p:column>
-						<p:column exportable="false" headerText="SALIDA">
-							<h:outputText value="#{t.movimiento.tipoMovimiento.codMovimiento eq 1 ? t.cantidad : 0}"/>
-						</p:column>
-						<p:column headerText="SALDO">
-							<h:outputText value="#{t.detalleAlmacen.existencia}" />
+						<p:column headerText="CANT.">
+							<h:outputText
+								value="#{t.cantidad}" />
 						</p:column>
 						<p:column exportable="false" headerText="OBS">
 							<h:outputLink value="#" id="obs">

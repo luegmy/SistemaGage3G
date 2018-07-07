@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -34,20 +35,13 @@ import com.tresg.util.formato.Formateo;
 @SessionScoped
 public class RegistroMovimientoBean implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	// Formulario ingreso y/o salida de productos
 
-	// Se refiere a la entrada o salida de productos
 	private List<SelectItem> tipoMovimientos;
 	private int codigoTipoMovimiento;
 
-	// Se refiere a los comprobantes de ingreso o salida
 	private List<SelectItem> comprobantes;
 	private int codigoComprobante;
-
 	private int numeroComprobante;
 
 	private Date fecha = new Date();
@@ -66,15 +60,12 @@ public class RegistroMovimientoBean implements Serializable {
 
 	// Para anadir elementos a la datatable
 	private List<DetalleMovimientoJPA> temporales;
-	
+
 	private List<DetalleMovimientoJPA> transferencias;
 
 	// Atributo de la tabla detalle_almacen
 	private int codigoProducto;
 	private int cantidad;
-
-	// crear una cadena de navegacion
-	public static final String AGREGAR_ALMACEN = "AGREGAR_ALMACEN";
 
 	// Instanciar los services
 	RegistrarMovimientoBusinessService sAlmacen = AlmacenBusinessDelegate.getRegistrarAlmacenService();
@@ -84,13 +75,16 @@ public class RegistroMovimientoBean implements Serializable {
 	// Constructor
 	public RegistroMovimientoBean() {
 		temporales = new ArrayList<>();
-		transferencias=new ArrayList<>();
+		transferencias = new ArrayList<>();
 	}
 
 	public void cargarComprobante() {
-		setNumeroComprobante(sAlmacen.generaNumeroNota());
+		if (codigoComprobante == 2) {
+			setNumeroComprobante(sAlmacen.generaNumeroNota());
+		} else {
+			setNumeroComprobante(0);
+		}
 	}
-	
 
 	public void agregarProductoAlmacen() {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -109,12 +103,12 @@ public class RegistroMovimientoBean implements Serializable {
 		else {
 
 			ProductoJPA producto = sProducto.buscaProductoPorCodigo(codigoProducto);
-			if(codigoDestino!=0) {
-				
+			if (codigoDestino != 0) {
+
 				DetalleMovimientoJPAPK dmpk2 = new DetalleMovimientoJPAPK();
 				dmpk2.setCodAlmacen(codigoDestino);
 				dmpk2.setCodProducto(codigoProducto);
-				dmpk2.setNroMovimiento(getNumeroDocumento());
+				dmpk2.setNroMovimiento(getNumeroDocumento() + 1);
 
 				DetalleMovimientoJPA objDetalle2 = new DetalleMovimientoJPA();
 				objDetalle2.setDescripcionProducto(
@@ -137,9 +131,7 @@ public class RegistroMovimientoBean implements Serializable {
 			objDetalle.setId(dmpk);
 
 			temporales.add(objDetalle);
-			
 
-			
 		}
 
 		// Crear una lista auxiliar
@@ -219,18 +211,18 @@ public class RegistroMovimientoBean implements Serializable {
 		objMovimiento.setObservacion(observacion);
 		objMovimiento.setDetalles(temporales);
 
-		if ((codigoTipoMovimiento == 1 || codigoTipoMovimiento == 2) && codigoOrigen == 0) {
+		if (codigoTipoMovimiento == 0) {
+			context.addMessage("mensajeTipoMovimiento",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el tipo movimiento", null));
+		} else if (codigoTipoMovimiento > 0 && codigoOrigen == 0) {
 			context.addMessage("mensajeAlmacenOrigen",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el almacen", null));
-		} else if (codigoTipoMovimiento == 3 && (codigoDestino == 0 || codigoOrigen == 0)) {
+		} else if (codigoTipoMovimiento == 3 && codigoDestino == 0) {
 			context.addMessage("mensajeAlmacenTransferencia",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el almacen", null));
-		} else if (codigoOrigen == codigoDestino) {
-			context.addMessage("mensajeAlmacenIgual", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Seleccione otro almacen diferente al origen o destino", null));
-		} else if (codigoTipoMovimiento == 0) {
-			context.addMessage("mensajeTipoMovimiento",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el tipo de movimiento", null));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el almacen destino", null));
+		} else if ((codigoOrigen == codigoDestino) && (codigoOrigen != 0 || codigoDestino != 0)) {
+			context.addMessage("mensajeAlmacenIgual",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione otro almacen diferente al origen", null));
 		} else if (codigoComprobante == 0) {
 			context.addMessage("mensajeComprobante",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el tipo de comprobante", null));
@@ -241,16 +233,14 @@ public class RegistroMovimientoBean implements Serializable {
 			context.addMessage("mensajeLista", new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Agregue un producto a la lista, pulse el boton AGREGAR", null));
 		} else {
-				context.addMessage("mensajeRegistroAlmacen", new FacesMessage(FacesMessage.SEVERITY_INFO,
-						sAlmacen.registraMovimiento(objMovimiento), null));
-			
+			context.addMessage("mensajeRegistroAlmacen",
+					new FacesMessage(FacesMessage.SEVERITY_INFO, sAlmacen.registraMovimiento(objMovimiento), null));
+
 			RequestContext.getCurrentInstance().execute("PF('dlgMensaje').show();");
-			
 
 		}
-		return AGREGAR_ALMACEN;
+		return "registroAlmacen";
 	}
-	
 
 	public String grabarTransferencia() {
 
@@ -275,19 +265,16 @@ public class RegistroMovimientoBean implements Serializable {
 		objMovimiento.setUsuario(objUsuario);
 		objMovimiento.setObservacion(observacion);
 		objMovimiento.setDetalles(transferencias);
-		
-		
+
 		sAlmacen.registraMovimiento(objMovimiento);
-		cancelarAlmacen();
-		return AGREGAR_ALMACEN;
-		
-		
+		return cancelarAlmacen();
+
 	}
 
 	public String cancelarAlmacen() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.getExternalContext().getSessionMap().remove("almacenBean");
-		return AGREGAR_ALMACEN;
+		return "registroAlmacen";
 
 	}
 
@@ -431,7 +418,6 @@ public class RegistroMovimientoBean implements Serializable {
 	public void setTemporales(List<DetalleMovimientoJPA> temporales) {
 		this.temporales = temporales;
 	}
-	
 
 	public List<DetalleMovimientoJPA> getTransferencias() {
 

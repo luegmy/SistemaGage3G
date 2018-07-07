@@ -184,7 +184,7 @@ public class UsuarioBean implements Serializable{
 		almacenSubmenu.addElement(item);
 
 		item = new DefaultMenuItem("Consulta movimiento");
-		item.setUrl("consultaKardex.xhtml");
+		item.setUrl("consultaMovimiento.xhtml");
 		item.setIcon("ui-icon-flag");
 		almacenSubmenu.addElement(item);
 		

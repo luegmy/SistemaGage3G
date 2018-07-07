@@ -1,6 +1,7 @@
 package com.tresg.almacen.dao;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -114,6 +115,21 @@ public class MysqlMovimientoDAO implements MovimientoDAO {
 		close();
 		return mensaje;
 
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<MovimientoJPA> listarMovimientos() {
+		open();
+		Query q=em.createNamedQuery(MovimientoJPA.LISTA_MOVIMIENTOS);
+		List<MovimientoJPA>lista=q.getResultList();
+		MovimientoJPA objMovimiento = null;
+		for (MovimientoJPA m : lista) {
+			objMovimiento=em.find(MovimientoJPA.class, m.getNroMovimiento());
+		}
+		em.refresh(objMovimiento);
+
+		return lista;
 	}
 
 

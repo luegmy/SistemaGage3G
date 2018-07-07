@@ -27,7 +27,8 @@ public class MysqlDetalleMovimientoDAO implements DetalleMovimientoDAO {
 			objDetalle = em.find(DetalleMovimientoJPA.class, d.getId());
 		}
 		em.refresh(objDetalle);
-		return lista;
+		
+		return q.getResultList();
 	}
 
 }

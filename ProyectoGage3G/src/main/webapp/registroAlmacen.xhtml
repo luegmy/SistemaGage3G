@@ -46,14 +46,10 @@
 												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
 												<f:selectItems value="#{almacenBean.almacenes}" />
 												<p:ajax event="change"
-													update="msgAlmacenOrigen msgAlmacenIgual msgAlmacenTransfer1 pnlComprobante" />
+													update="msgAlmacenOrigen pnlComprobante" />
 											</p:selectOneMenu>
 											<p:messages for="mensajeAlmacenOrigen" id="msgAlmacenOrigen" />
-											<p:messages for="mensajeAlmacenTransferencia"
-												id="msgAlmacenTransfer1" />
-
 										</div>
-
 									</div>
 									<div class="col-6 col-sm-6 col-md-3">
 										<div class="form-group">
@@ -64,14 +60,13 @@
 												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
 												<f:selectItems value="#{almacenBean.almacenes}" />
 												<p:ajax event="change"
-													update="msgAlmacenIgual msgAlmacenTransfer2" />
+													update="msgAlmacenIgual msgAlmacenTransfer" />
 											</p:selectOneMenu>
 											<p:messages for="mensajeAlmacenTransferencia"
-												id="msgAlmacenTransfer2" />
+												id="msgAlmacenTransfer" />
 										</div>
-
+										<p:messages for="mensajeAlmacenIgual" id="msgAlmacenIgual" />
 									</div>
-
 								</div>
 							</p:panel>
 						</div>
@@ -86,7 +81,7 @@
 												disabled="#{almacenBean.codigoOrigen==0}">
 												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
 												<f:selectItems value="#{almacenBean.comprobantes}" />
-												<p:ajax event="change" update="msgComprobante pnlDetalle"
+												<p:ajax event="change" update="comprobante msgComprobante pnlDetalle"
 													listener="#{almacenBean.cargarComprobante}" />
 											</p:selectOneMenu>
 											<p:messages for="mensajeComprobante" id="msgComprobante" />
@@ -109,7 +104,7 @@
 									<div class="col-sm-0">
 										<h:inputHidden value="#{almacenBean.usuario}" />
 									</div>
-									<p:messages for="mensajeAlmacenIgual" id="msgAlmacenIgual" />
+
 								</div>
 
 							</p:panel>
@@ -220,11 +215,12 @@
 							</div>
 							<div class="col-12 col-sm-6 col-md-2">
 								<div class="form-group">
-									<h:commandLink action="#{almacenBean.cancelarAlmacen}"
-										immediate="true" styleClass="#{r.gris} my-4">
+									<p:commandLink action="#{almacenBean.cancelarAlmacen}"
+										immediate="true" styleClass="#{r.gris} my-4"
+										update="formAlmacen">
 										<i class="fa fa-fw fa-plus-circle"></i>
-										<h:outputLabel value="Cancelar"></h:outputLabel>
-									</h:commandLink>
+										<h:outputLabel value="Cancelar"/>
+									</p:commandLink>
 								</div>
 							</div>
 							<div class="col-12 col-sm-12 col-md-4">
@@ -247,7 +243,7 @@
 				id="dlg" closable="false" showEffect="clip" hideEffect="clip"
 				responsive="true" modal="true" appendTo="@(body)">
 				<p:messages for="mensajeRegistroAlmacen" />
-				<h:form id="form">
+				<h:form>
 					<p:commandLink action="#{almacenBean.grabarTransferencia()}"
 						styleClass="#{r.azul} my-4"
 						disabled="#{almacenBean.codigoTipoMovimiento!=3}"

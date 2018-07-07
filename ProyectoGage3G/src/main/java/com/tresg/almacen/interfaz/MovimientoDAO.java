@@ -1,6 +1,8 @@
 package com.tresg.almacen.interfaz;
 
 
+import java.util.List;
+
 import com.tresg.almacen.jpa.MovimientoJPA;
 
 public interface MovimientoDAO {
@@ -14,5 +16,6 @@ public interface MovimientoDAO {
 
 	String registrarMovimiento(MovimientoJPA movimiento);
 
+	List<MovimientoJPA> listarMovimientos();
 
 }
