@@ -46,14 +46,7 @@ public class UsuarioBean implements Serializable{
 	private int sesionCodigoUsuario;
 	private String sesionUsuario;
 
-	String login = "LOGIN";
-	String menuVenta = "Venta";
-	String menuAlamcen = "Almacen";
-	String menuCompra = "Compra";
-	String menuContacto = "Contacto";
-	String menuCotizacion = "Cotizacion";
-	String menuProducto = "Producto";
-	String menuReporte = "Reporte";
+	String login = "login.xhtml?faces-redirect=true";
 	String icono = "ui-icon-person";
 
 	AutenticarUsuarioBusinessService sSeguridad = SeguridadBusinessDelegate.getAutenticarUsuarioService();
@@ -93,8 +86,7 @@ public class UsuarioBean implements Serializable{
 
 	public String logout() {
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-		return login;// indicas a donde quieres direccionar despu�s de cerrar
-						// sesi�n
+		return login;
 	}
 
 	public void editarUsuario(ActionEvent e) {
@@ -135,10 +127,6 @@ public class UsuarioBean implements Serializable{
 		limpiar();
 	}
 
-	public void cancelarUsuario() {
-		limpiar();
-	}
-
 	public void limpiar() {
 		dni = 0;
 		codigoUsuario = 0;
@@ -153,7 +141,7 @@ public class UsuarioBean implements Serializable{
 
 	public void menuVenta() {
 		
-		DefaultSubMenu ventaSubmenu = new DefaultSubMenu(menuVenta);
+		DefaultSubMenu ventaSubmenu = new DefaultSubMenu("Venta");
 
 		DefaultMenuItem item = new DefaultMenuItem("Registrar venta");
 		item.setUrl("registroVenta.xhtml");
@@ -176,7 +164,7 @@ public class UsuarioBean implements Serializable{
 
 	public void menuAlmacen() {
 		
-		DefaultSubMenu almacenSubmenu = new DefaultSubMenu(menuAlamcen);
+		DefaultSubMenu almacenSubmenu = new DefaultSubMenu("Almacen");
 
 		DefaultMenuItem item = new DefaultMenuItem("Movimientos");
 		item.setUrl("registroAlmacen.xhtml");
@@ -195,7 +183,7 @@ public class UsuarioBean implements Serializable{
 
 	public void menuContacto() {
 		
-		DefaultSubMenu contactoSubmenu = new DefaultSubMenu(menuContacto);
+		DefaultSubMenu contactoSubmenu = new DefaultSubMenu("Contacto");
 
 		DefaultMenuItem item = new DefaultMenuItem("Cliente");
 		item.setUrl("actualizaCliente.xhtml");
@@ -208,9 +196,9 @@ public class UsuarioBean implements Serializable{
 
 	public void menuProducto() {
 		
-		DefaultSubMenu productoSubmenu = new DefaultSubMenu(menuProducto);
+		DefaultSubMenu productoSubmenu = new DefaultSubMenu("Producto");
 
-		DefaultMenuItem item = new DefaultMenuItem(menuProducto);
+		DefaultMenuItem item = new DefaultMenuItem("Producto");
 		item.setUrl("actualizaProducto.xhtml");
 		item.setIcon("ui-icon-tag");
 		productoSubmenu.addElement(item);
@@ -231,7 +219,7 @@ public class UsuarioBean implements Serializable{
 
 	public void menuReporte() {
 
-		DefaultSubMenu reporteSubmenu = new DefaultSubMenu(menuReporte);
+		DefaultSubMenu reporteSubmenu = new DefaultSubMenu("Reporte");
 
 		DefaultMenuItem item = new DefaultMenuItem("Consulta venta");
 		item.setUrl("consultaVenta.xhtml");

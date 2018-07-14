@@ -224,10 +224,12 @@
 											<p:inputText
 												value="#{ventaBean.atributoUtil.descripcionProducto}"
 												id="descripcion" styleClass="form-control">
-												<p:ajax event="keyup" update="tablaBusqueda"
+												<p:ajax event="keyup" update="msgMensajeAgregarProducto tablaBusqueda"
 													listener="#{ventaBean.listarProducto}" />
-											</p:inputText>
+																								</p:inputText>
 										</div>
+										<p:messages for="mensajeAgregarProducto"
+										id="msgMensajeAgregarProducto" />
 									</div>
 									<div class="col-12 col-sm-3">
 										<div class="form-group">

@@ -95,25 +95,46 @@
 			<version>3.17</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.17</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.xmlbeans/xmlbeans -->
+		<dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.dom4j/dom4j -->
+		<dependency>
+			<groupId>org.dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
 		<dependency>
 			<groupId>com.lowagie</groupId>
 			<artifactId>itext</artifactId>
 			<version>2.1.7</version>
 			<exclusions>
-        <exclusion>
-            <groupId>bouncycastle</groupId>
-            <artifactId>bcprov-jdk14</artifactId>
-        </exclusion>
-        <exclusion>
-            <groupId>bouncycastle</groupId>
-            <artifactId>bcmail-jdk14</artifactId>
-        </exclusion>
-        <exclusion>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bctsp-jdk14</artifactId>
-        </exclusion>
-    </exclusions>
+				<exclusion>
+					<groupId>bouncycastle</groupId>
+					<artifactId>bcprov-jdk14</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>bouncycastle</groupId>
+					<artifactId>bcmail-jdk14</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bouncycastle</groupId>
+					<artifactId>bctsp-jdk14</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 	</dependencies>

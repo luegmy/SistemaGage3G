@@ -124,9 +124,15 @@ public class MysqlMovimientoDAO implements MovimientoDAO {
 		Query q=em.createNamedQuery(MovimientoJPA.LISTA_MOVIMIENTOS);
 		List<MovimientoJPA>lista=q.getResultList();
 		MovimientoJPA objMovimiento = null;
+		DetalleMovimientoJPA objDetalle=null;
 		for (MovimientoJPA m : lista) {
 			objMovimiento=em.find(MovimientoJPA.class, m.getNroMovimiento());
+			for(DetalleMovimientoJPA d:m.getDetalles()) {
+				objDetalle=em.find(DetalleMovimientoJPA.class, d.getId());
+				em.refresh(objDetalle);
+			}
 		}
+		
 		em.refresh(objMovimiento);
 
 		return lista;

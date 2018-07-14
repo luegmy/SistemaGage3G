@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO VENTAS</ui:define>
+	<ui:define name="content">
+		<f:loadBundle var="r" basename="recursos" />
+		<div class="container-fluid">
+			<!--  CONSULTA DE VENTAS -->
+			<h:form id="formProductoVenta">
+				<p:fieldset id="pnlGuia"
+					legend="CONSULTA VENTA DE PRODUCTOS">
+					<div class="row">
+							<div class="col-xs-12 col-sm- col-md-4 col-md-offset-4">
+							<p:tabView dynamic="true" cache="true" id="tabVenta"
+								effect="fade">
+								<p:ajax event="tabChange" update=":formProductoVenta:msgRangoFecha" />
+								<p:tab title="Rango de fecha">
+									<p:calendar value="#{productoVentaBean.fechaIni}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<p:ajax event="dateSelect" update="ffinal"/>
+									</p:calendar>
+									<p:calendar id="ffinal"
+										value="#{productoVentaBean.fechaFin}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<p:ajax event="dateSelect"
+											update=":formProductoVenta:tabla :formProductoVenta:msgRangoFecha" />
+									</p:calendar>
+								</p:tab>
+							</p:tabView>
+							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
+						</div>
+						<div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-0">
+							<h:commandLink styleClass="#{r.celeste}" value="Exportar "
+								title="Exportar">
+								<p:graphicImage width="24" value="/imagenes/excel.png" />
+								<p:dataExporter type="xls" target="tabla" fileName="ventas" />
+							</h:commandLink>
+
+						</div>
+					</div>
+					<br />
+
+					<p:dataTable id="tabla" value="#{productoVentaBean.detalles}"
+						var="t" paginator="true" emptyMessage="No existe ventas" rows="30"
+						reflow="true" binding="#{productoVentaBean.tbVenta}">
+
+						<p:column width="10%" headerText="CODIGO">
+							<h:outputText value="#{t.codigoTipo}" />
+						</p:column>
+						<p:column headerText="PRODUCTO">
+							<h:outputText value="#{t.descripcion}" />
+						</p:column>
+						<p:column width="20%" headerText="TIPO">
+							<h:outputText value="#{t.descripcionTipo}" />
+						</p:column>
+						<p:column width="10%" headerText="CANTIDAD">
+							<h:outputText value="#{t.cantidad}">
+							<f:convertNumber integerOnly="true"/>
+							</h:outputText>
+						</p:column>
+						<p:column width="20%" headerText="MONTO">
+							<h:outputText value="#{t.precio}">
+								<f:convertNumber type="currency" currencySymbol="S/. " />
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

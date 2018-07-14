@@ -28,7 +28,7 @@ public class MysqlDetalleMovimientoDAO implements DetalleMovimientoDAO {
 		}
 		em.refresh(objDetalle);
 		
-		return q.getResultList();
+		return lista;
 	}
 
 }
