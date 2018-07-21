@@ -166,7 +166,7 @@ public class GestionaBean implements Serializable {
 				// Realiza la comparacion de listas
 				if (detalleJPA.getId().getCodProducto() == aux1 && detalleJPA.getId().getPolvo() == aux2) {
 					it.remove();
-					mensaje = "mensajeProductoRepetido";
+					mensaje = "Ya ingreso dicho producto";
 					auxSubtotal = new java.math.BigDecimal("0.00");
 				}
 			}
@@ -223,9 +223,6 @@ public class GestionaBean implements Serializable {
 			AtributoBean atributo) {
 
 		BigDecimal monto = new java.math.BigDecimal("0.00");
-		ProductoJPA objProducto = new ProductoJPA();
-		objProducto.setCodProducto(codigo);
-		objProducto.setCantidad(cantidad);
 
 		Iterator<DetalleVentaJPA> it = temporales.iterator();
 		while (it.hasNext()) {

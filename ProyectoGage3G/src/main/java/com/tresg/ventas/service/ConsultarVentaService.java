@@ -20,6 +20,7 @@ public class ConsultarVentaService implements ConsultarVentaBusinessService {
 	@Override
 	public List<DetalleVentaJPA> consultaDetalleProductoPorVenta() {
 		return iDetalleVentaDAO.consultarDetalleProductoPorVenta();
-	}	
+	}
+
 
 }

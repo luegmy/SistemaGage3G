@@ -24,7 +24,7 @@
 									<p:calendar value="#{ventaActualizaBean.atributoUtil.fecha}"
 										pattern="dd-MM-yyyy" id="fecha" locale="es">
 										<p:ajax event="dateSelect" update=":formEditaVenta:tabla"
-											listener="#{ventaActualizaBean.listarVentaXFecha}" />
+											listener="#{ventaActualizaBean.listarVentaXFecha}"/>
 									</p:calendar>
 								</p:tab>
 								<p:tab title="Rango de fecha">
@@ -389,7 +389,7 @@
 											<p:inputText
 												value="#{ventaActualizaBean.atributoUtil.descripcionProducto}"
 												id="descripcion" styleClass="form-control form-control-sm">
-												<p:ajax event="keyup" update="tablaBusqueda"
+												<p:ajax event="keyup" update="msgAgregarProducto msgRepetido tablaBusqueda"
 													listener="#{ventaActualizaBean.listarProducto}" />
 											</p:inputText>
 										</div>
@@ -398,8 +398,8 @@
 										<div class="form-group">
 											<p:commandLink title="Agregar producto" id="btnAgregar"
 												actionListener="#{ventaActualizaBean.agregarProductoVenta}"
-												styleClass="#{r.azul} my-4"
-												update="toggleableDetalle msgProductoLista :formActualizaVenta:pnlDetalle">
+												styleClass="#{r.verde} my-4"
+												update="toggleableDetalle :formActualizaVenta:pnlDetalle">
 												<i class="fa fa-fw fa-shopping-cart"></i>
 												<p:outputLabel value=" Agregar" />
 											</p:commandLink>
@@ -438,11 +438,11 @@
 									</div>
 								</div>
 
-								<h:inputHidden value="#{ventaActualizaBean.atributoUtil.codigoTipo}" />
-
 								<p:messages for="mensajeAgregarCantidad" id="msgCantidad" />
-								<p:messages for="mensajeAgregarProducto" />
+								<p:messages for="mensajeAgregarProducto" id="msgAgregarProducto"/>
 								<p:messages for="mensajeStock" id="msgStock" />
+								<p:messages for="mensajeCodigo" id="msgCodigo" />
+								<p:messages for="mensajeProductoRepetido" id="msgRepetido" />
 
 							</div>
 
@@ -494,11 +494,6 @@
 							</div>
 						</div>
 					</p:panel>
-					<p:messages for="mensajeStock" />
-					<p:messages for="mensajeProductoRepetido" />
-					<p:messages for="mensajeProductoLista" id="msgProductoLista" />
-					<p:messages for="mensajeListaTope" />
-
 
 					<br />
 
@@ -507,41 +502,19 @@
 							emptyMessage=" " reflow="true"
 							rendered="#{ventaActualizaBean.temporales.size() > 0 eq true}">
 							<p:column width="5%">
-								<f:facet name="header">
-									<p:outputLabel value="" />
-								</f:facet>
 								<p:outputLabel value="#{t.id.codProducto}" />
-								<h:inputHidden value="#{t.id.polvo}" />
 							</p:column>
-							<p:column width="50%">
-								<f:facet name="header">
-									<p:outputLabel value="DESCRIPCION" />
-								</f:facet>
-								<p:outputLabel value="#{t.descripcion}" />
+							<p:column width="50%" headerText="DESCRIPCION">
+								<p:outputLabel value="#{t.descripcionProducto}" />
 							</p:column>
 
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="PRECIO" />
-								</f:facet>
+							<p:column headerText="PRECIO">
 								<p:outputLabel value="#{t.precio}" />
 							</p:column>
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="CANTIDAD" />
-								</f:facet>
+							<p:column headerText="CANTIDAD">
 								<p:outputLabel value="#{t.cantidad}" />
 							</p:column>
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="IMPORTE" />
-								</f:facet>
-								<p:outputLabel value="#{t.precio * t.cantidad}" />
-							</p:column>
-							<p:column>
-								<f:facet name="header">
-									<p:outputLabel value="IGV Venta" />
-								</f:facet>
+							<p:column headerText="IMPORTE">
 								<p:outputLabel value="#{t.precio * t.cantidad}" />
 							</p:column>
 							<p:column width="8%">
@@ -588,7 +561,7 @@
 								<div class="form-group">
 									<h:panelGroup id="pnlGrabar">
 										<p:commandLink action="#{ventaActualizaBean.actualizarVenta}"
-											update="formActualizaVenta dlg" styleClass="#{r.verde}" id="btnGrabar">
+											update="formActualizaVenta dlg :formEditaVenta:tabla" styleClass="#{r.azul}" id="btnGrabar">
 											<i class="fa fa-fw fa-save"></i>
 											<p:outputLabel value=" Grabar" />
 										</p:commandLink>
@@ -597,10 +570,10 @@
 							</div>
 							<div class="col-12 col-sm-4 col-md-2">
 								<div class="form-group">
-									<p:commandLink action="#{ventaActualizaBean.cancelarVenta}"
-									onclick="PF('dlgActualizaVenta').hide();" styleClass="#{r.gris}">
+									<p:commandLink onclick="PF('dlgActualizaVenta').hide();" 
+									styleClass="#{r.rojo}" action="#{ventaActualizaBean.retornar}">
 										<i class="fa fa-fw fa-plus-circle"></i>										
-										<p:outputLabel value=" Cancelar" />
+										<p:outputLabel value=" Retornar" />
 									</p:commandLink>
 								</div>
 							</div>
@@ -620,9 +593,9 @@
 				responsive="true" modal="true" appendTo="@(body)">
 				<p:messages for="mensajeActualizaVenta" />
 				<h:form>
-					<p:commandLink action="#{ventaActualizaBean.cancelarVenta}"
-						onclick="PF('dlgMensaje').hide();" immediate="true"
-						update="formActualizaVenta" styleClass="#{r.gris}">
+					<p:commandLink onclick="PF('dlgMensaje').hide();" immediate="true"
+						styleClass="#{r.rojo}" action="#{ventaActualizaBean.retornar()}"
+						update="formActualizaVenta">
 						<i class="fa fa-fw fa-sign-out"></i>
 						<p:outputLabel value=" Salir" />
 					</p:commandLink>

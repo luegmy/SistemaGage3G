@@ -50,7 +50,7 @@ public class MysqlVentaDAO implements VentaDAO {
 	public VentaJPA obtenerVenta(int comprobante) {
 		open();
 		VentaJPA objVenta = em.find(VentaJPA.class, comprobante);
-
+		em.refresh(objVenta);
 		return objVenta;
 	}
 
@@ -169,26 +169,31 @@ public class MysqlVentaDAO implements VentaDAO {
 		open();
 
 		em.getTransaction().begin();
-
-		stockUtil = new ActualizarExistencia();
-		DetalleAlmacenJPA da = new DetalleAlmacenJPA();
-		DetalleAlmacenJPAPK dapk = new DetalleAlmacenJPAPK();
-		dapk.setCodAlmacen(3);
-		dapk.setCodProducto(dv.getId().getCodProducto());
-		da.setId(dapk);
-		
-		stockUtil.actualizarAlmacenIncremento(dv.getCantidad(), da);
 		
 		DetalleVentaJPA objDetalle = em.find(DetalleVentaJPA.class, dv.getId());
-		try {
-			em.remove(objDetalle);
-			em.getTransaction().commit();
-		} catch (RuntimeException e) {
-			em.getTransaction().rollback();
-			throw e;
-		} finally {
-			close();
-		}
+		
+		if(objDetalle!=null) {
+			
+			stockUtil = new ActualizarExistencia();
+			DetalleAlmacenJPA da = new DetalleAlmacenJPA();
+			DetalleAlmacenJPAPK dapk = new DetalleAlmacenJPAPK();
+			dapk.setCodAlmacen(3);
+			dapk.setCodProducto(dv.getId().getCodProducto());
+			da.setId(dapk);
+			
+			stockUtil.actualizarAlmacenIncremento(dv.getCantidad(), da);
+			
+			
+			try {
+				em.remove(objDetalle);
+				em.getTransaction().commit();
+			} catch (RuntimeException e) {
+				em.getTransaction().rollback();
+				throw e;
+			} finally {
+				close();
+			}
+		}	
 
 	}
 

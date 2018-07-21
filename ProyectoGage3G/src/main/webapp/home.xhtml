@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -20,14 +19,6 @@
 
 				</div>
 				<div class="col-xs-12 col-sm-3 col-md-3">
-					<h:link outcome="registroGuiaRemision.xhtml" immediate="true"
-						styleClass="#{r.azul}">
-						<p:graphicImage url="imagenes/guia.png" width="80" />
-						<br></br>
-						<p:outputLabel value="REALIZAR GUIAS" />
-					</h:link>
-				</div>
-				<div class="col-xs-12 col-sm-3 col-md-3">
 					<h:link outcome="consultaFacturaPendiente.xhtml" immediate="true"
 						styleClass="#{r.azul}">
 						<p:graphicImage url="imagenes/moneda.png" width="80" />
@@ -40,7 +31,7 @@
 						styleClass="#{r.azul}">
 						<p:graphicImage url="imagenes/consultaVenta.png" width="80" />
 						<br></br>
-						<p:outputLabel value="CONSULTAR VENTAS" />
+						<p:outputLabel value="MODIFICAR VENTAS" />
 					</h:link>
 				</div>
 
@@ -52,7 +43,7 @@
 						styleClass="#{r.celeste}">
 						<p:graphicImage url="imagenes/almacen.png" width="80" />
 						<br></br>
-						<p:outputLabel value="REGISTRAR ALMACEN" />
+						<p:outputLabel value="REGISTRAR MOVIMIENTOS" />
 					</h:link>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-md-4">
@@ -61,14 +52,6 @@
 						<p:graphicImage url="imagenes/stock.png" width="80" />
 						<br></br>
 						<p:outputLabel value="CONSULTAR MOVIMIENTOS" />
-					</h:link>
-				</div>
-				<div class="col-xs-12 col-sm-4 col-md-4">
-					<h:link outcome="consultaAlmacen.xhtml" immediate="true"
-						styleClass="#{r.celeste}">
-						<p:graphicImage url="imagenes/movimiento.png" width="80" />
-						<br></br>
-						<p:outputLabel value="CONSULTAR STOCK" />
 					</h:link>
 				</div>
 			</div>
@@ -81,22 +64,6 @@
 						<p:outputLabel value="GESTIONAR CLIENTE" />
 					</h:link>
 				</div>
-				<div class="col-xs-12 col-sm-4 col-md-4">
-					<h:link outcome="actualizaProveedor.xhtml" immediate="true"
-						styleClass="#{r.verde}">
-						<p:graphicImage url="imagenes/proveedor.png" width="80" />
-						<br></br>
-						<p:outputLabel value="GESTIONAR PROVEEDOR" />
-					</h:link>
-				</div>
-				<div class="col-xs-12 col-sm-4 col-md-4">
-					<h:link outcome="actualizaUsuario.xhtml" immediate="true"
-						styleClass="#{r.verde}">
-						<p:graphicImage url="imagenes/usuario.png" width="80" />
-						<br></br>
-						<p:outputLabel value="GESTIONAR USUARIO" />
-					</h:link>
-				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12 col-sm-4 col-md-4">
@@ -107,56 +74,31 @@
 						<p:outputLabel value="GESTIONAR PRODUCTO" />
 					</h:link>
 				</div>
-				<div class="col-xs-12 col-sm-4 col-md-4">
-					<h:link outcome="actualizaTipoProducto.xhtml" immediate="true"
-						styleClass="#{r.rojo}">
-						<p:graphicImage url="imagenes/tipo.png" width="80" />
-						<br></br>
-						<p:outputLabel value="GESTIONAR TIPO PRODUCTO" />
-					</h:link>
-				</div>
-				<div class="col-xs-12 col-sm-4 col-md-4">
-					<h:link outcome="actualizaMedida.xhtml" immediate="true"
-						styleClass="#{r.rojo}">
-						<p:graphicImage url="imagenes/medida.png" width="80" />
-						<br></br>
-						<p:outputLabel value="GESTIONAR UNIDAD MEDIDA" />
-					</h:link>
-				</div>
 			</div>
+
 			<div class="row">
-				<div class="col-xs-12 col-sm-6 col-md-6">
-					<h:link outcome="registroCotizacion.xhtml" immediate="true"
-						styleClass="#{r.naranja}">
-						<p:graphicImage url="imagenes/cotiza.png" width="80" />
-						<br></br>
-						<p:outputLabel value="REALIZAR COTIZACION" />
-					</h:link>
-				</div>
-				<div class="col-xs-12 col-sm-6 col-md-6">
-					<h:link outcome="consultaCotizacion.xhtml" immediate="true"
-						styleClass="#{r.naranja}">
-						<p:graphicImage url="imagenes/consultaCotiza.png" width="80" />
-						<br></br>
-						<p:outputLabel value="CONSULTAR COTIZACION" />
-					</h:link>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-12 col-sm-6 col-md-6">
+				<div class="col-xs-12 col-sm-4 col-md-4">
 					<h:link outcome="consultaVenta.xhtml" immediate="true"
 						styleClass="#{r.azul}">
 						<p:graphicImage url="imagenes/exportar.png" width="80" />
 						<br></br>
-						<p:outputLabel value="EXPORTAR VENTAS" />
+						<p:outputLabel value="CONSULTAR VENTAS" />
 					</h:link>
 				</div>
-				<div class="col-xs-12 col-sm-6 col-md-6">
+				<div class="col-xs-12 col-sm-4 col-md-4">
 					<h:link outcome="consultaProductoXCliente.xhtml" immediate="true"
 						styleClass="#{r.azul}">
 						<p:graphicImage url="imagenes/productoCliente.png" width="80" />
 						<br></br>
 						<p:outputLabel value="CONSULTAR PRODUCTOS POR CLIENTE" />
+					</h:link>
+				</div>
+								<div class="col-xs-12 col-sm-4 col-md-4">
+					<h:link outcome="consultaProductoXVenta.xhtml" immediate="true"
+						styleClass="#{r.azul}">
+						<p:graphicImage url="imagenes/productoCliente.png" width="80" />
+						<br></br>
+						<p:outputLabel value="CONSULTAR PRODUCTOS POR VENTA" />
 					</h:link>
 				</div>
 			</div>

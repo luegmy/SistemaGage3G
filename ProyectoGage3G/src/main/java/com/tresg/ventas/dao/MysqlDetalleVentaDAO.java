@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.eclipse.persistence.config.QueryHints;
+
 import com.tresg.util.jpa.JpaUtil;
 import com.tresg.ventas.interfaz.DetalleVentaDAO;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
@@ -23,14 +25,7 @@ public class MysqlDetalleVentaDAO implements DetalleVentaDAO {
 	@Override
 	public List<DetalleVentaJPA> listarDetalleVenta() {
 		open();
-		Query q = em.createNamedQuery(DetalleVentaJPA.LISTAR_DETALLE_VENTAS);
-		//se realiza esta maniobra para mostrar detalle
-		List<DetalleVentaJPA>lista=q.getResultList();
-		DetalleVentaJPA objDetalle=null;
-		for (DetalleVentaJPA d : lista) {
-			objDetalle=em.find(DetalleVentaJPA.class, d.getId());
-		}
-		em.refresh(objDetalle);
+		Query q = em.createNamedQuery(DetalleVentaJPA.LISTAR_DETALLE_VENTAS).setHint(QueryHints.REFRESH, true);
 		
 		return q.getResultList();
 	}
@@ -62,8 +57,5 @@ public class MysqlDetalleVentaDAO implements DetalleVentaDAO {
 
 		return detalles;
 	}
-
-
-
 
 }

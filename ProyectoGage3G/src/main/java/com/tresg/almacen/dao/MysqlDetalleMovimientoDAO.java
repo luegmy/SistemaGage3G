@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.eclipse.persistence.config.QueryHints;
+
 import com.tresg.almacen.interfaz.DetalleMovimientoDAO;
 import com.tresg.almacen.jpa.DetalleMovimientoJPA;
 import com.tresg.util.jpa.JpaUtil;
@@ -20,15 +22,9 @@ public class MysqlDetalleMovimientoDAO implements DetalleMovimientoDAO {
 	@Override
 	public List<DetalleMovimientoJPA> listarDetalleMovimiento() {
 		open();
-		Query q = em.createNamedQuery(DetalleMovimientoJPA.LISTAR_DETALLE_MOVIMIENTOS);
-		List<DetalleMovimientoJPA> lista = q.getResultList();
-		DetalleMovimientoJPA objDetalle = null;
-		for (DetalleMovimientoJPA d : lista) {
-			objDetalle = em.find(DetalleMovimientoJPA.class, d.getId());
-		}
-		em.refresh(objDetalle);
+		Query q = em.createNamedQuery(DetalleMovimientoJPA.LISTAR_DETALLE_MOVIMIENTOS).setHint(QueryHints.REFRESH, true);
 		
-		return lista;
+		return q.getResultList();
 	}
 
 }

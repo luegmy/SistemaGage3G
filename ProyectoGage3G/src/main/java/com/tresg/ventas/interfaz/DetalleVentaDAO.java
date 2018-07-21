@@ -6,7 +6,7 @@ import com.tresg.ventas.jpa.DetalleVentaJPA;
 
 public interface DetalleVentaDAO {
 	
-	// CU consultar productos por cliente
+	// CU consultar ventas
 	List<DetalleVentaJPA> listarDetalleVenta();
 
 	// CU consultar cantidad vendida por producto

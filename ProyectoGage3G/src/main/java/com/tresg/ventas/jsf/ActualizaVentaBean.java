@@ -16,8 +16,8 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.incluido.jpa.ClienteJPA;
+import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.service.ComboService_I;
 import com.tresg.incluido.service.GestionarProductoService_I;
 import com.tresg.incluido.service.IncluidoBusinessDelegate;
@@ -45,7 +45,7 @@ public class ActualizaVentaBean implements Serializable {
 
 	// atributos para el rowSelect
 	private ClienteJPA clienteSeleccionado;
-	private DetalleAlmacenJPA productoSeleccionado;
+	private ProductoJPA productoSeleccionado;
 
 	// Para anadir elementos a la datatable
 	private List<DetalleVentaJPA> temporales;
@@ -101,6 +101,7 @@ public class ActualizaVentaBean implements Serializable {
 		atributoUtil.setCodigoPago(objVenta.getPago().getCodPago());
 
 		for (DetalleVentaJPA d : objVenta.getDetalles()) {
+			d.setDescripcionProducto(d.getProducto().getDescripcion());
 			temporales.add(d);
 
 			atributoUtil.setTotal(atributoUtil.getTotal().add(d.getPrecio().multiply(d.getCantidad())));
@@ -126,12 +127,13 @@ public class ActualizaVentaBean implements Serializable {
 	// Metodo donde se agrega los atributos del producto en las respectivas
 	// cajas de texto del formulario venta
 	public void seleccionarProducto(SelectEvent event) {
-		productoSeleccionado = (DetalleAlmacenJPA) event.getObject();
-		atributoUtil.setCodigoProducto(productoSeleccionado.getId().getCodProducto());
-		atributoUtil.setCodigoTipo(productoSeleccionado.getProducto().getTipo().getCodTipo());
-		atributoUtil.setDescripcionProducto(productoSeleccionado.getProducto().getDescripcion().concat(" ")
-				.concat(productoSeleccionado.getProducto().getTipo().getDescripcion()));
-		atributoUtil.setPrecio(productoSeleccionado.getProducto().getPrecioVenta());
+		productoSeleccionado = (ProductoJPA) event.getObject();
+		atributoUtil.setCodigoProducto(productoSeleccionado.getCodProducto());
+		atributoUtil.setDescripcionProducto(productoSeleccionado.getDescripcion().concat(" ")
+				.concat(productoSeleccionado.getTipo().getDescripcion()));
+		atributoUtil.setPrecio(productoSeleccionado.getPrecioVenta());
+		
+		atributoUtil.getProductos().clear();
 
 	}
 
@@ -150,7 +152,12 @@ public class ActualizaVentaBean implements Serializable {
 					mensajeUtil.mostrarMensajeError(mensajeAgregar, atributoUtil), null));
 		} else {
 			temporales.add(gestionUtil.retornarProductoVenta(atributoUtil));
-			gestionUtil.iterarListaVenta(temporales, atributoUtil);
+			String mensajeRepetido=gestionUtil.iterarListaVenta(temporales, atributoUtil);
+			if(!"".equals(mensajeRepetido)) {
+				context.addMessage("mensajeProductoRepetido", 
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								mensajeRepetido, null));
+			}
 			gestionUtil.limpiarProductoVenta(atributoUtil);
 		}
 
@@ -183,16 +190,25 @@ public class ActualizaVentaBean implements Serializable {
 
 			context.addMessage("mensajeActualizaVenta", new FacesMessage(FacesMessage.SEVERITY_INFO,
 					sVenta.actualizaVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
+		
 			RequestContext.getCurrentInstance().execute("PF('dlgMensaje').show();");
 
 		}
 		return "consultaVentaModificada.xhtml";
 	}
-
+	
 	public String cancelarVenta() {
-		temporales.clear();
+
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.getExternalContext().getSessionMap().remove("ventaActualizaBean");
+		return "consultaVentaModificada.xhtml";
+	}
+
+	public String retornar() {
+		temporales.clear();
+		atributoUtil.setTotal(new BigDecimal(0));
+		atributoUtil.setSubtotal(new BigDecimal(0));
+		atributoUtil.setIgv(new BigDecimal(0));
 		return "consultaVentaModificada.xhtml";
 	}
 
@@ -240,11 +256,11 @@ public class ActualizaVentaBean implements Serializable {
 		this.clienteSeleccionado = clienteSeleccionado;
 	}
 
-	public DetalleAlmacenJPA getProductoSeleccionado() {
+	public ProductoJPA getProductoSeleccionado() {
 		return productoSeleccionado;
 	}
 
-	public void setProductoSeleccionado(DetalleAlmacenJPA productoSeleccionado) {
+	public void setProductoSeleccionado(ProductoJPA productoSeleccionado) {
 		this.productoSeleccionado = productoSeleccionado;
 	}
 

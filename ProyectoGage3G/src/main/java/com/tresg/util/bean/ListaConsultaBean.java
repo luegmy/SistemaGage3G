@@ -107,7 +107,7 @@ public class ListaConsultaBean implements Serializable {
 	public List<DetalleVentaJPA> mostrarDetalleVenta(int numero) {
 
 		List<DetalleVentaJPA> detalles = new ArrayList<>();
-		sConsultaVenta.listaDetalleVenta().stream().filter(d -> d.getVenta().getNumComprobante() == numero)
+		sConsultaVenta.listaDetalleVenta().stream().filter(d->d.getVenta().getNumComprobante()==numero)
 				.forEach(detalles::add);
 		return detalles;
 	}

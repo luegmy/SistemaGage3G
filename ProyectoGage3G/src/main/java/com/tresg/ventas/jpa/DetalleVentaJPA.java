@@ -18,7 +18,7 @@ import com.tresg.incluido.jpa.ProductoJPA;
 @Table(name = "tb_detalle_venta")
 @NamedQueries({
 		@NamedQuery(name = "detalleVenta.listarDetalleVenta", 
-					query = "select d from DetalleVentaJPA d"),
+					query = "select d from DetalleVentaJPA d" ),
 		@NamedQuery(name = "detalleVenta.listarProductoXVenta", 
 					query = "select d.producto.codProducto,d.producto.descripcion,sum(d.cantidad),sum(d.cantidad * d.precio) from DetalleVentaJPA d group by d.producto.codProducto"),
 		@NamedQuery(name = "detalleVenta.eliminarItemDetalle", 

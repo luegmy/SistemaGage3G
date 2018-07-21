@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Font;
@@ -23,7 +24,7 @@ import com.tresg.ventas.service.ConsultarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;
 
 @ManagedBean(name = "productoVentaBean")
-@SessionScoped
+@ViewScoped
 public class ProductoXVentaBean {
 
 	// lista los detalles de dicha venta

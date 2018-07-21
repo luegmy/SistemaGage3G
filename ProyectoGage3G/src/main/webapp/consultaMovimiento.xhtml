@@ -10,12 +10,12 @@
 	<ui:define name="title">MODULO ALMACEN</ui:define>
 	<ui:define name="content">
 		<div class="container-fluid">
-			<p:fieldset legend="KARDEX POR ALMACEN">
+			<p:fieldset legend="CONSULTAR MOVIMIENTOS">
 				<h:form id="formMovimientos">
 					<div class="row">
 
 						<div class="col-xs-12 col-sm-6 col-md-6 col-md-offset-1">
-							<p:tabView dynamic="true" cache="true" style="width:80%">
+							<p:tabView dynamic="true" cache="true" effect="fade">
 								<p:ajax event="tabChange"
 									update=":formMovimientos:msgRangoFecha" />
 

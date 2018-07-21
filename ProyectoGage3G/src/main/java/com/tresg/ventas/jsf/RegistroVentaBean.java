@@ -103,10 +103,11 @@ public class RegistroVentaBean implements Serializable {
 
 		productoSeleccionado = (ProductoJPA) event.getObject();
 		atributoUtil.setCodigoProducto(productoSeleccionado.getCodProducto());
-		atributoUtil.setCodigoTipo(productoSeleccionado.getTipo().getCodTipo());
 		atributoUtil.setDescripcionProducto(productoSeleccionado.getDescripcion().concat(" ")
 				.concat(productoSeleccionado.getTipo().getDescripcion()));
 		atributoUtil.setPrecio(productoSeleccionado.getPrecioVenta());
+		
+		atributoUtil.getProductos().clear();
 	}
 
 	// otra posibilidad se cargue codigo del producto
@@ -138,7 +139,13 @@ public class RegistroVentaBean implements Serializable {
 					mensajeUtil.mostrarMensajeError(mensajeAgregar, atributoUtil), null));
 		} else {
 			temporales.add(gestionUtil.retornarProductoVenta(atributoUtil));
-			gestionUtil.iterarListaVenta(temporales, atributoUtil);
+			String mensajeRepetido=gestionUtil.iterarListaVenta(temporales, atributoUtil);
+			if(!"".equals(mensajeRepetido)) {
+				context.addMessage("mensajeProductoRepetido", 
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								mensajeRepetido, null));
+			}
+			
 			gestionUtil.limpiarProductoVenta(atributoUtil);
 		}
 
