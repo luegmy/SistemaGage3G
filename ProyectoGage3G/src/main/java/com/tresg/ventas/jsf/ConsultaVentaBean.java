@@ -19,9 +19,6 @@ import com.tresg.ventas.jpa.VentaJPA;
 @SessionScoped
 public class ConsultaVentaBean implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	// lista las ventas

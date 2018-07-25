@@ -25,26 +25,6 @@ public class ListaConsultaBean implements Serializable {
 
 	}
 
-/*	public List<VentaJPA> listarVentaPorFechaContado(Date fecha) {
-		List<VentaJPA> ventas = new ArrayList<>();
-		sVenta.listaVenta().stream().filter(f -> fecha.equals(f.getFecha()))
-				.collect(Collectors.toCollection(ArrayList::new)).stream()
-				.filter(e -> e.getEstado().getCodEstado() == 1).forEach(ventas::add);
-		return ventas;
-
-	}*/
-
-/*	public List<VentaJPA> listarVentaPorRangoFechaContado(Date fechaIni, Date fechaFin) {
-		List<VentaJPA> ventas = new ArrayList<>();
-		sVenta.listaVenta().stream()
-				.filter(f -> (f.getFecha().after(fechaIni) || fechaIni.equals(f.getFecha()))
-						&& (f.getFecha().before(fechaFin) || fechaFin.equals(f.getFecha())))
-				.collect(Collectors.toCollection(ArrayList::new)).stream()
-				.filter(e -> e.getEstado().getCodEstado() == 1).forEach(ventas::add);
-		return ventas;
-
-	}*/
-
 	public List<VentaJPA> listarVentaPorRangoFecha(Date fechaIni, Date fechaFin) {
 		List<VentaJPA> ventas = new ArrayList<>();
 		sVenta.listaVenta().stream().filter(f -> (f.getFecha().after(fechaIni) || fechaIni.equals(f.getFecha()))
@@ -59,6 +39,8 @@ public class ListaConsultaBean implements Serializable {
 				.forEach(ventas::add);
 		return ventas;
 	}
+	
+	
 
 	public double acumuladoContadoVentaXFecha(Date fecha) {
 		return sVenta.listaVenta().stream().filter(f -> (fecha.equals(f.getFecha()) && f.getEstado().getCodEstado()==1))

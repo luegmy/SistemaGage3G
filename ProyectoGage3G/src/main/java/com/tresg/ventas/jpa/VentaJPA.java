@@ -30,14 +30,14 @@ import com.tresg.seguridad.jpa.UsuarioJPA;
 @Table(name = "tb_venta")
 @NamedQueries({ @NamedQuery(name = "venta.listarVentas", query = "select v from VentaJPA v"),
 
-		@NamedQuery(name = "venta.actualizarVentaEstado", query = "update VentaJPA v set v.estado=:x , v.monto=0 where v.numComprobante=:y") })
+		@NamedQuery(name = "venta.anularVenta", query = "update VentaJPA v set v.estado=:x , v.monto=0 where v.numComprobante=:y") })
 
 public class VentaJPA implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	public static final String LISTAR_VENTAS = "venta.listarVentas";
-	public static final String ACTUALIZAR_VENTA_ESTADO = "venta.actualizarVentaEstado";// ANULAR O REGISTRAR (GUIAR)
+	public static final String ANULAR_VENTA = "venta.anularVenta";
 
 	@Id
 	private int numComprobante;

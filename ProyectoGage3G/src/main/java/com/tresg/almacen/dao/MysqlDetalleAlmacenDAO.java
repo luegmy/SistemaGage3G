@@ -27,13 +27,7 @@ public class MysqlDetalleAlmacenDAO implements DetalleAlmacenDAO {
 	public List<DetalleAlmacenJPA> listarDetalleAlmacen() {
 		open();
 		Query q=em.createNamedQuery(DetalleAlmacenJPA.LISTAR_DETALLE_ALMACEN).setHint(QueryHints.REFRESH, true);
-		List<DetalleAlmacenJPA>lista=q.getResultList();
-		DetalleAlmacenJPA objDetalle=null;
-		for (DetalleAlmacenJPA d : lista) {
-			objDetalle=em.find(DetalleAlmacenJPA.class, d.getId());
-		}
-		em.refresh(objDetalle);
-		return lista;
+		return q.getResultList();
 	}
 	
 

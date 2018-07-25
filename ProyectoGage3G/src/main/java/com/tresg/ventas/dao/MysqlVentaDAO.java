@@ -205,7 +205,7 @@ public class MysqlVentaDAO implements VentaDAO {
 		EstadoJPA objEstado = new EstadoJPA();
 		objEstado.setCodEstado(3);
 		try {
-			Query q = em.createNamedQuery(VentaJPA.ACTUALIZAR_VENTA_ESTADO);
+			Query q = em.createNamedQuery(VentaJPA.ANULAR_VENTA);
 			q.setParameter("x", objEstado);
 			q.setParameter("y", venta);
 			q.executeUpdate();

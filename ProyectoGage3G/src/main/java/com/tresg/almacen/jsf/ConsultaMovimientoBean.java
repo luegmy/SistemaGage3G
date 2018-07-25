@@ -11,7 +11,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import com.tresg.almacen.jpa.DetalleMovimientoJPA;
-import com.tresg.almacen.jpa.MovimientoJPA;
 import com.tresg.almacen.service.AlmacenBusinessDelegate;
 import com.tresg.almacen.service.ConsultarMovimientoBusinessService;
 import com.tresg.incluido.service.ComboService_I;
@@ -38,15 +37,8 @@ public class ConsultaMovimientoBean implements Serializable {
 
 	public void listarMovimientoXFecha() {
 		movimientos = new ArrayList<>();
-
-		for (MovimientoJPA m : sAlmacen.listaMovimientos()) {
-			if (fecha.equals(m.getFecha())) {
-				for (DetalleMovimientoJPA d : m.getDetalles()) {
-					movimientos.add(d);
-				}
-				
-			}			
-		}
+		sAlmacen.listaDetalleMovimiento().stream().filter(f -> fecha.equals(f.getMovimiento().getFecha()))
+				.forEach(movimientos::add);
 
 	}
 
@@ -54,10 +46,15 @@ public class ConsultaMovimientoBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 		movimientos = new ArrayList<>();
 
-		if (fechaFin.before(fechaIni)) {
+		if (getFechaFin().before(getFechaIni())) {
 			context.addMessage("mensajeRangoFecha", new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"La fecha final no puede ser menor a fecha inicial", null));
 		}
+		
+		sAlmacen.listaDetalleMovimiento().stream().filter(f -> (f.getMovimiento().getFecha().after(fechaIni)
+				|| fechaIni.equals(f.getMovimiento().getFecha()))
+				&& (f.getMovimiento().getFecha().before(fechaFin) || fechaFin.equals(f.getMovimiento().getFecha())))
+				.forEach(movimientos::add);
 	}
 
 	public Date getFecha() {
@@ -91,6 +88,5 @@ public class ConsultaMovimientoBean implements Serializable {
 	public void setMovimientos(List<DetalleMovimientoJPA> movimientos) {
 		this.movimientos = movimientos;
 	}
-
 
 }

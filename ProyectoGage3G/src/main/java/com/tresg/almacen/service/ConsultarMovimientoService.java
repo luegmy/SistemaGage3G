@@ -5,7 +5,6 @@ import java.util.List;
 import com.tresg.almacen.interfaz.DetalleMovimientoDAO;
 import com.tresg.almacen.interfaz.MovimientoDAO;
 import com.tresg.almacen.jpa.DetalleMovimientoJPA;
-import com.tresg.almacen.jpa.MovimientoJPA;
 import com.tresg.factoria.DAOFactory;
 
 public class ConsultarMovimientoService implements ConsultarMovimientoBusinessService {
@@ -17,11 +16,6 @@ public class ConsultarMovimientoService implements ConsultarMovimientoBusinessSe
 	@Override
 	public List<DetalleMovimientoJPA> listaDetalleMovimiento() {
 		return iDetalleMovimiento.listarDetalleMovimiento();
-	}
-
-	@Override
-	public List<MovimientoJPA> listaMovimientos() {
-		return iMovimiento.listarMovimientos();
 	}
 
 

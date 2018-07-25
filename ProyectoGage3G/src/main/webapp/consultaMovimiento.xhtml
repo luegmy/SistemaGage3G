@@ -45,8 +45,9 @@
 							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
 						</div>
 						<div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-0">
-							<h:commandLink styleClass="#{r.celeste}" value="Exportar ">
-								<p:graphicImage value="/imagenes/excel.png" width="24" />
+							<h:commandLink styleClass="#{r.celeste}" title="Exportar">
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<p:outputLabel value=" Exportar" />
 								<p:dataExporter type="xls" target="tabla" fileName="movimientos" />
 							</h:commandLink>
 						</div>
