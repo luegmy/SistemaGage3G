@@ -111,3 +111,8 @@
 .ui-dialog {
 	font-size: 14px;
 }
+
+#wrapperMenu {
+  width: 30%;
+  margin: 20px 50px;
+}
