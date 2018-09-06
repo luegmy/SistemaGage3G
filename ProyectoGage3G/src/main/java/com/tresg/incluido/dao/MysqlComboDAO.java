@@ -11,7 +11,6 @@ import com.tresg.incluido.interfaz.ComboDAO;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
-import com.tresg.incluido.jpa.SerieJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 import com.tresg.seguridad.jpa.RolJPA;
@@ -84,15 +83,6 @@ public class MysqlComboDAO implements ComboDAO {
 	public List<MediosPagoJPA> comboPago() {
 		open();
 		Query q = em.createNamedQuery("pago.comboPago");
-
-		return q.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<SerieJPA> comboSerie(int comprobante) {
-		open();
-		Query q = em.createNamedQuery("serie.comboSerie").setParameter("x", comprobante);
 
 		return q.getResultList();
 	}

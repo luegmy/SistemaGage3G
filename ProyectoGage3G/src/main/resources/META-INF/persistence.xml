@@ -10,7 +10,6 @@
 		<class>com.tresg.incluido.jpa.TipoProductoJPA</class>
 		<class>com.tresg.incluido.jpa.EstadoJPA</class>
 		<class>com.tresg.incluido.jpa.ComprobanteJPA</class>
-		<class>com.tresg.incluido.jpa.SerieJPA</class>
 		<class>com.tresg.incluido.jpa.MediosPagoJPA</class>
 		<class>com.tresg.incluido.jpa.MonedaJPA</class>
 		<class>com.tresg.incluido.jpa.EmpleadoJPA</class>

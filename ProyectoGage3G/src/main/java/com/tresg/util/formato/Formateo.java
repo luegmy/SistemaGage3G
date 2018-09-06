@@ -1,6 +1,7 @@
 package com.tresg.util.formato;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Formateo {
 
@@ -14,11 +15,33 @@ public class Formateo {
 		return Integer.valueOf(cadena);
 	}
 
+	public String obtenerFecha(Date fecha) {
+		// formato para registrar la fecha
+		if(fecha==null) {
+			return "-";
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.format(fecha);
+
+	}
+	
 	public String obtenerHora() {
 		// formato para registrar la hora
 		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
 		return sdf.format(new java.util.Date());
 
+	}
+	
+	public String obtenerFormatoComprobante(int comprobante) {
+		int a = comprobante;
+		String patronA = "%02d";
+		return String.format(patronA, a);
+	}
+
+	public String obtenerFormatoNumeroComprobante(int numero) {
+		int b = numero;
+		String patronB = "%08d";
+		return String.format(patronB, b);
 	}
 
 		

@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tb_cliente")
@@ -36,6 +37,9 @@ public class ClienteJPA implements Serializable {
 	private String nroDocumento;
 	private String telefono;
 	private String correo;
+	
+	@Transient
+	private String codigoDocumento="";
 
 	@ManyToOne
 	@JoinColumn(name = "codDocumento")
@@ -89,7 +93,13 @@ public class ClienteJPA implements Serializable {
 		this.correo = correo;
 	}
 
+	public String getCodigoDocumento() {
+		return codigoDocumento;
+	}
 
+	public void setCodigoDocumento(String codigoDocumento) {
+		this.codigoDocumento = codigoDocumento;
+	}
 
 	public DocumentoIdentidadJPA getDocumento() {
 		return documento;

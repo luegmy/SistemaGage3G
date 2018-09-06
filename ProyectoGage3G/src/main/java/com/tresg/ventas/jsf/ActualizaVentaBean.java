@@ -97,7 +97,6 @@ public class ActualizaVentaBean implements Serializable {
 		atributoUtil.getCliente().setNroDocumento(objVenta.getCliente().getNroDocumento());
 		atributoUtil.getCliente().setNombre(objVenta.getCliente().getNombre());
 		atributoUtil.setCodigoComprobante(objVenta.getComprobante().getCodComprobante());
-		atributoUtil.setNumeroSerie(objVenta.getSerie().getNroSerie());
 		atributoUtil.setCodigoPago(objVenta.getPago().getCodPago());
 
 		for (DetalleVentaJPA d : objVenta.getDetalles()) {
@@ -165,9 +164,8 @@ public class ActualizaVentaBean implements Serializable {
 
 	public void quitarListaProducto(ActionEvent e) {
 		int codigo = (int) e.getComponent().getAttributes().get("codigo");
-		BigDecimal cantidad = (BigDecimal) e.getComponent().getAttributes().get("cantidad");
 
-		gestionUtil.quitarListaProductoModificado(codigo, cantidad, temporales, atributoUtil);
+		gestionUtil.quitarListaProductoModificado(codigo, temporales, atributoUtil);
 
 	}
 

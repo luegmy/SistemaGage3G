@@ -31,18 +31,19 @@
 										<p:ajax event="change"
 											update="comprobante msgComprobante toggleableDetalle serie"
 											listener="#{ventaBean.cargarComprobante}" />
+										<p:ajax event="change" update="serie"
+											listener="#{ventaBean.cargarSerie()}" />
 									</p:selectOneMenu>
 									<p:messages for="mensajeComprobante" id="msgComprobante" />
 								</div>
 							</div>
 
-							<div class="col-6 col-sm-4 col-md-2">
+							<div class="col-6 col-sm-4 col-md-1">
 								<div class="form-group">
 									<p:outputLabel value="#{r.serie}" for="serie" />
-									<p:selectOneMenu value="#{ventaBean.atributoUtil.numeroSerie}"
-										id="serie" styleClass="form-control form-control-sm">
-										<f:selectItems value="#{ventaBean.atributoUtil.series}" />
-									</p:selectOneMenu>
+									<p:inputText value="#{ventaBean.atributoUtil.numeroSerie}"
+										id="serie" styleClass="form-control">
+									</p:inputText>
 								</div>
 							</div>
 							<div class="col-6 col-sm-4 col-md-2">
@@ -51,9 +52,6 @@
 									<p:inputText
 										value="#{ventaBean.atributoUtil.numeroComprobante}"
 										id="comprobante" styleClass="form-control">
-										<p:ajax event="keyup"
-											listener="#{ventaBean.validarComprobante}"
-											update="msgCargarComprobante msgNumeroComprobante msgNumeroExiste" />
 									</p:inputText>
 									<p:messages for="mensajeCargarNumeroComprobante"
 										id="msgCargarComprobante" />
@@ -76,11 +74,22 @@
 								</div>
 							</div>
 
-							<div class="col-6 col-sm-8 col-md-2">
+							<div class="col-6 col-sm-4 col-md-2">
 								<div class="form-group">
 									<p:outputLabel value="#{r.fecha}" for="fecha" />
 									<p:calendar value="#{ventaBean.atributoUtil.fecha}"
 										pattern="dd-MM-yyyy" id="fecha" locale="es" navigator="true"
+										inputStyleClass="form-control">
+										<p:ajax event="dateSelect" />
+									</p:calendar>
+								</div>
+							</div>
+							
+							<div class="col-6 col-sm-4 col-md-2">
+								<div class="form-group">
+									<p:outputLabel value="#{r.fecha}" for="fechaVence" />
+									<p:calendar value="#{ventaBean.atributoUtil.fechaVence}"
+										pattern="dd-MM-yyyy" id="fechaVence" locale="es" navigator="true"
 										inputStyleClass="form-control">
 										<p:ajax event="dateSelect" />
 									</p:calendar>
@@ -291,7 +300,7 @@
 								</div>
 
 								<p:messages for="mensajeAgregarCantidad" id="msgCantidad" />
-								<p:messages for="mensajeAgregarProducto" id="msgAgregarProducto"/>
+								<p:messages for="mensajeAgregarProducto" id="msgAgregarProducto" />
 								<p:messages for="mensajeStock" id="msgStock" />
 								<p:messages for="mensajeCodigo" id="msgCodigo" />
 								<p:messages for="mensajeProductoRepetido" id="msgRepetido" />
@@ -329,6 +338,12 @@
 									</p:column>
 									<p:column>
 										<f:facet name="header">
+											<p:outputLabel value="U.M" />
+										</f:facet>
+										<p:outputLabel value="#{p.medida.abreviatura}" />
+									</p:column>
+									<p:column>
+										<f:facet name="header">
 											<p:outputLabel value="PRECIO" />
 										</f:facet>
 										<p:outputLabel value="#{p.precioVenta}">
@@ -363,12 +378,14 @@
 							<p:column width="50%" headerText="DESCRIPCION">
 								<p:outputLabel value="#{t.descripcionProducto}" />
 							</p:column>
-
 							<p:column headerText="PRECIO">
 								<p:outputLabel value="#{t.precio}" />
 							</p:column>
 							<p:column headerText="CANTIDAD">
 								<p:outputLabel value="#{t.cantidad}" />
+							</p:column>
+							<p:column headerText="U.M">
+								<p:outputLabel value="#{t.unidadMedida}" />
 							</p:column>
 							<p:column headerText="IMPORTE">
 								<p:outputLabel value="#{t.precio * t.cantidad}" />

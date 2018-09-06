@@ -23,7 +23,6 @@ import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.EstadoJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
-import com.tresg.incluido.jpa.SerieJPA;
 import com.tresg.seguridad.jpa.UsuarioJPA;
 
 @Entity
@@ -64,10 +63,6 @@ public class VentaJPA implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "codEstado")
 	private EstadoJPA estado;
-
-	@ManyToOne
-	@JoinColumn(name = "nroSerie")
-	private SerieJPA serie;
 
 	@ManyToOne
 	@JoinColumn(name = "codUsuario")
@@ -133,14 +128,6 @@ public class VentaJPA implements Serializable {
 
 	public void setPago(MediosPagoJPA pago) {
 		this.pago = pago;
-	}
-
-	public SerieJPA getSerie() {
-		return serie;
-	}
-
-	public void setSerie(SerieJPA serie) {
-		this.serie = serie;
 	}
 
 	public ComprobanteJPA getComprobante() {

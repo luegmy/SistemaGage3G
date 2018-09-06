@@ -15,7 +15,6 @@ import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.EstadoJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
-import com.tresg.incluido.jpa.SerieJPA;
 import com.tresg.incluido.service.GestionarClienteService_I;
 import com.tresg.incluido.service.GestionarProductoService_I;
 import com.tresg.incluido.service.IncluidoBusinessDelegate;
@@ -73,6 +72,7 @@ public class GestionaBean implements Serializable {
 
 		DetalleVentaJPA objDetalle = new DetalleVentaJPA();
 		objDetalle.setDescripcionProducto(atributo.getDescripcionProducto());
+		objDetalle.setUnidadMedida(atributo.getUnidad());
 		objDetalle.setCantidad(atributo.getCantidad());
 		objDetalle.setPrecio(atributo.getPrecio());
 		objDetalle.setId(pk);
@@ -90,9 +90,6 @@ public class GestionaBean implements Serializable {
 		MediosPagoJPA objPago = new MediosPagoJPA();
 		objPago.setCodPago(atributo.getCodigoPago());
 
-		SerieJPA objSerie = new SerieJPA();
-		objSerie.setNroSerie(atributo.getNumeroSerie());
-
 		ClienteJPA objCliente = tipoCliente(atributo);
 
 		EstadoJPA objEstado = new EstadoJPA();
@@ -108,7 +105,6 @@ public class GestionaBean implements Serializable {
 		objVenta.setPago(objPago);
 		objVenta.setNumComprobante(
 				formato.obtenerTalonario(atributo.getCodigoComprobante(), atributo.getNumeroComprobante()));
-		objVenta.setSerie(objSerie);
 		objVenta.setMonto(atributo.getTotal());
 		objVenta.setFecha(atributo.getFecha());
 		objVenta.setHora(formato.obtenerHora());
@@ -195,8 +191,7 @@ public class GestionaBean implements Serializable {
 
 	// metodo si a la hora de modificar la venta se elimina un item de la lista
 	// detalle
-	public void quitarListaProductoModificado(int codigo, BigDecimal cantidad,
-			List<DetalleVentaJPA> temporales, AtributoBean atributo) {
+	public void quitarListaProductoModificado(int codigo,List<DetalleVentaJPA> temporales, AtributoBean atributo) {
 
 		BigDecimal monto = new java.math.BigDecimal("0.00");
 

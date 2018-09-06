@@ -10,7 +10,6 @@ import com.tresg.incluido.interfaz.ComboDAO;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
-import com.tresg.incluido.jpa.SerieJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 import com.tresg.seguridad.jpa.RolJPA;
@@ -53,11 +52,6 @@ public class ComboService implements ComboService_I,Serializable {
 	@Override
 	public List<ComprobanteJPA> comboComprobante() {
 		return iComboDAO.comboComprobante();
-	}
-	
-	@Override
-	public List<SerieJPA> comboSerie(int comprobante) {
-		return iComboDAO.comboSerie(comprobante);
 	}
 
 	@Override

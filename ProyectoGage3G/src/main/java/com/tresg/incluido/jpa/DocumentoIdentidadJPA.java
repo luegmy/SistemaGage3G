@@ -15,7 +15,7 @@ public class DocumentoIdentidadJPA implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String codDocumento;
+	private String codDocumento="";
 	
 	private String descripcion;
 

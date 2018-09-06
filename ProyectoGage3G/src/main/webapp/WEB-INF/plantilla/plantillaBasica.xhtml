@@ -5,6 +5,10 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:h="http://java.sun.com/jsf/html">
 <h:head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 	<title><ui:insert name="title"></ui:insert></title>
 </h:head>
 
@@ -17,13 +21,14 @@
 		<p:layoutUnit position="south" size="30" gutter="0" style="border:0;"
 			footer="Creado por GAGE 2016 &copy; - Correo:luegmy@gmail.com"
 			styleClass="pie" />
-		<p:layoutUnit position="center" gutter="0" style="border:0;">
-			<ui:insert name="content" />
-		</p:layoutUnit>
 		<p:layoutUnit position="west" size="150" gutter="0"
 			header="GAGE SYSTEM" collapsible="true" style="border:0;">
 			<ui:include src="/WEB-INF/plantilla/menu.xhtml" />
 		</p:layoutUnit>
+		<p:layoutUnit position="center" gutter="0" style="border:0;">
+			<ui:insert name="content" />
+		</p:layoutUnit>
+
 	</p:layout>
 
 
