@@ -29,7 +29,7 @@
 	</context-param>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>swanky-purse</param-value>
+		<param-value>vader</param-value>
 	</context-param>
 
 </web-app>

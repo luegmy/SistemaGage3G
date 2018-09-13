@@ -31,7 +31,7 @@
 
 					<p:dataTable id="tabla" value="#{productoClienteBean.detalles}"
 						var="t" paginator="true" emptyMessage="No existe ventas" rows="30"
-						reflow="true" widgetVar="ventaTabla">
+						reflow="true" widgetVar="ventaTabla" >
 						<f:facet name="header">
 							<p:outputPanel styleClass="text-center">
 								<p:outputLabel value="FILTRO :" />
@@ -41,7 +41,7 @@
 									placeholder="Filtrar busqueda" />
 							</p:outputPanel>
 						</f:facet>
-						<p:column width="5%" filterBy="#{t.venta.numComprobante}">
+						<p:column width="5%">
 							<f:facet name="header">
 								<h:outputText value="Nro." />
 							</f:facet>

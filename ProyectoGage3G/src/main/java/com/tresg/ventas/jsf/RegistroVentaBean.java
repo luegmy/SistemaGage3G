@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +14,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.xml.sax.SAXException;
 
+import com.google.zxing.WriterException;
 import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.service.ComboService_I;
@@ -27,10 +32,13 @@ import com.tresg.util.bean.GestionaBean;
 import com.tresg.util.bean.MensajeBean;
 import com.tresg.util.conexion.MontoEnLetras;
 import com.tresg.util.formato.Formateo;
+import com.tresg.util.impresion.Impresora;
 import com.tresg.util.sunat.Sunat;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.service.RegistrarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;
+
+import net.sf.jasperreports.engine.JRException;
 
 @ManagedBean(name = "ventaBean")
 @ViewScoped
@@ -65,14 +73,14 @@ public class RegistroVentaBean implements Serializable {
 	}
 
 	public void cargarSerie() {
-		if(atributoUtil.getCodigoComprobante()==1) {
+		if (atributoUtil.getCodigoComprobante() == 1) {
 			atributoUtil.setNumeroSerie("F001");
-		}else {
+		} else {
 			atributoUtil.setNumeroSerie("B001");
 		}
 
 	}
-	
+
 	public void cargarComprobante() {
 		atributoUtil.setNumeroComprobante(
 				gestionUtil.retornaNumeroComprobante(atributoUtil.getCodigoComprobante()) % 10000000);
@@ -180,77 +188,39 @@ public class RegistroVentaBean implements Serializable {
 			context.addMessage(mensajeVenta, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					mensajeUtil.mostrarMensajeError(mensajeVenta, atributoUtil), null));
 		} else {
-			if (atributoUtil.getCodigoComprobante() == 7 || atributoUtil.getCodigoComprobante() == 8) {
+			// generar el archivo plano para facturador sunat
+			sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
+					atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), cadenaSunatCabecera(),
+					cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda());
 
-				sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
-						atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), cadenaSunatNota(),
-						cadenaSunatDetalle(),cadenaSunatTributo(),cadenaSunatLeyenda());
-
-				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
-						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
-				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
-
-			} else {
-				// generar el archivo plano para facturador sunat
-				sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
-						atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), cadenaSunatCabecera(),
-						cadenaSunatDetalle(),cadenaSunatTributo(),cadenaSunatLeyenda());
-
-				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
-						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
-				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
-			}
+			context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
+					sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
+			RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
 
 		}
 	}
 
 	String cadenaSunatCabecera() {
 
-		return AtributoBean.OPERACION.concat("|")
-				.concat(talonarioUtil.obtenerFecha(atributoUtil.getFecha())).concat("|")
-				.concat(talonarioUtil.obtenerHora()).concat("|")
+		return atributoUtil.getCodigoOperacion().concat("|").concat(talonarioUtil.obtenerFecha(atributoUtil.getFecha()))
+				.concat("|").concat(talonarioUtil.obtenerHora()).concat("|")
 				.concat(talonarioUtil.obtenerFecha(atributoUtil.getFechaVence())).concat("|")
 				.concat(AtributoBean.CODIGO_DOMICILIO_FISCAL).concat("|")
 				.concat(atributoUtil.getCliente().getCodigoDocumento()).concat("|")
 				.concat(atributoUtil.getCliente().getNroDocumento()).concat("|")
-				.concat(atributoUtil.getCliente().getNombre()).concat("|")
-				.concat(AtributoBean.CODIGO_MONEDA).concat("|")
-				//sumatoria de tributos
+				.concat(atributoUtil.getCliente().getNombre()).concat("|").concat(AtributoBean.CODIGO_MONEDA)
+				.concat("|")
+				// sumatoria de tributos
 				.concat(atributoUtil.getIgv().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
-				//total valor de venta
+				// total valor de venta
 				.concat(atributoUtil.getSubtotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
-				//total precio de venta
+				// total precio de venta
 				.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
 				.concat(AtributoBean.TOTAL_DESCUENTOS).concat("|").concat(AtributoBean.SUMATORIA_OTROS_CARGOS)
 				.concat("|").concat(AtributoBean.TOTAL_ANTICIPOS).concat("|")
-				//importe total de venta
+				// importe total de venta
 				.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
 				.concat(AtributoBean.VERSION_UBL).concat("|").concat(AtributoBean.CUSTOMIZACION_DOCUMENTO);
-	}
-
-	String cadenaSunatNota() {
-
-		return AtributoBean.OPERACION.concat("|")
-				.concat(talonarioUtil.obtenerFecha(atributoUtil.getFecha())).concat("|")
-				.concat(talonarioUtil.obtenerHora()).concat("|")
-				.concat(AtributoBean.CODIGO_DOMICILIO_FISCAL).concat("|")
-				.concat(String.valueOf(atributoUtil.getCliente().getDocumento())).concat("|")
-				.concat(atributoUtil.getCliente().getNroDocumento()).concat("|")
-				.concat(atributoUtil.getCliente().getNombre()).concat("|")
-				.concat(AtributoBean.CODIGO_MONEDA).concat("|")
-				.concat(atributoUtil.getTipoNota()).concat("|")
-				.concat(atributoUtil.getObservacion()).concat("|")
-				.concat(talonarioUtil.obtenerFormatoComprobante(atributoUtil.getCodigoComprobante())).concat("|")
-				.concat(atributoUtil.getNumeroSerie().concat("-").concat(String.valueOf(atributoUtil.getNumeroComprobante()))).concat("|")
-						.concat(atributoUtil.getIgv().setScale(2, RoundingMode.HALF_EVEN).toString()).concat("|")
-						.concat(atributoUtil.getSubtotal().setScale(2, RoundingMode.HALF_EVEN).toString()).concat("|")
-						.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_EVEN).toString()).concat("|")
-						.concat(AtributoBean.TOTAL_DESCUENTOS).concat("|")
-						.concat(AtributoBean.SUMATORIA_OTROS_CARGOS).concat("|")
-						.concat(AtributoBean.TOTAL_ANTICIPOS).concat("|")
-						.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_EVEN).toString()).concat("|")
-						.concat(AtributoBean.VERSION_UBL).concat("|")
-						.concat(AtributoBean.CUSTOMIZACION_DOCUMENTO);
 	}
 
 	List<String> cadenaSunatDetalle() {
@@ -261,73 +231,63 @@ public class RegistroVentaBean implements Serializable {
 		BigDecimal valorVenta;
 
 		for (DetalleVentaJPA s : temporales) {
-			
-			precioUnitario=s.getPrecio().multiply(s.getCantidad());
-			valorUnitario=s.getPrecio().divide(atributoUtil.getValor(),2, RoundingMode.HALF_DOWN);
-			valorVenta=valorUnitario.multiply(s.getCantidad());
-			
-			
-			cadenas.add(s.getUnidadMedida().concat("|")
-					.concat(s.getCantidad().toString()).concat("|")
+
+			precioUnitario = s.getPrecio().multiply(s.getCantidad());
+			valorUnitario = s.getPrecio().divide(atributoUtil.getValor(), 2, RoundingMode.HALF_DOWN);
+			valorVenta = valorUnitario.multiply(s.getCantidad());
+
+			cadenas.add(s.getUnidadMedida().concat("|").concat(s.getCantidad().toString()).concat("|")
 					.concat(String.valueOf(s.getId().getCodProducto())).concat("|")
-					.concat(AtributoBean.CODIGO_PRODUCTO_SUNAT).concat("|")
-					.concat(s.getDescripcionProducto()).concat("|")
+					.concat(AtributoBean.CODIGO_PRODUCTO_SUNAT).concat("|").concat(s.getDescripcionProducto())
+					.concat("|")
 					// valor unitario por item (sin igv)
 					.concat(valorUnitario.toString()).concat("|")
 					// sumatoria de tributos por item
-					.concat(precioUnitario.subtract(valorVenta).toString()).concat("|")
-					.concat(AtributoBean.CODIGO_IGV).concat("|")
+					.concat(precioUnitario.subtract(valorVenta).toString()).concat("|").concat(AtributoBean.CODIGO_IGV)
+					.concat("|")
 					// monto de igv por item
 					.concat(precioUnitario.subtract(valorVenta).toString()).concat("|")
 					// base imponible igv
-					.concat(valorVenta.toString()).concat("|")
-					.concat(AtributoBean.NOMBRE_TRIBUTO_ITEM_IGV).concat("|")
-					.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_IGV).concat("|")
-					.concat(AtributoBean.AFECTACION_IGV_ITEM).concat("|")
-					.concat(AtributoBean.PORCENTAJE_IGV).concat("|")
-					
-					.concat(AtributoBean.CODIGO_ISC).concat("|")
-					.concat(AtributoBean.MONTO_ISC).concat("|")
+					.concat(valorVenta.toString()).concat("|").concat(AtributoBean.NOMBRE_TRIBUTO_ITEM_IGV).concat("|")
+					.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_IGV).concat("|").concat(AtributoBean.AFECTACION_IGV_ITEM)
+					.concat("|").concat(AtributoBean.PORCENTAJE_IGV).concat("|")
+
+					.concat(AtributoBean.CODIGO_ISC).concat("|").concat(AtributoBean.MONTO_ISC).concat("|")
 					.concat(AtributoBean.BASE_IMPONIBLE_ISC_ITEM).concat("|")
 					.concat(AtributoBean.NOMBRE_TRIBUTO_ITEM_ISC).concat("|")
-					.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_ISC).concat("|")
-					.concat(AtributoBean.TIPO_SISTEMA_ISC).concat("|")
-					.concat(AtributoBean.PORCENTAJE_ISC).concat("|")
-					
+					.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_ISC).concat("|").concat(AtributoBean.TIPO_SISTEMA_ISC)
+					.concat("|").concat(AtributoBean.PORCENTAJE_ISC).concat("|")
+
 					// otros tributos, se copia igual que el isc
-					.concat(AtributoBean.CODIGO_ISC).concat("|")
-					.concat(AtributoBean.MONTO_ISC).concat("|")
+					.concat(AtributoBean.CODIGO_ISC).concat("|").concat(AtributoBean.MONTO_ISC).concat("|")
 					.concat(AtributoBean.BASE_IMPONIBLE_ISC_ITEM).concat("|")
 					.concat(AtributoBean.NOMBRE_TRIBUTO_ITEM_ISC).concat("|")
-					.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_ISC).concat("|")
-					.concat(AtributoBean.PORCENTAJE_ISC).concat("|")
-					
+					.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_ISC).concat("|").concat(AtributoBean.PORCENTAJE_ISC)
+					.concat("|")
+
 					// precio venta unitario
 					.concat(precioUnitario.toString()).concat("|")
 					// valor de venta por item
-					.concat(valorVenta.toString()).concat("|")				
-					.concat(AtributoBean.VALOR_REFERENCIAL).concat("\r\n"));
+					.concat(valorVenta.toString()).concat("|").concat(AtributoBean.VALOR_REFERENCIAL).concat("\r\n"));
 		}
 		return cadenas;
 
 	}
-	
+
 	String cadenaSunatTributo() {
-		return AtributoBean.CODIGO_IGV.concat("|")
-				.concat(AtributoBean.NOMBRE_TRIBUTO_ITEM_IGV).concat("|")
-				.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_IGV).concat("|")
-				.concat(atributoUtil.getSubtotal().toString()).concat("|")
-				.concat(atributoUtil.getIgv().toString());	
+		return AtributoBean.CODIGO_IGV.concat("|").concat(AtributoBean.NOMBRE_TRIBUTO_ITEM_IGV).concat("|")
+				.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_IGV).concat("|").concat(atributoUtil.getSubtotal().toString())
+				.concat("|").concat(atributoUtil.getIgv().toString());
 	}
-	
+
 	String cadenaSunatLeyenda() {
 		MontoEnLetras numeroLetra = new MontoEnLetras();
 		String letra = String.valueOf(atributoUtil.getTotal());
-		String leyenda=numeroLetra.convertir(letra, true);
-		
-		return "1000".concat("|").concat(leyenda);	
+		String leyenda = numeroLetra.convertir(letra, true);
+
+		return "1000".concat("|").concat(leyenda);
 	}
-	
+
 	public void editaProducto(ActionEvent e) {
 
 		int codigo = (int) e.getComponent().getAttributes().get("codigo");
@@ -347,6 +307,35 @@ public class RegistroVentaBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.getExternalContext().getSessionMap().remove("ventaBean");
 		return "registroVenta.xhtml";
+	}
+
+	public void imprimirVenta() throws IOException, ClassNotFoundException, JRException, SQLException,
+			ParserConfigurationException, SAXException, WriterException {
+
+		// leer archivo xml firma, para obtener el digestValue (hash o valor
+		// resumen) y signatureValue (firma digital)
+		sunatUtil.leerNodosXml(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
+				atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante() % 10000000);
+
+		// generar el codigo de barra sin hash y sin firma digital, estos se
+		// añaden em la clase sunat
+		sunatUtil.generarCodigoBarra(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
+				atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), atributoUtil.getIgv().toString(),
+				atributoUtil.getTotal().toString(), atributoUtil.getFecha().toString(),
+				atributoUtil.getCliente().getCodigoDocumento(), atributoUtil.getCliente().getNroDocumento());
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Impresora i = Impresora.getImpresora();
+		i.imprimirVenta(
+				talonarioUtil
+						.obtenerTalonario(atributoUtil.getCodigoComprobante(), atributoUtil.getNumeroComprobante()),
+				cadenaSunatLeyenda(),
+				Sunat.RUTA_IMAGEN.concat(
+						sunatUtil.generarNombreArchivo(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
+								atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante() % 10000000))
+						.concat(".png"),
+				sunatUtil.getDigestTexto(), "", "0",
+				sdf.format(atributoUtil.getFechaVence()));
 	}
 
 	public AtributoBean getAtributoUtil() {

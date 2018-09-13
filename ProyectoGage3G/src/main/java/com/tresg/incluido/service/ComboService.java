@@ -13,6 +13,7 @@ import com.tresg.incluido.jpa.MediosPagoJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 import com.tresg.seguridad.jpa.RolJPA;
+import com.tresg.ventas.jpa.OperacionJPA;
 
 
 public class ComboService implements ComboService_I,Serializable {
@@ -62,6 +63,11 @@ public class ComboService implements ComboService_I,Serializable {
 	@Override
 	public List<RolJPA> comboRol() {
 		return iComboDAO.comboRol();
+	}
+
+	@Override
+	public List<OperacionJPA> comboOperacion() {
+		return iComboDAO.comboOperacion();
 	}
 
 	

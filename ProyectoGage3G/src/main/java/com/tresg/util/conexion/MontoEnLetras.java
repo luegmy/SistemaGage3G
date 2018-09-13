@@ -84,7 +84,7 @@ public class MontoEnLetras implements Serializable{
     private String getCentenas(String num) {// 999 o 099
         if( Integer.parseInt(num)>99 ){//es centena
             if (Integer.parseInt(num) == 100) {//caso especial
-                return " cien ";
+                return "cien ";
             } else {
                  return centenas[Integer.parseInt(num.substring(0, 1))].concat(getDecenas(num.substring(1)));
             } 

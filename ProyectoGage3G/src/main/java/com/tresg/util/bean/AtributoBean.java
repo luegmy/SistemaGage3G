@@ -29,24 +29,25 @@ public class AtributoBean implements Serializable {
 	private int numeroComprobante;
 
 	// campos de la cabecera de la venta
-	public static final String OPERACION="0101";
+	private List<SelectItem> operaciones;
+	private String codigoOperacion="";
 	private Date fecha = new Date();
 	private String hora;
 	private Date fechaVence;
 	public static final String CODIGO_DOMICILIO_FISCAL = "000";
 	ClienteJPA cliente = new ClienteJPA();
 	private List<ClienteJPA> clientes;
-	public static final String CODIGO_MONEDA="PEN";
-	
+	public static final String CODIGO_MONEDA = "PEN";
+
 	private BigDecimal igv = new java.math.BigDecimal("0.00");
-	private BigDecimal subtotal = new java.math.BigDecimal("0.00");	
+	private BigDecimal subtotal = new java.math.BigDecimal("0.00");
 	private BigDecimal total = new java.math.BigDecimal("0.00");
 	public static final String TOTAL_DESCUENTOS = "0.00";
 	public static final String SUMATORIA_OTROS_CARGOS = "0.00";
 	public static final String TOTAL_ANTICIPOS = "0.00";
 	public static final String VERSION_UBL = "2.1";
 	public static final String CUSTOMIZACION_DOCUMENTO = "2.0";
-	
+
 	// campos del detalle de la venta
 	private List<ProductoJPA> productos;
 	private String unidad;
@@ -57,36 +58,30 @@ public class AtributoBean implements Serializable {
 	private BigDecimal precio = new java.math.BigDecimal("0.00");
 	public static final String CODIGO_IGV = "1000";
 	public static final String NOMBRE_TRIBUTO_ITEM_IGV = "IGV";
-	public static final String CODIGO_TIPO_TRIBUTO_IGV="VAT";
-	public static final String AFECTACION_IGV_ITEM="10";
-	public static final String PORCENTAJE_IGV="18.00";
-	
-	public static final String CODIGO_ISC="-";
+	public static final String CODIGO_TIPO_TRIBUTO_IGV = "VAT";
+	public static final String AFECTACION_IGV_ITEM = "10";
+	public static final String PORCENTAJE_IGV = "18.00";
+
+	public static final String CODIGO_ISC = "-";
 	public static final String MONTO_ISC = "0.00";
 	public static final String BASE_IMPONIBLE_ISC_ITEM = "0.00";
 	public static final String NOMBRE_TRIBUTO_ITEM_ISC = "";
-	public static final String CODIGO_TIPO_TRIBUTO_ISC="";
-	public static final String TIPO_SISTEMA_ISC="";
-	public static final String PORCENTAJE_ISC="";
+	public static final String CODIGO_TIPO_TRIBUTO_ISC = "";
+	public static final String TIPO_SISTEMA_ISC = "";
+	public static final String PORCENTAJE_ISC = "";
+
+	public static final String VALOR_REFERENCIAL = "0.00";
 	
-	public static final String VALOR_REFERENCIAL="0.00";
 	private int codigoTipo;
-	
-	
-	// para las notas de credito y debito
-	private String tipoNota;
 	private String observacion;
-	private int facturaNota;
-	private int serieNota;
-	private int comprobanteNota;
-	
 	private BigDecimal valor = new BigDecimal("1.18");
+	private String serieGuia;
+	private String numeroSerieGuia;
+	
 
 	// Adicional manejo interno
 	private List<SelectItem> pagos;
 	private int codigoPago;
-	
-	
 
 	// atributos para consulta y actualizacion de venta
 	private Date fechaIni = new Date();
@@ -137,6 +132,25 @@ public class AtributoBean implements Serializable {
 		this.numeroComprobante = numeroComprobante;
 	}
 
+	public List<SelectItem> getOperaciones() {
+		operaciones = new ArrayList<>();
+		sCombo.comboOperacion().stream()
+				.forEach(o -> operaciones.add(new SelectItem(o.getCodOperacion(), o.getDescripcion())));
+		return operaciones;
+	}
+
+	public void setOperaciones(List<SelectItem> operaciones) {
+		this.operaciones = operaciones;
+	}
+
+	public String getCodigoOperacion() {
+		return codigoOperacion;
+	}
+
+	public void setCodigoOperacion(String codigoOperacion) {
+		this.codigoOperacion = codigoOperacion;
+	}
+
 	public Date getFecha() {
 		return fecha;
 	}
@@ -152,7 +166,7 @@ public class AtributoBean implements Serializable {
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
-	
+
 	public Date getFechaVence() {
 		return fechaVence;
 	}
@@ -175,38 +189,6 @@ public class AtributoBean implements Serializable {
 
 	public void setClientes(List<ClienteJPA> clientes) {
 		this.clientes = clientes;
-	}
-
-	public String getTipoNota() {
-		return tipoNota;
-	}
-
-	public void setTipoNota(String tipoNota) {
-		this.tipoNota = tipoNota;
-	}
-
-	public int getFacturaNota() {
-		return facturaNota;
-	}
-
-	public void setFacturaNota(int facturaNota) {
-		this.facturaNota = facturaNota;
-	}
-
-	public int getSerieNota() {
-		return serieNota;
-	}
-
-	public void setSerieNota(int serieNota) {
-		this.serieNota = serieNota;
-	}
-
-	public int getComprobanteNota() {
-		return comprobanteNota;
-	}
-
-	public void setComprobanteNota(int comprobanteNota) {
-		this.comprobanteNota = comprobanteNota;
 	}
 
 	public BigDecimal getSubtotal() {
@@ -239,6 +221,22 @@ public class AtributoBean implements Serializable {
 
 	public void setValor(BigDecimal valor) {
 		this.valor = valor;
+	}
+
+	public String getSerieGuia() {
+		return serieGuia;
+	}
+
+	public void setSerieGuia(String serieGuia) {
+		this.serieGuia = serieGuia;
+	}
+
+	public String getNumeroSerieGuia() {
+		return numeroSerieGuia;
+	}
+
+	public void setNumeroSerieGuia(String numeroSerieGuia) {
+		this.numeroSerieGuia = numeroSerieGuia;
 	}
 
 	public List<SelectItem> getPagos() {
@@ -340,5 +338,4 @@ public class AtributoBean implements Serializable {
 		this.fechaFin = fechaFin;
 	}
 
-	
 }
