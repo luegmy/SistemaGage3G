@@ -29,7 +29,7 @@ public class MysqlMovimientoDAO implements MovimientoDAO {
 	ActualizarExistencia existenciaUtil = new ActualizarExistencia();
 
 	@Override
-	public int obtenerNumero() {
+	public int obtenerNumeroMovimiento() {
 		open();
 
 		int numero;

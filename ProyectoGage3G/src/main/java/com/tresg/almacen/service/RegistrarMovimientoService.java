@@ -18,8 +18,8 @@ public class RegistrarMovimientoService implements RegistrarMovimientoBusinessSe
 	}
 
 	@Override
-	public int obtieneNumero() {
-		return iAlmacen.obtenerNumero();
+	public int obtieneNumeroMovimiento() {
+		return iAlmacen.obtenerNumeroMovimiento();
 	}
 	
 	@Override

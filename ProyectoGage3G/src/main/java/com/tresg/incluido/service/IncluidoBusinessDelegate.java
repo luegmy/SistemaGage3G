@@ -19,4 +19,9 @@ public class IncluidoBusinessDelegate {
 		return new GestionarClienteService();
 		
 	}
+	
+	public static GestionarProveedorService_I getGestionarProveedorService(){
+		return new GestionarProveedorService();
+		
+	}
 }

@@ -24,8 +24,10 @@ import com.tresg.almacen.service.AlmacenBusinessDelegate;
 import com.tresg.almacen.service.RegistrarMovimientoBusinessService;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
+import com.tresg.incluido.jpa.ProveedorJPA;
 import com.tresg.incluido.service.ComboService_I;
 import com.tresg.incluido.service.GestionarProductoService_I;
+import com.tresg.incluido.service.GestionarProveedorService_I;
 import com.tresg.incluido.service.IncluidoBusinessDelegate;
 import com.tresg.seguridad.jpa.UsuarioJPA;
 import com.tresg.util.formato.Formateo;
@@ -39,15 +41,18 @@ public class RegistroMovimientoBean implements Serializable {
 	private List<SelectItem> tipoMovimientos;
 	private int codigoTipoMovimiento;
 
+	private List<SelectItem> almacenes;
+	private int codigoOrigen;
+	private int codigoDestino;
+
 	private List<SelectItem> comprobantes;
 	private int codigoComprobante;
 	private int numeroComprobante;
 
-	private Date fecha = new Date();
+	private List<SelectItem> proveedores;
+	private int codigoProveedor;
 
-	private List<SelectItem> almacenes;
-	private int codigoOrigen;
-	private int codigoDestino;
+	private Date fecha = new Date();
 	private String observacion;
 
 	private List<SelectItem> productos;
@@ -59,19 +64,18 @@ public class RegistroMovimientoBean implements Serializable {
 
 	// Para anadir elementos a la datatable
 	private List<DetalleMovimientoJPA> temporales;
-
-	private List<DetalleMovimientoJPA> transferencias;
-
 	// Atributo de la tabla detalle_almacen
 	private int codigoProducto;
 	private int cantidad;
 
+	private List<DetalleMovimientoJPA> transferencias;
+
 	// Instanciar los services
 	RegistrarMovimientoBusinessService sAlmacen = AlmacenBusinessDelegate.getRegistrarAlmacenService();
 	GestionarProductoService_I sProducto = IncluidoBusinessDelegate.getGestionarProductoService();
+	GestionarProveedorService_I sProveedor=IncluidoBusinessDelegate.getGestionarProveedorService();
 	ComboService_I sCombo = IncluidoBusinessDelegate.getComboService();
 
-	// Constructor
 	public RegistroMovimientoBean() {
 		temporales = new ArrayList<>();
 		transferencias = new ArrayList<>();
@@ -194,6 +198,9 @@ public class RegistroMovimientoBean implements Serializable {
 		UsuarioJPA objUsuario = new UsuarioJPA();
 		objUsuario.setCodUsuario(usuario);
 
+		ProveedorJPA objProveedor = new ProveedorJPA();
+		objProveedor.setCodProveedor(codigoProveedor);
+
 		ComprobanteJPA objComprobante = new ComprobanteJPA();
 		objComprobante.setCodComprobante(codigoComprobante);
 
@@ -207,6 +214,7 @@ public class RegistroMovimientoBean implements Serializable {
 		objMovimiento.setHora(formatoHora.obtenerHora());
 		objMovimiento.setTipoMovimiento(objTipoMovimiento);
 		objMovimiento.setUsuario(objUsuario);
+		objMovimiento.setProveedor(objProveedor);
 		objMovimiento.setObservacion(observacion);
 		objMovimiento.setDetalles(temporales);
 
@@ -225,7 +233,10 @@ public class RegistroMovimientoBean implements Serializable {
 		} else if (codigoComprobante == 0) {
 			context.addMessage("mensajeComprobante",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el tipo de comprobante", null));
-		} else if (numeroComprobante == 0 && codigoComprobante != 2) {
+		} else if (codigoProveedor == 0) {
+			context.addMessage("mensajeProveedor",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el proveedor", null));
+		}else if (numeroComprobante == 0 && codigoComprobante != 2) {
 			context.addMessage("mensajeNumeroComprobante",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ingrese el numero de comprobante", null));
 		} else if (temporales.isEmpty()) {
@@ -359,7 +370,25 @@ public class RegistroMovimientoBean implements Serializable {
 	}
 
 	public int getNumeroDocumento() {
-		return sAlmacen.obtieneNumero();
+		return sAlmacen.obtieneNumeroMovimiento();
+	}
+
+	public List<SelectItem> getProveedores() {
+		proveedores=new ArrayList<>();
+		sProveedor.listaProveedor().forEach(a -> proveedores.add(new SelectItem(a.getCodProveedor(), a.getNombre())));
+		return proveedores;
+	}
+
+	public void setProveedores(List<SelectItem> proveedores) {
+		this.proveedores = proveedores;
+	}
+
+	public int getCodigoProveedor() {
+		return codigoProveedor;
+	}
+
+	public void setCodigoProveedor(int codigoProveedor) {
+		this.codigoProveedor = codigoProveedor;
 	}
 
 	public Date getFecha() {

@@ -7,6 +7,7 @@ import com.tresg.almacen.interfaz.DetalleMovimientoDAO;
 import com.tresg.incluido.interfaz.ClienteDAO;
 import com.tresg.incluido.interfaz.ComboDAO;
 import com.tresg.incluido.interfaz.ProductoDAO;
+import com.tresg.incluido.interfaz.ProveedorDAO;
 import com.tresg.incluido.interfaz.TipoProductoDAO;
 import com.tresg.incluido.interfaz.UnidadMedidaDAO;
 import com.tresg.seguridad.interfaz.UsuarioDAO;
@@ -36,6 +37,7 @@ public abstract class DAOFactory{
     public abstract ComboDAO getComboDAO();
     
     public abstract ClienteDAO getClienteDAO();
+    public abstract ProveedorDAO getProveedorDAO();
     
     public abstract VentaDAO getVentaDAO();
     public abstract DetalleVentaDAO getDetalleVentaDAO();

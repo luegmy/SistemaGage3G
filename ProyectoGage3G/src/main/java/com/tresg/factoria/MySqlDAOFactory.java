@@ -11,9 +11,11 @@ import com.tresg.almacen.interfaz.DetalleMovimientoDAO;
 import com.tresg.incluido.dao.MysqlClienteDAO;
 import com.tresg.incluido.dao.MysqlComboDAO;
 import com.tresg.incluido.dao.MysqlProductoDAO;
+import com.tresg.incluido.dao.MysqlProveedorDAO;
 import com.tresg.incluido.interfaz.ClienteDAO;
 import com.tresg.incluido.interfaz.ComboDAO;
 import com.tresg.incluido.interfaz.ProductoDAO;
+import com.tresg.incluido.interfaz.ProveedorDAO;
 import com.tresg.incluido.interfaz.TipoProductoDAO;
 import com.tresg.incluido.interfaz.UnidadMedidaDAO;
 import com.tresg.seguridad.dao.MysqlUsuarioDAO;
@@ -91,6 +93,11 @@ public class MySqlDAOFactory extends DAOFactory {
 	@Override
 	public UsuarioDAO getUsuarioDAO() {
 		return new MysqlUsuarioDAO();
+	}
+
+	@Override
+	public ProveedorDAO getProveedorDAO() {
+		return new MysqlProveedorDAO();
 	}
 
 	

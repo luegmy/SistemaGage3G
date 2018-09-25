@@ -8,7 +8,7 @@ public interface MovimientoDAO {
 	// CU Registrar ingreso o salida almacen
 	
 	// obtener el numero del movimiento
-	int obtenerNumero();
+	int obtenerNumeroMovimiento();
 
 	// generar la numeracion de la nota de movimiento
 	int generarNumeroNota();

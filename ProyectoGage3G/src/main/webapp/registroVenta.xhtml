@@ -18,9 +18,9 @@
 
 					<p:panel>
 
-						<div class="form-row justify-content-md-center">
+						<div class="form-row">
 
-							<div class="col-6 col-sm-4 col-md-3">
+							<div class="col-6 col-sm-4 col-md-2">
 								<div class="form-group">
 									<p:outputLabel value="Operacion" for="operacion" />
 									<p:selectOneMenu value="#{ventaBean.atributoUtil.codigoOperacion}"
@@ -30,7 +30,7 @@
 									</p:selectOneMenu>
 								</div>
 							</div>
-							<div class="col-6 col-sm-4 col-md-3">
+							<div class="col-6 col-sm-4 col-md-2">
 								<div class="form-group">
 									<p:outputLabel value="#{r.comprobante}" for="tipo" />
 									<p:selectOneMenu
@@ -56,7 +56,7 @@
 									</p:inputText>
 								</div>
 							</div>
-							<div class="col-6 col-sm-4 col-md-2">
+							<div class="col-6 col-sm-4 col-md-1">
 								<div class="form-group">
 									<p:outputLabel value="#{r.numero}" for="comprobante" />
 									<p:inputText
@@ -71,25 +71,7 @@
 										id="msgNumeroExiste" />
 								</div>
 							</div>
-							<div class="col-xs-5 col-sm-3 col-md-1">S
-									<div class="form-group">
-										<p:outputLabel value="Serie" for="guiaSerie"/>
-										<p:inputText disabled="#{!ventaBean.atributoUtil.codigoComprobante==7}"
-											value="#{ventaBean.atributoUtil.serieGuia}" id="guiaSerie"
-											styleClass="form-control input-sm" />
-
-									</div>
-								</div>
-								<div class="col-xs-5 col-sm-3 col-md-2">
-									<div class="form-group">
-										<p:outputLabel value="Guia" for="guia"/>
-										<p:inputText disabled="#{!ventaBean.atributoUtil.codigoComprobante==7}"
-											value="#{ventaBean.atributoUtil.numeroSerieGuia}" id="guia"
-											styleClass="form-control input-sm" />
-									</div>
-								</div>
-							</div>
-							<div class="form-row justify-content-md-center">
+							
 							<div class="col-6 col-sm-4 col-md-2">
 								<div class="form-group">
 									<p:outputLabel value="#{r.pago}" for="pago" />
@@ -124,7 +106,6 @@
 									</p:calendar>
 								</div>
 							</div>
-							
 						</div>
 				
 					</p:panel>
@@ -377,10 +358,17 @@
 										<f:facet name="header">
 											<p:outputLabel value="PRECIO" />
 										</f:facet>
-										<p:outputLabel value="#{p.precioVenta}">
+										<p:outputLabel value="#{p.cantidad}">
 											<f:convertNumber type="currency" currencySymbol="S/" />
 										</p:outputLabel>
 									</p:column>
+									<p:column width="8%">
+								<p:commandLink actionListener="#{ventaBean.editaProducto}"
+									styleClass="#{r.celeste}" update="formVenta">
+									<i class="fa fa-fw fa-edit"></i>
+									<f:attribute value="#{p.codProducto}" name="codigo" />
+								</p:commandLink>
+							</p:column>
 								</p:dataTable>
 								<p:blockUI block="toggleableDetalle" trigger="tablaBusqueda">
         										CARGANDO<br />

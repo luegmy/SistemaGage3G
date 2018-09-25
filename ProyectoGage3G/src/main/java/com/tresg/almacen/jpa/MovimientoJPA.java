@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.tresg.incluido.jpa.ComprobanteJPA;
+import com.tresg.incluido.jpa.ProveedorJPA;
 import com.tresg.seguridad.jpa.UsuarioJPA;
 
 @Entity
@@ -59,6 +60,10 @@ public class MovimientoJPA implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "codUsuario")
 	private UsuarioJPA usuario;
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "codProveedor")
+	private ProveedorJPA proveedor;
 
 	@ManyToOne
 	@JoinColumn(name = "codComprobante")
@@ -126,6 +131,14 @@ public class MovimientoJPA implements Serializable {
 
 	public void setUsuario(UsuarioJPA usuario) {
 		this.usuario = usuario;
+	}
+
+	public ProveedorJPA getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(ProveedorJPA proveedor) {
+		this.proveedor = proveedor;
 	}
 
 	public ComprobanteJPA getComprobante() {

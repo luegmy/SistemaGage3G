@@ -4,23 +4,18 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
-import org.xml.sax.SAXException;
 
-import com.google.zxing.WriterException;
 import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.service.ComboService_I;
@@ -32,16 +27,13 @@ import com.tresg.util.bean.GestionaBean;
 import com.tresg.util.bean.MensajeBean;
 import com.tresg.util.conexion.MontoEnLetras;
 import com.tresg.util.formato.Formateo;
-import com.tresg.util.impresion.Impresora;
 import com.tresg.util.sunat.Sunat;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.service.RegistrarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;
 
-import net.sf.jasperreports.engine.JRException;
-
 @ManagedBean(name = "ventaBean")
-@ViewScoped
+@SessionScoped
 public class RegistroVentaBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -75,8 +67,10 @@ public class RegistroVentaBean implements Serializable {
 	public void cargarSerie() {
 		if (atributoUtil.getCodigoComprobante() == 1) {
 			atributoUtil.setNumeroSerie("F001");
-		} else {
+		} else if (atributoUtil.getCodigoComprobante() == 3){
 			atributoUtil.setNumeroSerie("B001");
+		} else {
+			atributoUtil.setNumeroSerie("N001");
 		}
 
 	}
@@ -188,15 +182,21 @@ public class RegistroVentaBean implements Serializable {
 			context.addMessage(mensajeVenta, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					mensajeUtil.mostrarMensajeError(mensajeVenta, atributoUtil), null));
 		} else {
-			// generar el archivo plano para facturador sunat
-			sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
-					atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), cadenaSunatCabecera(),
-					cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda());
+			
+			if(atributoUtil.getCodigoComprobante()!=2) {
+				// generar el archivo plano para facturador sunat
+				sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
+						atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), cadenaSunatCabecera(),
+						cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda());
 
 			context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
 					sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
 			RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
-
+			} else {
+				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
+						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
+				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
+			}
 		}
 	}
 
@@ -287,6 +287,14 @@ public class RegistroVentaBean implements Serializable {
 
 		return "1000".concat("|").concat(leyenda);
 	}
+	
+	String cadenaSunatDocumentoRelacionado() {
+		return "1".concat("|").concat("-").concat(talonarioUtil.obtenerFormatoComprobante(atributoUtil.getCodigoComprobante()))
+				.concat("|").concat(atributoUtil.getSerieGuia())
+				.concat("|").concat(atributoUtil.getNumeroSerieGuia())
+				.concat("|").concat("6").concat("|").concat(AtributoBean.RUC_EMISOR)
+				.concat("|").concat(atributoUtil.getTotal().toString());
+	}
 
 	public void editaProducto(ActionEvent e) {
 
@@ -309,7 +317,7 @@ public class RegistroVentaBean implements Serializable {
 		return "registroVenta.xhtml";
 	}
 
-	public void imprimirVenta() throws IOException, ClassNotFoundException, JRException, SQLException,
+/*	public void imprimirVenta() throws IOException, ClassNotFoundException, JRException, SQLException,
 			ParserConfigurationException, SAXException, WriterException {
 
 		// leer archivo xml firma, para obtener el digestValue (hash o valor
@@ -336,7 +344,7 @@ public class RegistroVentaBean implements Serializable {
 						.concat(".png"),
 				sunatUtil.getDigestTexto(), "", "0",
 				sdf.format(atributoUtil.getFechaVence()));
-	}
+	}*/
 
 	public AtributoBean getAtributoUtil() {
 		return atributoUtil;

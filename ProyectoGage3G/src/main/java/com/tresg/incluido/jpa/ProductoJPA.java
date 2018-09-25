@@ -44,7 +44,7 @@ public class ProductoJPA implements Serializable {
 	private UnidadMedidaJPA medida;
 
 	@Transient
-	private BigDecimal cantidad = new BigDecimal(0);
+	private int cantidad;
 
 	public int getCodProducto() {
 		return codProducto;
@@ -94,11 +94,11 @@ public class ProductoJPA implements Serializable {
 		this.medida = medida;
 	}
 
-	public BigDecimal getCantidad() {
+	public int getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(BigDecimal cantidad) {
+	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
 

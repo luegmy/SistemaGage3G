@@ -12,11 +12,13 @@
 		<div class="container-fluid">
 			<h:form id="formAlmacen">
 				<p:fieldset legend="REGISTRO DE MOVIMIENTOS DE ALMACEN">
-					<div class="row">
-						<div class="col-12 col-sm-8">
+
+					<div class="form-row">
+
+						<div class="col-6 col-sm-6 col-md-6">
 							<p:panel id="pnlAlmacen">
-								<div class="row">
-									<div class="col-6 col-sm-6 col-md-3">
+								<div class="form-row">
+									<div class="col-6 col-sm-6 col-md-6">
 										<div class="form-group">
 											<p:outputLabel value="#{r.fecha}" for="fecha" />
 											<p:calendar value="#{almacenBean.fecha}" pattern="dd-MM-yyyy"
@@ -25,7 +27,7 @@
 											</p:calendar>
 										</div>
 									</div>
-									<div class="col-6 col-sm-6 col-md-3">
+									<div class="col-6 col-sm-6 col-md-6">
 										<div class="form-group">
 											<p:outputLabel value="#{r.tipoMovimiento}" />
 											<p:selectOneMenu value="#{almacenBean.codigoTipoMovimiento}"
@@ -38,7 +40,7 @@
 											<p:messages for="mensajeTipoMovimiento" id="msgMovimiento" />
 										</div>
 									</div>
-									<div class="col-6 col-sm-6 col-md-3">
+									<div class="col-6 col-sm-6 col-md-6">
 										<div class="form-group">
 											<p:outputLabel value="Almacen" />
 											<p:selectOneMenu value="#{almacenBean.codigoOrigen}"
@@ -51,7 +53,7 @@
 											<p:messages for="mensajeAlmacenOrigen" id="msgAlmacenOrigen" />
 										</div>
 									</div>
-									<div class="col-6 col-sm-6 col-md-3">
+									<div class="col-6 col-sm-6 col-md-6">
 										<div class="form-group">
 											<p:outputLabel value="Destino" />
 											<p:selectOneMenu value="#{almacenBean.codigoDestino}"
@@ -70,10 +72,28 @@
 								</div>
 							</p:panel>
 						</div>
-						<div class="col-12 col-sm-4 col-md-4">
+
+
+
+
+						<div class="col-6 col-sm-6 col-md-6">
 							<p:panel id="pnlComprobante">
-								<div class="row">
-									<div class="col-12 col-sm-12 col-md-6">
+								<div class="form-row">
+
+									<div class="col-6 col-sm-12 col-md-12">
+										<div class="form-group">
+											<p:outputLabel value="#{r.proveedor}" />
+											<p:selectOneMenu value="#{almacenBean.codigoProveedor}"
+												id="proveedor" styleClass="form-control form-control-sm">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems value="#{almacenBean.proveedores}" />
+												<p:ajax event="change" update="msgProveedor" />
+											</p:selectOneMenu>
+											<p:messages for="mensajeProveedor" id="msgProveedor" />
+										</div>
+									</div>
+
+									<div class="col-12 col-sm-6 col-md-6">
 										<div class="form-group">
 											<p:outputLabel value="Comprobante" />
 											<p:selectOneMenu value="#{almacenBean.codigoComprobante}"
@@ -81,14 +101,15 @@
 												disabled="#{almacenBean.codigoOrigen==0}">
 												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
 												<f:selectItems value="#{almacenBean.comprobantes}" />
-												<p:ajax event="change" update="comprobante msgComprobante pnlDetalle"
+												<p:ajax event="change"
+													update="comprobante msgComprobante pnlDetalle"
 													listener="#{almacenBean.cargarComprobante}" />
 											</p:selectOneMenu>
 											<p:messages for="mensajeComprobante" id="msgComprobante" />
 										</div>
 									</div>
 
-									<div class="col-12 col-sm-12 col-md-6">
+									<div class="col-12 col-sm-6 col-md-6">
 										<div class="form-group">
 											<p:outputLabel value="#{r.numero}" for="comprobante" />
 											<p:inputText value="#{almacenBean.numeroComprobante}"
@@ -104,19 +125,16 @@
 									<div class="col-sm-0">
 										<h:inputHidden value="#{almacenBean.usuario}" />
 									</div>
-
 								</div>
-
 							</p:panel>
 						</div>
-					</div>
 
+					</div>
 					<br></br>
 					<div class="row">
 						<div class="col-12 col-sm-12">
 							<p:panel id="pnlDetalle"
-								visible="#{almacenBean.codigoTipoMovimiento==3 || almacenBean.codigoComprobante==2
-								|| almacenBean.codigoComprobante==9}">
+								visible="#{almacenBean.codigoTipoMovimiento==3 || almacenBean.codigoComprobante!=0}">
 								<div class="row">
 									<div class="col-12 col-sm-4 col-md-2">
 										<div class="form-group">
@@ -219,7 +237,7 @@
 										immediate="true" styleClass="#{r.gris} my-4"
 										update="formAlmacen">
 										<i class="fa fa-fw fa-plus-circle"></i>
-										<h:outputLabel value="Cancelar"/>
+										<h:outputLabel value="Cancelar" />
 									</p:commandLink>
 								</div>
 							</div>
@@ -262,6 +280,7 @@
 				</h:form>
 			</p:dialog>
 		</div>
+
 	</ui:define>
 </ui:composition>
 </html>

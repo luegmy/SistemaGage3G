@@ -95,7 +95,8 @@ public class Sunat implements Serializable {
 		File archivoTributo = new File(rutaDataTributo);
 		File archivoLeyenda = new File(rutaDataLeyenda);
 
-		if (archivoCabecera.exists() || archivoDetalle.exists() || archivoTributo.exists() || archivoLeyenda.exists()) {
+		if (archivoCabecera.exists() || archivoDetalle.exists() || archivoTributo.exists() 
+				|| archivoLeyenda.exists()) {
 			archivoCabecera.delete();
 			archivoDetalle.delete();
 			archivoTributo.delete();
@@ -120,27 +121,21 @@ public class Sunat implements Serializable {
 		bw2.close();
 		bw3.close();
 		bw4.close();
+		
 	}
 
-	public void obtenerArchivoRelacionado(String rucEmisor, int comprobante, String serie, int numero,
-			String cadenaRelacion, String cadenaGuia) throws IOException {
+	public void generarArchivoRelacionado(String rucEmisor, int comprobante, String serie, int numero,
+			String cadenaRelacion) throws IOException {
 
 		String rutaDataRelacionada = RUTA_DATA.concat(generarNombreArchivo(rucEmisor, comprobante, serie, numero))
 				.concat(".REL");
-		String rutaDataGuia = RUTA_DATA.concat(generarNombreArchivo(rucEmisor, comprobante, serie, numero))
-				.concat(".GRE");
 
 		File archivoRelacionada = new File(rutaDataRelacionada);
-		File archivoGuia = new File(rutaDataGuia);
 
 		BufferedWriter bw = new BufferedWriter(new FileWriter(archivoRelacionada));
 		bw.write(cadenaRelacion);
 
-		BufferedWriter bw2 = new BufferedWriter(new FileWriter(archivoGuia));
-		bw2.write(cadenaGuia);
-
 		bw.close();
-		bw2.close();
 	}
 
 	private void procesarNodos(Node inputNode) {
