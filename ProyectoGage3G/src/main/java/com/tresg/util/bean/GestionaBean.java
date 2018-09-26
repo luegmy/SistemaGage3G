@@ -10,6 +10,9 @@ import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
+import com.tresg.almacen.service.AlmacenBusinessDelegate;
+import com.tresg.almacen.service.ConsultarAlmacenBusinessService;
+import com.tresg.almacen.service.ConsultarAlmacenService;
 import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.EstadoJPA;
@@ -36,7 +39,8 @@ public class GestionaBean implements Serializable {
 
 	RegistrarVentaBusinessService sVenta = VentasBusinessDelegate.getRegistrarVentaService();
 	GestionarClienteService_I sCliente = IncluidoBusinessDelegate.getGestionarClienteService();
-	GestionarProductoService_I sProducto = IncluidoBusinessDelegate.getGestionarProductoService();
+	GestionarProductoService_I sProducto=IncluidoBusinessDelegate.getGestionarProductoService();
+	ConsultarAlmacenBusinessService sConsultaAlmacen=AlmacenBusinessDelegate.getConsultarAlmacenService();
 
 	// retorna el numero maximo + 1 del numero comprobante
 	public int retornaNumeroComprobante(int comprobante) {
@@ -55,7 +59,7 @@ public class GestionaBean implements Serializable {
 	// metodo para mostrar lista de productos dentro la generacion de una venta
 	public List<ProductoJPA> listarProducto(String descripcionProducto) {
 		List<ProductoJPA> productos = new ArrayList<>();
-		sProducto.listaProducto().stream().filter(p -> p.getDescripcion().toLowerCase().contains(descripcionProducto))
+		sConsultaAlmacen.listaExistencia().stream().filter(p -> p.getDescripcion().toLowerCase().contains(descripcionProducto))
 				.forEach(productos::add);
 		return productos;
 
@@ -214,7 +218,7 @@ public class GestionaBean implements Serializable {
 	}
 
 	// metodo que elimina un item de la lista detalle
-	public void quitarListaProductoVenta(int codigo, BigDecimal cantidad, List<DetalleVentaJPA> temporales,
+	public void quitarListaProductoVenta(int codigo, List<DetalleVentaJPA> temporales,
 			AtributoBean atributo) {
 
 		BigDecimal monto = new java.math.BigDecimal("0.00");

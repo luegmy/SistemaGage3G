@@ -5,6 +5,7 @@ import java.util.List;
 import com.tresg.almacen.interfaz.DetalleAlmacenDAO;
 import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.factoria.DAOFactory;
+import com.tresg.incluido.jpa.ProductoJPA;
 
 public class ConsultarAlmacenService implements ConsultarAlmacenBusinessService {
 
@@ -14,6 +15,11 @@ public class ConsultarAlmacenService implements ConsultarAlmacenBusinessService 
 	@Override
 	public List<DetalleAlmacenJPA> listaDetalleAlmacen() {
 		return iAlmacen.listarDetalleAlmacen();
+	}
+
+	@Override
+	public List<ProductoJPA> listaExistencia() {
+		return iAlmacen.listarExistencias();
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.tresg.incluido.dao;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,7 +8,6 @@ import javax.persistence.Query;
 import com.tresg.incluido.interfaz.ProductoDAO;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.util.jpa.JpaUtil;
-import com.tresg.ventas.jpa.DetalleVentaJPA;
 
 public class MysqlProductoDAO implements ProductoDAO {
 	EntityManager em = null;

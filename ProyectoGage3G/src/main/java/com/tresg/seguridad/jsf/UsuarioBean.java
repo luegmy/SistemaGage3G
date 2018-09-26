@@ -189,6 +189,11 @@ public class UsuarioBean implements Serializable{
 		item.setUrl("actualizaCliente.xhtml");
 		item.setIcon(icono);
 		contactoSubmenu.addElement(item);
+		
+		item = new DefaultMenuItem("Proveedor");
+		item.setUrl("actualizaProveedor.xhtml");
+		item.setIcon(icono);
+		contactoSubmenu.addElement(item);
 
 		modelo.addElement(contactoSubmenu);
 

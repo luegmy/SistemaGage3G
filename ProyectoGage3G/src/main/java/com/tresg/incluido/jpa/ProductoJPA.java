@@ -3,29 +3,30 @@ package com.tresg.incluido.jpa;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-
 @Entity
 @Table(name = "tb_producto")
 
-
-@NamedQuery(name = "producto.listarProducto", query = "select p from ProductoJPA p")
+@NamedQueries({ @NamedQuery(name = "producto.listarProductoPorExistencia", query = "select d.producto.codProducto,d.producto.descripcion,d.producto.tipo.descripcion,sum(d.existencia) from DetalleAlmacenJPA d "
+					+ "group by d.producto.codProducto"),
+	@NamedQuery(name = "producto.listarProducto", query="select p from ProductoJPA p") })
 
 public class ProductoJPA implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String LISTAR_PRODUCTO= "producto.listarProducto";
+	public static final String LISTAR_PRODUCTO_EXISTENCIA = "producto.listarProductoPorExistencia";
+	public static final String LISTAR_PRODUCTO = "producto.listarProducto";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +44,9 @@ public class ProductoJPA implements Serializable {
 	@JoinColumn(name = "codMedida")
 	private UnidadMedidaJPA medida;
 
+	@Transient
+	private String descripcionTipo;
+	
 	@Transient
 	private int cantidad;
 
@@ -92,6 +96,14 @@ public class ProductoJPA implements Serializable {
 
 	public void setMedida(UnidadMedidaJPA medida) {
 		this.medida = medida;
+	}
+	
+	public String getDescripcionTipo() {
+		return descripcionTipo;
+	}
+
+	public void setDescripcionTipo(String descripcionTipo) {
+		this.descripcionTipo = descripcionTipo;
 	}
 
 	public int getCantidad() {

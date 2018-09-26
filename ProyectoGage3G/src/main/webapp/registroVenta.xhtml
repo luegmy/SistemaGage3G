@@ -322,7 +322,7 @@
 							<div class="col-12 col-sm-12 col-md-6">
 								<p:dataTable id="tablaBusqueda"
 									value="#{ventaBean.atributoUtil.productos}" var="p"
-									selectionMode="single" rows="10"
+									selectionMode="single" rows="20"
 									selection="#{ventaBean.productoSeleccionado}"
 									emptyMessage="No existe #{ventaBean.atributoUtil.descripcionProducto}"
 									reflow="true" rowKey="#{p.codProducto}">
@@ -346,29 +346,15 @@
 										<f:facet name="header">
 											<p:outputLabel value="TIPO" />
 										</f:facet>
-										<p:outputLabel value="#{p.tipo.descripcion}" />
+										<p:outputLabel value="#{p.descripcionTipo}" />
 									</p:column>
 									<p:column>
 										<f:facet name="header">
-											<p:outputLabel value="U.M" />
+											<p:outputLabel value="CANTIDAD" />
 										</f:facet>
-										<p:outputLabel value="#{p.medida.abreviatura}" />
+										<p:outputLabel value="#{p.cantidad}"/>
 									</p:column>
-									<p:column>
-										<f:facet name="header">
-											<p:outputLabel value="PRECIO" />
-										</f:facet>
-										<p:outputLabel value="#{p.cantidad}">
-											<f:convertNumber type="currency" currencySymbol="S/" />
-										</p:outputLabel>
-									</p:column>
-									<p:column width="8%">
-								<p:commandLink actionListener="#{ventaBean.editaProducto}"
-									styleClass="#{r.celeste}" update="formVenta">
-									<i class="fa fa-fw fa-edit"></i>
-									<f:attribute value="#{p.codProducto}" name="codigo" />
-								</p:commandLink>
-							</p:column>
+
 								</p:dataTable>
 								<p:blockUI block="toggleableDetalle" trigger="tablaBusqueda">
         										CARGANDO<br />

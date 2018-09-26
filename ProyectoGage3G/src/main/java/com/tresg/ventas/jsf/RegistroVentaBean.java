@@ -305,9 +305,8 @@ public class RegistroVentaBean implements Serializable {
 	public void quitarListaProducto(ActionEvent e) {
 
 		int codigo = (int) e.getComponent().getAttributes().get("codigo");
-		BigDecimal cantidad = (BigDecimal) e.getComponent().getAttributes().get("cantidad");
 
-		gestionUtil.quitarListaProductoVenta(codigo, cantidad, temporales, atributoUtil);
+		gestionUtil.quitarListaProductoVenta(codigo, temporales, atributoUtil);
 	}
 
 	public String cancelarVenta() {
