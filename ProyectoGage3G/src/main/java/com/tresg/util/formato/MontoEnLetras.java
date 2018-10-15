@@ -1,4 +1,4 @@
-package com.tresg.util.conexion;
+package com.tresg.util.formato;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;

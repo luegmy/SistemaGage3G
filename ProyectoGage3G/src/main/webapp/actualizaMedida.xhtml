@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO MANTENIMIENTO</ui:define>
+	<ui:define name="content">
+
+		<div class="container-fluid">
+			<h:form id="formMedida">
+				<p:fieldset legend="GESTION DE UNIDAD DE MEDIDA">
+					<div class="d-flex justify-content-between">
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"> <i
+									class="fa fa-fw fa-search"></i></span>
+								<p:inputText value="#{medidaBean.busqueda}"
+									placeholder="Buscar U.M"
+									styleClass="form-control input-sm">
+									<p:ajax event="keyup" update="tabla" />
+								</p:inputText>
+							</div>
+						</div>
+
+						<div class="btn-group" role="group">
+							<p:commandLink action="ACTUALIZAR_MEDIDA" id="nuevo"
+								onclick="PF('dlgMedida').show();" styleClass="#{r.verde}">
+								<i class="fa fa-fw fa-eyedropper"></i>
+								<h:outputLabel value=" Nuevo " />
+							</p:commandLink>
+						</div>
+					</div>
+
+					<p:dataTable id="tabla" value="#{medidaBean.medidas}" var="m"
+						emptyMessage="No hay medidas" paginator="true"
+						rowsPerPageTemplate="5,10,15,20,25" rows="10">
+
+						<p:column width="50%">
+							<f:facet name="header">
+								<p:outputLabel value="DESCRIPCION" />
+							</f:facet>
+							<p:outputLabel value="#{m.descripcion}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<p:outputLabel value="PREFIJO" />
+							</f:facet>
+							<p:outputLabel value="#{m.abreviatura}" />
+						</p:column>
+						<p:column width="10%">
+							<p:commandLink actionListener="#{medidaBean.editarMedida}"
+								update="dialogo" action="ACTUALIZAR_MEDIDA"
+								oncomplete="PF('dlgMedida').show();" styleClass="#{r.celeste}">
+								<i class="fa fa-fw fa-edit"></i>
+								<f:attribute value="#{m.codMedida}" name="codigo" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+
+				</p:fieldset>
+			</h:form>
+			<p:dialog header="REGISTRAR UNIDAD DE MEDIDA" widgetVar="dlgMedida"
+				closable="false" id="dialogo" showEffect="scale"
+				hideEffect="explode" height="400" width="400" modal="true"
+				appendTo="@(body)">
+				<h:form id="formMedidaNueva">
+					<h:panelGroup id="pnlMedida">
+						<div class="row">
+							<div class="col-xs-12 col-sm-8 col-sm-offset-2">
+								<div class="form-group">
+									<p:outputLabel value="codigo" />
+									<h:inputText value="#{medidaBean.codigoMedida}" disabled="true" />
+								</div>
+								<div class="form-group">
+									<p:outputLabel value="Descripcion" />
+									<h:inputText value="#{medidaBean.descripcion}"
+										styleClass="form-control" />
+								</div>
+								<div class="form-group">
+									<p:outputLabel value="Prefijo" />
+									<h:inputText value="#{medidaBean.abreviatura}"
+										styleClass="form-control" />
+								</div>
+								<div class="row">
+									<div class="col-xs-12 col-sm-6">
+										<div class="form-group">
+											<p:commandLink action="ACTUALIZAR_MEDIDA"
+												actionListener="#{medidaBean.actualizarMedida}"
+												update="formMedidaNueva:pnlMedida" styleClass="#{r.verde}">
+												<p:graphicImage url="imagenes/save.png" width="25"
+													height="25" />
+												<h:outputLabel value="Grabar"></h:outputLabel>
+											</p:commandLink>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-6">
+										<div class="form-group">
+											<p:commandLink onclick="PF('dlgMedida').hide();"
+												styleClass="#{r.rojo}"
+												update="formMedida:tabla formMedidaNueva:msgMedida">
+												<p:graphicImage url="imagenes/exit.png" width="25"
+													height="25" />
+												<h:outputLabel value="Salir"></h:outputLabel>
+											</p:commandLink>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<p:messages for="mensajeRegistroMedida" id="msgMedida" />
+					</h:panelGroup>
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>
