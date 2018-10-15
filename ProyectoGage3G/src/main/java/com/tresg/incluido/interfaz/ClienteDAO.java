@@ -10,10 +10,11 @@ public interface ClienteDAO {
 
 	ClienteJPA buscarClientePorCodigo(int codigo);
 	
+	ClienteJPA buscarClientePorRuc(String ruc);
+	
 	String actualizarCliente(ClienteJPA cliente);
 	
-	// metodo para cargar en la venta segun ruc
-	ClienteJPA buscarClientePorRuc(String ruc);
+	
 
 
 }

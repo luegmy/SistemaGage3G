@@ -302,8 +302,7 @@ public class RegistroMovimientoBean implements Serializable {
 	// lista despegable de productos
 	public List<SelectItem> getProductos() {
 		productos = new ArrayList<>();
-		sProducto.listaProducto().stream().filter(p -> p.getTipo().getCodTipo() == codigoTipoProducto)
-				.forEach(p -> productos.add(new SelectItem(p.getCodProducto(), p.getDescripcion())));
+		sProducto.listaProductoPorDescripcion("").stream().forEach(p -> productos.add(new SelectItem(p.getCodProducto(), p.getDescripcion())));
 		return productos;
 	}
 

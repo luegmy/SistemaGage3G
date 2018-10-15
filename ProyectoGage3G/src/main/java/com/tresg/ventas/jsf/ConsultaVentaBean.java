@@ -9,7 +9,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.tresg.util.bean.AtributoBean;
+import com.tresg.incluido.jsf.AtributoBean;
 import com.tresg.util.bean.ListaConsultaBean;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.jpa.VentaJPA;
@@ -56,7 +56,7 @@ public class ConsultaVentaBean implements Serializable{
 	}
 
 	public void listarVentaXCliente() {
-		ventas = listaUtil.listarPorCliente(atributoUtil.getCliente().getNombre());
+		ventas = listaUtil.listarVentaPorCliente(atributoUtil.getCliente().getNombre());
 		acumuladoContado=listaUtil.acumuladoXCliente(atributoUtil.getCliente().getNombre());
 	}
 

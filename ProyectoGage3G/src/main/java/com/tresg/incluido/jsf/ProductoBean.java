@@ -127,8 +127,7 @@ public class ProductoBean implements Serializable {
 
 	public List<ProductoJPA> getProductos() {
 		productos = new ArrayList<>();
-		sProducto.listaProducto().stream().filter(p -> p.getDescripcion().toLowerCase().contains(descripcionProducto))
-				.forEach(productos::add);
+		sProducto.listaProductoPorDescripcion(descripcionProducto).stream().forEach(productos::add);
 		return productos;
 	}
 

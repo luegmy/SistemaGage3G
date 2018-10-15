@@ -33,14 +33,12 @@ public class ListaConsultaBean implements Serializable {
 
 	}
 
-	public List<VentaJPA> listarPorCliente(String cliente) {
+	public List<VentaJPA> listarVentaPorCliente(String cliente) {
 		List<VentaJPA> ventas = new ArrayList<>();
-		sVenta.listaVenta().stream().filter(v -> v.getCliente().getNombre().toLowerCase().contains(cliente))
+		sVenta.listaVenta().stream().filter(v -> v.getCliente().getNombre().toLowerCase().contains(cliente.toLowerCase()))
 				.forEach(ventas::add);
 		return ventas;
 	}
-	
-	
 
 	public double acumuladoContadoVentaXFecha(Date fecha) {
 		return sVenta.listaVenta().stream().filter(f -> (fecha.equals(f.getFecha()) && f.getEstado().getCodEstado()==1))

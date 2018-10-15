@@ -6,30 +6,31 @@ import com.tresg.factoria.DAOFactory;
 import com.tresg.incluido.interfaz.ClienteDAO;
 import com.tresg.incluido.jpa.ClienteJPA;
 
+public class GestionarClienteService implements GestionarClienteService_I {
 
-public class GestionarClienteService implements GestionarClienteService_I{
-	
-	DAOFactory fabrica=DAOFactory.getDAOFactory(DAOFactory.MYSQL);
-	ClienteDAO iCliente=fabrica.getClienteDAO();
+	DAOFactory fabrica = DAOFactory.getDAOFactory(DAOFactory.MYSQL);
+	ClienteDAO iCliente = fabrica.getClienteDAO();
 
 	@Override
-	public List<ClienteJPA> listaCliente()
-			 {
+	public List<ClienteJPA> listaCliente() {
 		return iCliente.listarCliente();
 	}
 
 	@Override
-	public ClienteJPA buscaClientePorCodigo(int codigo)  {
+	public ClienteJPA buscaClientePorCodigo(int codigo) {
 		return iCliente.buscarClientePorCodigo(codigo);
 	}
-
+	
 	@Override
-	public String actualizaCliente(ClienteJPA cliente)  {
-		return iCliente.actualizarCliente(cliente);
-	}
-
-	@Override
-	public ClienteJPA buscaClientePorRuc(String ruc)  {
+	public ClienteJPA buscaClientePorRuc(String ruc) {
 		return iCliente.buscarClientePorRuc(ruc);
 	}
+
+
+
+	@Override
+	public String actualizaCliente(ClienteJPA cliente) {
+		return iCliente.actualizarCliente(cliente);
+	}
+	
 }

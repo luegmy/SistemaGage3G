@@ -12,6 +12,6 @@ public interface DetalleAlmacenDAO {
 	//consultar cantidad de productos que hay en cada almacen
 	List<DetalleAlmacenJPA> listarDetalleAlmacen();
 	
-	List<ProductoJPA> listarExistencias();
+	List<ProductoJPA> listarExistencias(String descripcion);
 
 }

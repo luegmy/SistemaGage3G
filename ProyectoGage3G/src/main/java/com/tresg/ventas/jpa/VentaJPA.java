@@ -40,10 +40,13 @@ public class VentaJPA implements Serializable {
 
 	@Id
 	private int numComprobante;
-
+	
+	private String serie;
+	
 	@Temporal(TemporalType.DATE)
 	private Date fecha;
-
+	
+	private String fecVence;
 	private String hora;
 	private BigDecimal monto;
 	private String observacion;
@@ -82,12 +85,28 @@ public class VentaJPA implements Serializable {
 		this.numComprobante = numComprobante;
 	}
 
+	public String getSerie() {
+		return serie;
+	}
+
+	public void setSerie(String serie) {
+		this.serie = serie;
+	}
+
 	public Date getFecha() {
 		return fecha;
 	}
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}
+
+	public String getFecVence() {
+		return fecVence;
+	}
+
+	public void setFecVence(String fecVence) {
+		this.fecVence = fecVence;
 	}
 
 	public String getHora() {

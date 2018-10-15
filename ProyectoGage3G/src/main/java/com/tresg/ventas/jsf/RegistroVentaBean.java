@@ -4,33 +4,42 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.xml.sax.SAXException;
 
+import com.google.zxing.WriterException;
 import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
+import com.tresg.incluido.jsf.AtributoBean;
+import com.tresg.incluido.jsf.ClienteBean;
 import com.tresg.incluido.service.ComboService_I;
 import com.tresg.incluido.service.GestionarClienteService_I;
 import com.tresg.incluido.service.GestionarProductoService_I;
 import com.tresg.incluido.service.IncluidoBusinessDelegate;
-import com.tresg.util.bean.AtributoBean;
 import com.tresg.util.bean.GestionaBean;
 import com.tresg.util.bean.MensajeBean;
-import com.tresg.util.conexion.MontoEnLetras;
 import com.tresg.util.formato.Formateo;
+import com.tresg.util.formato.MontoEnLetras;
+import com.tresg.util.impresion.Impresora;
 import com.tresg.util.sunat.Sunat;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.service.RegistrarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;
+
+import net.sf.jasperreports.engine.JRException;
 
 @ManagedBean(name = "ventaBean")
 @SessionScoped
@@ -47,9 +56,13 @@ public class RegistroVentaBean implements Serializable {
 
 	// Para anadir elementos a la datatable
 	private List<DetalleVentaJPA> temporales;
+	
+	@ManagedProperty(value = "#{usuario.sesionCodigoUsuario}")
+	private int usuario;
 
-	private AtributoBean atributoUtil = new AtributoBean();
+	AtributoBean atributoUtil = new AtributoBean();
 	GestionaBean gestionUtil = new GestionaBean();
+	ClienteBean clienteBean=new ClienteBean();
 	MensajeBean mensajeUtil = new MensajeBean();
 	Sunat sunatUtil = new Sunat();
 	Formateo talonarioUtil = new Formateo();
@@ -81,7 +94,7 @@ public class RegistroVentaBean implements Serializable {
 	}
 
 	public void listarCliente() {
-		atributoUtil.setClientes(gestionUtil.listarCliente(atributoUtil.getCliente().getNombre()));
+		atributoUtil.setClientes(clienteBean.getClientes());
 	}
 
 	// Metodo donde se agrega los atributos del cliente en las respectivas
@@ -124,8 +137,8 @@ public class RegistroVentaBean implements Serializable {
 		productoSeleccionado = (ProductoJPA) event.getObject();
 		atributoUtil.setCodigoProducto(productoSeleccionado.getCodProducto());
 		atributoUtil.setDescripcionProducto(productoSeleccionado.getDescripcion().concat(" ")
-				.concat(productoSeleccionado.getTipo().getDescripcion()));
-		atributoUtil.setUnidad(productoSeleccionado.getMedida().getAbreviatura());
+				.concat(productoSeleccionado.getDescripcionTipo()));
+		atributoUtil.setUnidad(productoSeleccionado.getDescripcionMedida());
 		atributoUtil.setPrecio(productoSeleccionado.getPrecioVenta());
 
 		atributoUtil.getProductos().clear();
@@ -171,6 +184,16 @@ public class RegistroVentaBean implements Serializable {
 		}
 
 	}
+	
+	public void cargarGuia() {
+
+		if (atributoUtil.isGuiaVenta()) {
+			atributoUtil.setGuiaSerie("T001");
+		} else {
+			atributoUtil.setGuiaSerie("");
+			atributoUtil.setGuiaNumero("");
+		}
+	}
 
 	@SuppressWarnings("deprecation")
 	public void grabarVenta() throws IOException {
@@ -182,7 +205,7 @@ public class RegistroVentaBean implements Serializable {
 			context.addMessage(mensajeVenta, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					mensajeUtil.mostrarMensajeError(mensajeVenta, atributoUtil), null));
 		} else {
-			
+			//factura o boleta electronica
 			if(atributoUtil.getCodigoComprobante()!=2) {
 				// generar el archivo plano para facturador sunat
 				sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
@@ -190,11 +213,11 @@ public class RegistroVentaBean implements Serializable {
 						cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda());
 
 			context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
-					sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
+					sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales,usuario)), null));
 			RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
 			} else {
 				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
-						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales)), null));
+						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales,usuario)), null));
 				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
 			}
 		}
@@ -316,7 +339,7 @@ public class RegistroVentaBean implements Serializable {
 		return "registroVenta.xhtml";
 	}
 
-/*	public void imprimirVenta() throws IOException, ClassNotFoundException, JRException, SQLException,
+	public void imprimirVenta() throws IOException, ClassNotFoundException, JRException, SQLException,
 			ParserConfigurationException, SAXException, WriterException {
 
 		// leer archivo xml firma, para obtener el digestValue (hash o valor
@@ -331,19 +354,21 @@ public class RegistroVentaBean implements Serializable {
 				atributoUtil.getTotal().toString(), atributoUtil.getFecha().toString(),
 				atributoUtil.getCliente().getCodigoDocumento(), atributoUtil.getCliente().getNroDocumento());
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		MontoEnLetras numeroLetra = new MontoEnLetras();
+		String letra = String.valueOf(atributoUtil.getTotal());
+		String leyenda = numeroLetra.convertir(letra, true);
+		
 		Impresora i = Impresora.getImpresora();
 		i.imprimirVenta(
 				talonarioUtil
 						.obtenerTalonario(atributoUtil.getCodigoComprobante(), atributoUtil.getNumeroComprobante()),
-				cadenaSunatLeyenda(),
+				leyenda,
 				Sunat.RUTA_IMAGEN.concat(
 						sunatUtil.generarNombreArchivo(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
 								atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante() % 10000000))
 						.concat(".png"),
-				sunatUtil.getDigestTexto(), "", "0",
-				sdf.format(atributoUtil.getFechaVence()));
-	}*/
+				sunatUtil.getDigestTexto(), "", "0",talonarioUtil.obtenerFecha(atributoUtil.getFechaVence()));
+	}
 
 	public AtributoBean getAtributoUtil() {
 		return atributoUtil;
@@ -375,6 +400,14 @@ public class RegistroVentaBean implements Serializable {
 
 	public void setTemporales(List<DetalleVentaJPA> temporales) {
 		this.temporales = temporales;
+	}
+
+	public int getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(int usuario) {
+		this.usuario = usuario;
 	}
 
 }

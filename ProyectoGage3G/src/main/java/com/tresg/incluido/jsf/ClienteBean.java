@@ -21,12 +21,11 @@ import com.tresg.incluido.service.IncluidoBusinessDelegate;
 
 @ManagedBean(name = "clienteBean")
 @SessionScoped
-public class ClienteBean implements Serializable{
-
+public class ClienteBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	// parametro de busqueda para la lista clientes
-	private String busqueda="";
+	private String busqueda = "";
 
 	private int codigoCliente;
 	private String nombreCliente;
@@ -40,7 +39,7 @@ public class ClienteBean implements Serializable{
 	private List<ClienteJPA> clientes;
 
 	GestionarClienteService_I sCliente = IncluidoBusinessDelegate.getGestionarClienteService();
-	ComboService_I sCombo=IncluidoBusinessDelegate.getComboService();
+	ComboService_I sCombo = IncluidoBusinessDelegate.getComboService();
 
 	// Metodo donde se agrega los atributos del cliente en las respectivas
 	// cajas de texto del formulario venta
@@ -60,13 +59,14 @@ public class ClienteBean implements Serializable{
 		FacesContext context = FacesContext.getCurrentInstance();
 		ClienteJPA objC;
 		DocumentoIdentidadJPA objIdentidad;
-		Optional<ClienteJPA> existeRuc=sCliente.listaCliente().stream().filter(c->c.getNroDocumento().equals(ruc)).findFirst();
+		Optional<ClienteJPA> existeRuc = sCliente.listaCliente().stream().filter(c -> c.getNroDocumento().equals(ruc))
+				.findFirst();
 
-		if (!existeRuc.isPresent() || codigoCliente!=0) {
+		if (!existeRuc.isPresent() || codigoCliente != 0) {
 			objC = new ClienteJPA();
-			objIdentidad=new DocumentoIdentidadJPA();
+			objIdentidad = new DocumentoIdentidadJPA();
 			objIdentidad.setCodDocumento(codIdentidad);
-			
+
 			objC.setCodCliente(codigoCliente);
 			objC.setNombre(nombreCliente);
 			objC.setDireccion(direccion);
@@ -77,10 +77,10 @@ public class ClienteBean implements Serializable{
 
 			context.addMessage("mensajeRegistroCliente",
 					new FacesMessage(FacesMessage.SEVERITY_INFO, sCliente.actualizaCliente(objC), null));
-			
+
 		} else {
-			context.addMessage("mensajeRucExiste",
-					new FacesMessage(FacesMessage.SEVERITY_WARN, "Ya existe dicho cliente con".concat(" ").concat(ruc), null));
+			context.addMessage("mensajeRucExiste", new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Ya existe dicho cliente con".concat(" ").concat(ruc), null));
 		}
 		limpiar();
 	}
@@ -89,7 +89,7 @@ public class ClienteBean implements Serializable{
 		codigoCliente = 0;
 		nombreCliente = "";
 		direccion = "";
-		codIdentidad="";
+		codIdentidad = "";
 		ruc = "";
 		telefono = "";
 		correo = "";
@@ -114,12 +114,10 @@ public class ClienteBean implements Serializable{
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
-	
 
 	public List<SelectItem> getIdentidades() {
 		identidades = new ArrayList<>();
-		sCombo.comboIdentidad()
-				.forEach(p -> identidades.add(new SelectItem(p.getCodDocumento(), p.getDescripcion())));
+		sCombo.comboIdentidad().forEach(p -> identidades.add(new SelectItem(p.getCodDocumento(), p.getDescripcion())));
 		return identidades;
 	}
 
@@ -157,9 +155,8 @@ public class ClienteBean implements Serializable{
 
 	public List<ClienteJPA> getClientes() {
 		clientes = new ArrayList<>();
-		sCliente.listaCliente().stream()
-		.filter(c->c.getNombre().toLowerCase().contains(busqueda))
-		.forEach(clientes::add);
+		sCliente.listaCliente().stream().filter(c -> c.getNombre().toLowerCase().contains(nombreCliente.toLowerCase()))
+				.forEach(clientes::add);
 		return clientes;
 	}
 

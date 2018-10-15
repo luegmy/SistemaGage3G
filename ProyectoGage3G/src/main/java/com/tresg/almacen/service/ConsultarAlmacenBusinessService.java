@@ -9,6 +9,6 @@ public interface ConsultarAlmacenBusinessService {
 
 	public List<DetalleAlmacenJPA> listaDetalleAlmacen();
 	
-	public List<ProductoJPA> listaExistencia();
+	public List<ProductoJPA> listaExistencia(String descripcion);
 
 }

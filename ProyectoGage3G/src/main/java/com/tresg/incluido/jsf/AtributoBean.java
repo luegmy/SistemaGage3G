@@ -1,4 +1,4 @@
-package com.tresg.util.bean;
+package com.tresg.incluido.jsf;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,13 +24,12 @@ public class AtributoBean implements Serializable {
 	public static final String RUC_EMISOR = "20515589873";
 	private List<SelectItem> comprobantes;
 	private int codigoComprobante;
-	private List<SelectItem> series;
 	private String numeroSerie;
 	private int numeroComprobante;
 
 	// campos de la cabecera de la venta
 	private List<SelectItem> operaciones;
-	private String codigoOperacion="";
+	private String codigoOperacion = "";
 	private Date fecha = new Date();
 	private String hora;
 	private Date fechaVence;
@@ -71,13 +70,12 @@ public class AtributoBean implements Serializable {
 	public static final String PORCENTAJE_ISC = "";
 
 	public static final String VALOR_REFERENCIAL = "0.00";
-	
+
 	private int codigoTipo;
 	private String observacion;
 	private BigDecimal valor = new BigDecimal("1.18");
 	private String serieGuia;
 	private String numeroSerieGuia;
-	
 
 	// Adicional manejo interno
 	private List<SelectItem> pagos;
@@ -86,6 +84,11 @@ public class AtributoBean implements Serializable {
 	// atributos para consulta y actualizacion de venta
 	private Date fechaIni = new Date();
 	private Date fechaFin = new Date();
+
+	// atributo para adjuntar una guia
+	private boolean guiaVenta;
+	private String guiaSerie = "";
+	private String guiaNumero = "0";
 
 	ComboService_I sCombo = IncluidoBusinessDelegate.getComboService();
 
@@ -106,14 +109,6 @@ public class AtributoBean implements Serializable {
 
 	public void setCodigoComprobante(int codigoComprobante) {
 		this.codigoComprobante = codigoComprobante;
-	}
-
-	public List<SelectItem> getSeries() {
-		return series;
-	}
-
-	public void setSeries(List<SelectItem> series) {
-		this.series = series;
 	}
 
 	public String getNumeroSerie() {
@@ -336,6 +331,30 @@ public class AtributoBean implements Serializable {
 
 	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
+	}
+
+	public boolean isGuiaVenta() {
+		return guiaVenta;
+	}
+
+	public void setGuiaVenta(boolean guiaVenta) {
+		this.guiaVenta = guiaVenta;
+	}
+
+	public String getGuiaSerie() {
+		return guiaSerie;
+	}
+
+	public void setGuiaSerie(String guiaSerie) {
+		this.guiaSerie = guiaSerie;
+	}
+
+	public String getGuiaNumero() {
+		return guiaNumero;
+	}
+
+	public void setGuiaNumero(String guiaNumero) {
+		this.guiaNumero = guiaNumero;
 	}
 
 }

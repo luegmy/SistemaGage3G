@@ -35,6 +35,16 @@ public class MysqlClienteDAO implements ClienteDAO {
 	}
 
 	@Override
+	public ClienteJPA buscarClientePorRuc(String ruc) {
+		open();
+		Query q = em.createNamedQuery(ClienteJPA.BUSCAR_CLIENTE_RUC).setParameter("p1", ruc);	
+		if(!q.getResultList().isEmpty()){
+			return (ClienteJPA) q.getResultList().get(0);
+		}	
+		return null;
+	}
+	
+	@Override
 	public String actualizarCliente(ClienteJPA cliente) {
 		open();
 		String mensaje;
@@ -59,14 +69,6 @@ public class MysqlClienteDAO implements ClienteDAO {
 		return mensaje;
 	}
 	
-	@Override
-	public ClienteJPA buscarClientePorRuc(String ruc) {
-		open();
-		Query q = em.createNamedQuery(ClienteJPA.BUSCAR_CLIENTE_RUC).setParameter("p1", ruc);	
-		if(!q.getResultList().isEmpty()){
-			return (ClienteJPA) q.getResultList().get(0);
-		}	
-		return null;
-	}
+
 
 }

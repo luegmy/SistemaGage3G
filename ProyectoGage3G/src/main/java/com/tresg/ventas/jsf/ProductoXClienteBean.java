@@ -31,7 +31,7 @@ public class ProductoXClienteBean {
 		detalles = new ArrayList<>();
 		Comparator<DetalleVentaJPA> comp = (d1,d2)->d1.getVenta().getFecha().compareTo(d2.getVenta().getFecha());
 		sConsultaVenta.listaDetalleVenta().stream().sorted(comp.reversed())
-				.filter(d -> d.getVenta().getCliente().getNombre().toLowerCase().contains(nombreCliente))			
+				.filter(d -> d.getVenta().getCliente().getNombre().toLowerCase().contains(nombreCliente.toLowerCase()))			
 				.forEach(detalles::add);
 
 	}

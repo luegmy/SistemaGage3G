@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.tresg.factoria.DAOFactory;
 import com.tresg.incluido.interfaz.ProductoDAO;
+import com.tresg.incluido.interfaz.UnidadMedidaDAO;
 import com.tresg.incluido.jpa.ProductoJPA;
+import com.tresg.incluido.jpa.UnidadMedidaJPA;
 
 
 public class GestionarProductoService implements GestionarProductoService_I{
@@ -13,11 +15,11 @@ public class GestionarProductoService implements GestionarProductoService_I{
 
 	DAOFactory fabrica=DAOFactory.getDAOFactory(DAOFactory.MYSQL);
 	ProductoDAO iProducto=fabrica.getProductoDAO();
-	
+	UnidadMedidaDAO iMedida=fabrica.getUnidadMedidaDAO();
 	
 	@Override
-	public List<ProductoJPA> listaProducto()  {
-		return iProducto.listarProducto();
+	public List<ProductoJPA> listaProductoPorDescripcion(String descripcion)  {
+		return iProducto.listarProductoPorDescripcion(descripcion);
 	}
 	
 	@Override
@@ -38,5 +40,20 @@ public class GestionarProductoService implements GestionarProductoService_I{
 		return iProducto.eliminarProducto(codigo);
 	}
 
+	@Override
+	public List<UnidadMedidaJPA> buscaMedidaPorDescripcion2(String descripcion)
+			 {
+		return iMedida.buscarMedidaPorDescripcion2(descripcion);
+	}
+
+	@Override
+	public UnidadMedidaJPA buscaMedidaPorCodigo(int codigo)  {
+		return iMedida.buscarMedidaPorCodigo(codigo);
+	}
+
+	@Override
+	public String actualizaMedida(UnidadMedidaJPA medida)  {
+		return iMedida.actualizarMedida(medida);
+	}
 	
 }

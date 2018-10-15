@@ -16,16 +16,14 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "tb_cliente")
 
-@NamedQueries({ 
-		@NamedQuery(name = "cliente.listarCliente", query = "select c from ClienteJPA c"),
-
+@NamedQueries({ @NamedQuery(name = "cliente.listarCliente", query = "select c from ClienteJPA c"),
 		@NamedQuery(name = "cliente.buscarClienteRuc", query = "select c from ClienteJPA c where c.nroDocumento= :p1")
- })
+
+})
 
 public class ClienteJPA implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 	public static final String LISTAR_CLIENTE = "cliente.listarCliente";
 	public static final String BUSCAR_CLIENTE_RUC = "cliente.buscarClienteRuc";
 
@@ -37,9 +35,9 @@ public class ClienteJPA implements Serializable {
 	private String nroDocumento;
 	private String telefono;
 	private String correo;
-	
+
 	@Transient
-	private String codigoDocumento="";
+	private String codigoDocumento;
 
 	@ManyToOne
 	@JoinColumn(name = "codDocumento")

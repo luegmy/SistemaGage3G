@@ -1,5 +1,6 @@
 package com.tresg.almacen.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +33,10 @@ public class MysqlDetalleAlmacenDAO implements DetalleAlmacenDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ProductoJPA> listarExistencias() {
+	public List<ProductoJPA> listarExistencias(String descripcion) {
 		open();
 		List<ProductoJPA>productos=new ArrayList<>();
-		Query q = em.createNamedQuery(ProductoJPA.LISTAR_PRODUCTO_EXISTENCIA);
+		Query q = em.createNamedQuery(ProductoJPA.LISTAR_PRODUCTO_EXISTENCIA).setParameter("x", "%"+ descripcion+ "%");;
 		
 		List<Object[]> lista=q.getResultList();
 		
@@ -46,8 +47,9 @@ public class MysqlDetalleAlmacenDAO implements DetalleAlmacenDAO {
 				obj.setCodProducto((int) (arr[0]));
 				obj.setDescripcion(arr[1].toString());
 				obj.setDescripcionTipo(arr[2].toString());
-				obj.setCantidad((int) (long) arr[3]);
-
+				obj.setPrecioVenta((BigDecimal) arr[3]);
+				obj.setDescripcionMedida(arr[4].toString());
+				obj.setCantidad((int) (long) arr[5]);				
 			}
 			productos.add(obj);
 		}

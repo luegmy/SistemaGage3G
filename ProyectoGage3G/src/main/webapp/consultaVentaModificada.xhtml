@@ -10,7 +10,7 @@
 <ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
 	<ui:define name="title">MODULO VENTAS</ui:define>
 	<ui:define name="content">
-	
+
 		<div class="container-fluid">
 
 			<h:form id="formEditaVenta">
@@ -24,7 +24,7 @@
 									<p:calendar value="#{ventaActualizaBean.atributoUtil.fecha}"
 										pattern="dd-MM-yyyy" id="fecha" locale="es">
 										<p:ajax event="dateSelect" update=":formEditaVenta:tabla"
-											listener="#{ventaActualizaBean.listarVentaXFecha}"/>
+											listener="#{ventaActualizaBean.listarVentaXFecha}" />
 									</p:calendar>
 								</p:tab>
 								<p:tab title="Rango de fecha">
@@ -67,10 +67,13 @@
 									placeholder="Filtrar busqueda" />
 							</p:outputPanel>
 						</f:facet>
-						<p:column width="5%" filterBy="#{t.numComprobante}" headerText="Nro.">
+
+						<p:column width="5%" filterBy="#{t.numComprobante}"
+							headerText="Nro.">
 							<h:outputText value="#{t.numComprobante%10000000}" />
 						</p:column>
-						<p:column width="5%" filterBy="#{t.comprobante.descripcion}" headerText="CDP">
+						<p:column width="5%" filterBy="#{t.comprobante.descripcion}"
+							headerText="CDP">
 							<h:outputText value="#{t.comprobante.descripcion}" />
 						</p:column>
 						<p:column width="6%" headerText="FECHA">
@@ -89,22 +92,23 @@
 						<p:column filterBy="#{t.cliente.direccion}" headerText="DIRECCION">
 							<h:outputText value="#{t.cliente.direccion}" />
 						</p:column>
-						<p:column width="8%" filterBy="#{t.cliente.nroDocumento}" headerText="RUC">
+						<p:column width="8%" filterBy="#{t.cliente.nroDocumento}"
+							headerText="RUC">
 							<h:outputText value="#{t.cliente.nroDocumento}" />
 						</p:column>
 						<p:column width="6%" headerText="MONTO">
 							<h:outputText value="#{t.monto}" />
 						</p:column>
 
-						<p:column width="6%" filterBy="#{t.pago.descripcion}" headerText="ESTADO">
+						<p:column width="6%" filterBy="#{t.pago.descripcion}"
+							headerText="ESTADO">
 							<h:outputText value="#{t.estado.descripcion}" />
 						</p:column>
-						<p:column width="14%" styleClass="text-center">
+						<p:column width="18%" styleClass="text-center">
 							<p:commandLink title="Ver detalle"
 								actionListener="#{ventaActualizaBean.mostrarDetalleVenta}"
 								action="consultaVentaModificada" update="formEditaVenta"
-								oncomplete="PF('dlgDetalle').show();"
-								styleClass="btn btn-info">
+								oncomplete="PF('dlgDetalle').show();" styleClass="btn btn-info">
 								<i class="fa fa-fw fa-eye"></i>
 								<f:attribute value="#{t.numComprobante}" name="numeroDetalle" />
 							</p:commandLink>
@@ -121,19 +125,50 @@
 								action="consultaVentaModificada"
 								update=":formEditaVenta:dialogoAnula" title="Anular venta"
 								oncomplete="PF('dlgAnulacion').show();"
-								styleClass="btn btn-danger"
-								disabled="#{t.estado.codEstado==3}">
+								styleClass="btn btn-danger" disabled="#{t.estado.codEstado==3}">
 								<i class="fa fa-fw fa-times-circle"></i>
 								<f:attribute value="#{t.numComprobante}" name="numeroCargar" />
 							</p:commandLink>
-							</p:column>
-						
+							<p:commandLink
+								actionListener="#{ventaActualizaBean.imprimirFactura}"
+								title="Imprimir" target="_blank" ajax="false"
+								styleClass="btn btn-dark">
+								<i class="fa fa-fw fa-print"></i>
+								<f:attribute value="#{t.comprobante.codComprobante}"
+									name="comprobante" />
+								<f:attribute value="#{t.numComprobante}" name="numeroFactura" />
+								<f:attribute value="#{t.serie}" name="serie" />
+								<f:attribute value="#{t.fecha}" name="fechaVence" />
+								<f:attribute value="#{t.monto}" name="monto" />
+								<f:attribute value="#{t.cliente.documento.codDocumento}"
+									name="documento" />
+								<f:attribute value="#{t.cliente.nroDocumento}"
+									name="numeroDocumento" />
+							</p:commandLink>
+							<p:commandLink actionListener="#{ventaActualizaBean.cargarFirma}"
+								action="consultaVentaModificada"
+								disabled="#{t.estado.codEstado==8}"
+								update=":formEditaVenta:dialogoCorreo" title="Enviar correo"
+								oncomplete="PF('dlgCorreo').show();"
+								styleClass="btn btn-success">
+								<i class="fa fa-fw fa-envelope" />
+								<f:attribute value="#{t.numComprobante}" name="numeroCargar" />
+								<f:attribute value="#{t.comprobante.codComprobante}"
+									name="comprobanteCargar" />
+								<f:attribute value="#{t.serie}" name="serieCargar" />
+								<f:attribute value="#{t.cliente.nombre}" name="clienteCargar" />
+								<f:attribute value="#{t.cliente.correo}" name="correoCargar" />
+								<f:attribute value="#{t.fecha}" name="fechaCargar" />
+								<f:attribute value="#{t.monto}" name="montoCargar" />
+							</p:commandLink>
+						</p:column>
+
 					</p:dataTable>
-					
+
 					<!--  DETALLE DE LA VENTA -->
 					<p:dialog header="DETALLE DE LA VENTA" widgetVar="dlgDetalle"
-						id="dialogo" showEffect="scale" hideEffect="explode" position="left center"
-						modal="true" appendTo="@(body)">
+						id="dialogo" showEffect="scale" hideEffect="explode"
+						position="left center" modal="true" appendTo="@(body)">
 						<p:dataTable var="d" value="#{ventaActualizaBean.detalles}"
 							reflow="true">
 							<p:column headerText="NUMERO">
@@ -156,10 +191,10 @@
 							</p:column>
 						</p:dataTable>
 					</p:dialog>
-					
-					</p:fieldset>
-					
-					<p:dialog header="ANULAR VENTA" widgetVar="dlgAnulacion"
+
+				</p:fieldset>
+
+				<p:dialog header="ANULAR VENTA" widgetVar="dlgAnulacion"
 					closable="false" id="dialogoAnula" showEffect="scale"
 					hideEffect="explode" height="300" width="400">
 
@@ -205,92 +240,230 @@
 					</h:panelGroup>
 
 				</p:dialog>
-					
-			</h:form>
-			
-			<p:dialog widgetVar="dlgActualizaVenta"
-				id="dialogoActualiza" closable="false" header="MODIFICAR VENTA"
-				modal="true" appendTo="@(body)" fitViewport="true">
-				<h:form id="formActualizaVenta">
 
-					<p:panel>
+				<p:dialog header="ENVIAR CORREO" widgetVar="dlgCorreo"
+					closable="false" id="dialogoCorreo" showEffect="scale"
+					hideEffect="explode" height="400" width="500">
 
-						<div class="form-row justify-content-md-center">
-						
-							<div class="col-6 col-sm-4 col-md-2">
+					<h:panelGroup id="pnlCorreo">
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-sm-offset-1">
 								<div class="form-group">
-									<p:outputLabel value="#{r.comprobante}" for="tipo" />
-									<p:selectOneMenu disabled="true"
-										value="#{ventaActualizaBean.atributoUtil.codigoComprobante}" id="tipo"
-										styleClass="form-control form-control-sm">
-										<f:selectItem itemValue="" itemLabel="--Seleccione--"/>
-										<f:selectItems value="#{ventaActualizaBean.atributoUtil.comprobantes}"/>
-									</p:selectOneMenu>
-									<p:messages for="mensajeComprobante" id="msgComprobante" />
+									<p:outputLabel value="Nro. Comprobante" />
+									<h:inputText
+										value="#{ventaActualizaBean.atributoUtil.numeroComprobante%10000000}"
+										disabled="true" styleClass="form-control input-sm" />
 								</div>
-							</div>
+								<div class="form-group">
+									<p:outputLabel value="Cliente" />
+									<h:inputText
+										value="#{ventaActualizaBean.atributoUtil.cliente.nombre}"
+										disabled="true" styleClass="form-control input-sm" />
+								</div>
+								<div class="form-group">
+									<p:outputLabel value="Correo" />
+									<h:inputText
+										value="#{ventaActualizaBean.atributoUtil.cliente.correo}"
+										styleClass="form-control input-sm" />
+								</div>
 
-							<div class="col-6 col-sm-4 col-md-2">
-								<div class="form-group">
-									<p:outputLabel value="#{r.serie}" for="serie" />
-									<p:selectOneMenu value="#{ventaActualizaBean.atributoUtil.numeroSerie}"
-										id="serie" styleClass="form-control form-control-sm" disabled="true">
-										<f:selectItems value="#{ventaActualizaBean.atributoUtil.series}" />
-									</p:selectOneMenu>
-								</div>
-							</div>
-							<div class="col-6 col-sm-4 col-md-2">
-								<div class="form-group">
-									<p:outputLabel value="#{r.numero}" for="comprobante" />
-									<p:inputText disabled="true"
-										value="#{ventaActualizaBean.atributoUtil.numeroComprobante}"
-										id="comprobante" styleClass="form-control form-control-sm">
-									</p:inputText>
-									<p:messages for="mensajeCargarNumeroComprobante"
-										id="msgCargarComprobante" />
-									<p:messages for="mensajeNumeroComprobante"
-										id="msgNumeroComprobante" />
-									<p:messages for="mensajeNumeroComprobanteExiste"
-										id="msgNumeroExiste" />
-								</div>
-							</div>
-							<div class="col-6 col-sm-4 col-md-2">
-								<div class="form-group">
-									<p:outputLabel value="#{r.pago}" for="pago" />
-									<p:selectOneMenu value="#{ventaActualizaBean.atributoUtil.codigoPago}"
-										styleClass="form-control form-control-sm" id="pago">
-										<f:selectItem itemValue="" itemLabel="--Seleccione--" />
-										<f:selectItems value="#{ventaActualizaBean.atributoUtil.pagos}" />
-										<p:ajax event="change" update="msgPago" />
-									</p:selectOneMenu>
-									<p:messages for="mensajePago" id="msgPago" />
-								</div>
-							</div>
+								<div class="row">
+									<div class="col-xs-12 col-sm-6">
+										<div class="form-group">
+											<p:commandLink id="btnEnviar"
+												actionListener="#{ventaActualizaBean.enviarFirma}"
+												update="formEditaVenta:pnlCorreo" styleClass="#{r.azul}">
+												<p:graphicImage url="imagenes/pago.png" width="25"
+													height="25" />
+												<p:outputLabel value="Enviar " />
+											</p:commandLink>
+										</div>
+									</div>
 
-							<div class="col-6 col-sm-8 col-md-2">
-								<div class="form-group">
-									<p:outputLabel value="#{r.fecha}" for="fecha" />
-									<p:calendar value="#{ventaActualizaBean.atributoUtil.fecha}"
-										pattern="dd-MM-yyyy" id="fecha"
-										styleClass="form-control form-control-sm" locale="es">
-										<p:ajax event="dateSelect" />
-									</p:calendar>
+									<div class="col-xs-12 col-sm-6">
+										<div class="form-group">
+											<p:commandLink onclick="PF('dlgCorreo').hide();"
+												styleClass="#{r.rojo}">
+												<p:graphicImage url="imagenes/exit.png" width="25"
+													height="25" />
+												<p:outputLabel value="Salir" />
+											</p:commandLink>
+										</div>
+									</div>
 								</div>
 							</div>
+							<p:blockUI block="pnlCorreo" trigger="btnEnviar">
+        										ENVIANDO...<br />
+								<p:graphicImage url="imagenes/load.gif" />
+							</p:blockUI>
 						</div>
-					</p:panel>
-			
+						<p:messages for="mensajeFirma" id="msgFirma" />
+						<p:messages for="mensajeArchivo" />
+					</h:panelGroup>
+
+				</p:dialog>
+
+			</h:form>
+
+			<p:dialog widgetVar="dlgActualizaVenta" id="dialogoActualiza"
+				closable="false" header="MODIFICAR VENTA" modal="true"
+				appendTo="@(body)" fitViewport="true">
+				<h:form id="formActualizaVenta">
+					<div class="form-row justify-content-center">
+
+						<div class="col-6 col-md-5">
+							<p:panel>
+
+								<div class="form-row">
+
+									<div class="col-12 col-md-12">
+										<div class="form-group">
+											<p:outputLabel value="Operacion" for="operacion" />
+											<p:selectOneMenu
+												value="#{ventaActualizaBean.atributoUtil.codigoOperacion}"
+												id="operacion" styleClass="form-control form-control-sm">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems
+													value="#{ventaActualizaBean.atributoUtil.operaciones}" />
+											</p:selectOneMenu>
+										</div>
+									</div>
+									<div class="col-12 col-md-4">
+										<div class="form-group">
+											<p:outputLabel value="#{r.comprobante}" for="tipo" />
+											<p:selectOneMenu disabled="true"
+												value="#{ventaActualizaBean.atributoUtil.codigoComprobante}"
+												id="tipo" styleClass="form-control form-control-sm">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems
+													value="#{ventaActualizaBean.atributoUtil.comprobantes}" />
+											</p:selectOneMenu>
+											<p:messages for="mensajeComprobante" id="msgComprobante" />
+										</div>
+									</div>
+
+									<div class="col-6 col-md-4">
+										<div class="form-group">
+											<p:outputLabel value="#{r.serie}" for="serie" />
+											<p:inputText disabled="true"
+												value="#{ventaActualizaBean.atributoUtil.numeroSerie}"
+												id="serie" styleClass="form-control">
+											</p:inputText>
+										</div>
+									</div>
+									<div class="col-6 col-md-4">
+										<div class="form-group">
+											<p:outputLabel value="#{r.numero}" for="comprobante" />
+											<p:inputText disabled="true"
+												value="#{ventaActualizaBean.atributoUtil.numeroComprobante}"
+												id="comprobante" styleClass="form-control">
+											</p:inputText>
+											<p:messages for="mensajeCargarNumeroComprobante"
+												id="msgCargarComprobante" />
+											<p:messages for="mensajeNumeroComprobante"
+												id="msgNumeroComprobante" />
+											<p:messages for="mensajeNumeroComprobanteExiste"
+												id="msgNumeroExiste" />
+										</div>
+									</div>
+
+								</div>
+							</p:panel>
+						</div>
+
+						<div class="col-6 col-md-5">
+							<p:panel>
+								<div class="form-row">
+									<div class="col-12 col-md-4">
+										<div class="form-group">
+											<p:outputLabel value="#{r.pago}" for="pago" />
+											<p:selectOneMenu
+												value="#{ventaActualizaBean.atributoUtil.codigoPago}"
+												styleClass="form-control form-control-sm" id="pago">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems
+													value="#{ventaActualizaBean.atributoUtil.pagos}" />
+												<p:ajax event="change" update="msgPago" />
+											</p:selectOneMenu>
+											<p:messages for="mensajePago" id="msgPago" />
+										</div>
+									</div>
+									<div class="col-6 col-md-4">
+										<div class="form-group">
+											<p:outputLabel value="#{r.fecha}" for="fecha" />
+											<p:calendar value="#{ventaActualizaBean.atributoUtil.fecha}"
+												pattern="dd-MM-yyyy" id="fecha" locale="es" navigator="true"
+												inputStyleClass="form-control">
+												<p:ajax event="dateSelect" />
+											</p:calendar>
+										</div>
+									</div>
+
+									<div class="col-6 col-md-4">
+										<div class="form-group">
+											<p:outputLabel value="#{r.fechaVence}" for="fechaVence" />
+											<p:calendar
+												value="#{ventaActualizaBean.atributoUtil.fechaVence}"
+												pattern="dd-MM-yyyy" id="fechaVence" locale="es"
+												navigator="true" inputStyleClass="form-control">
+												<p:ajax event="dateSelect" />
+											</p:calendar>
+										</div>
+									</div>
+
+
+									<div class="col-4">
+										<div class="form-group">
+											<p:outputLabel value="Generar guia" />
+											<br />
+											<p:inputSwitch
+												value="#{ventaActualizaBean.atributoUtil.guiaVenta}"
+												onLabel=" SI " offLabel=" NO " styleClass="">
+												<p:ajax event="change"
+													listener="#{ventaActualizaBean.cargarGuia}"
+													update="guiaSerie guia" />
+											</p:inputSwitch>
+										</div>
+									</div>
+
+									<div class="col-4">
+										<div class="form-group">
+											<p:outputLabel value="#{r.serie}" for="guiaSerie" />
+											<p:inputText
+												disabled="#{!ventaActualizaBean.atributoUtil.guiaVenta}"
+												value="#{ventaActualizaBean.atributoUtil.guiaSerie}"
+												id="guiaSerie" styleClass="form-control" />
+
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="form-group">
+											<p:outputLabel value="#{r.numero}" for="guia" />
+											<p:inputText
+												disabled="#{!ventaActualizaBean.atributoUtil.guiaVenta}"
+												value="#{ventaActualizaBean.atributoUtil.guiaNumero}"
+												id="guia" styleClass="form-control input-sm" />
+										</div>
+									</div>
+
+								</div>
+							</p:panel>
+						</div>
+
+					</div>
+
 					<!--  DATOS DEL CLIENTE -->
 					<p:panel id="toggleableCliente" header="CLIENTE" toggleable="true">
 
 						<div class="row">
 							<div class="col-12 col-sm-12 col-md-6">
 								<div class="row">
-									<div class="col-12">
+									<div class="col-12 col-sm-9">
 										<div class="form-group">
 											<p:outputLabel value="#{r.nombre}" for="nombre" />
-											<p:inputText value="#{ventaActualizaBean.atributoUtil.cliente.nombre}"
-												styleClass="form-control form-control-sm" id="nombre">
+											<p:inputText
+												value="#{ventaActualizaBean.atributoUtil.cliente.nombre}"
+												styleClass="form-control" id="nombre">
 												<p:ajax event="keyup" update="tablaCliente"
 													listener="#{ventaActualizaBean.listarCliente}" />
 											</p:inputText>
@@ -301,22 +474,22 @@
 
 								</div>
 								<div class="row">
-									<div class="col-12">
+									<div class="col-12 col-sm-12">
 										<div class="form-group">
-											<p:outputLabel value="#{r.direccion}" for="direccion"/>
+											<p:outputLabel value="#{r.direccion}" for="direccion" />
 											<p:inputText id="direccion"
 												value="#{ventaActualizaBean.atributoUtil.cliente.direccion}"
-												styleClass="form-control form-control-sm" />
+												styleClass="form-control" />
 										</div>
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-12">
+									<div class="col-12 col-sm-9">
 										<div class="form-group">
-											<p:outputLabel value="#{r.ruc}" for="ruc"/>
+											<p:outputLabel value="#{r.ruc}" for="ruc" />
 											<p:inputText id="ruc"
 												value="#{ventaActualizaBean.atributoUtil.cliente.nroDocumento}"
-												styleClass="form-control form-control-sm" />
+												styleClass="form-control" />
 											<p:messages for="mensajeRuc" />
 										</div>
 									</div>
@@ -329,11 +502,13 @@
 									value="#{ventaActualizaBean.atributoUtil.clientes}" var="c"
 									selectionMode="single"
 									selection="#{ventaActualizaBean.clienteSeleccionado}"
+									emptyMessage="No existe #{ventaActualizaBean.atributoUtil.cliente.nombre}, click en NUEVO"
 									reflow="true" rows="5" rowKey="#{c.codCliente}">
 
 									<p:ajax event="rowSelect"
 										listener="#{ventaActualizaBean.seleccionarCliente}"
-										update=":formActualizaVenta:toggleableCliente" process="@parent" />
+										update=":formActualizaVenta:toggleableCliente"
+										process="@parent" />
 
 									<p:column width="8%">
 										<f:facet name="header">
@@ -376,7 +551,8 @@
 					</p:panel>
 
 					<!--  DETALLES DE LA FACTURA -->
-					<p:panel id="toggleableDetalle" header="DETALLE VENTA" toggleable="true"
+					<p:panel id="toggleableDetalle" header="DETALLE VENTA"
+						toggleable="true"
 						visible="#{ventaActualizaBean.atributoUtil.codigoComprobante!=0}">
 						<div class="row">
 
@@ -388,18 +564,21 @@
 											<p:outputLabel value="#{r.descripcion}" for="descripcion" />
 											<p:inputText
 												value="#{ventaActualizaBean.atributoUtil.descripcionProducto}"
-												id="descripcion" styleClass="form-control form-control-sm">
-												<p:ajax event="keyup" update="msgAgregarProducto msgRepetido tablaBusqueda"
+												id="descripcion" styleClass="form-control">
+												<p:ajax event="keyup"
+													update="msgAgregarProducto msgRepetido tablaBusqueda"
 													listener="#{ventaActualizaBean.listarProducto}" />
 											</p:inputText>
 										</div>
+										<p:messages for="mensajeAgregarProducto"
+											id="msgMensajeAgregarProducto" />
 									</div>
 									<div class="col-12 col-sm-3">
 										<div class="form-group">
 											<p:commandLink title="Agregar producto" id="btnAgregar"
 												actionListener="#{ventaActualizaBean.agregarProductoVenta}"
 												styleClass="#{r.verde} my-4"
-												update="toggleableDetalle :formActualizaVenta:pnlDetalle">
+												update="toggleableDetalle msgProductoLista :formActualizaVenta:pnlDetalle">
 												<i class="fa fa-fw fa-shopping-cart"></i>
 												<p:outputLabel value=" Agregar" />
 											</p:commandLink>
@@ -411,15 +590,17 @@
 									<div class="col-6 col-sm-3">
 										<div class="form-group">
 											<p:outputLabel value="#{r.precio}" for="precio" />
-											<p:inputText value="#{ventaActualizaBean.atributoUtil.precio}"
-												id="precio" styleClass="form-control form-control-sm" />
+											<p:inputText
+												value="#{ventaActualizaBean.atributoUtil.precio}"
+												id="precio" styleClass="form-control" />
 										</div>
 									</div>
 									<div class="col-6 col-sm-3">
 										<div class="form-group">
 											<p:outputLabel value="#{r.cantidad}" for="cantidad" />
-											<p:inputText value="#{ventaActualizaBean.atributoUtil.cantidad}"
-												id="cantidad" styleClass="form-control form-control-sm">
+											<p:inputText
+												value="#{ventaActualizaBean.atributoUtil.cantidad}"
+												id="cantidad" styleClass="form-control">
 												<f:converter converterId="javax.faces.Integer" />
 												<p:ajax event="keyup" update="msgCantidad msgStock" />
 											</p:inputText>
@@ -432,14 +613,28 @@
 
 										<div class="form-group">
 											<p:outputLabel value="#{r.codigo}" for="codigo" />
-											<p:inputText value="#{ventaActualizaBean.atributoUtil.codigoProducto}"
-												id="codigo" styleClass="form-control form-control-sm" />
+											<p:inputText
+												value="#{ventaActualizaBean.atributoUtil.codigoProducto}"
+												id="codigo" styleClass="form-control" />
 										</div>
 									</div>
+									<div class="col-6 col-sm-3">
+										<div class="form-group">
+											<p:commandLink title="Cargar producto"
+												actionListener="#{ventaActualizaBean.cargarProductoCodigo}"
+												styleClass="#{r.celeste} my-4" update="toggleableDetalle"
+												process="@parent">
+												<i class="fa fa-fw fa-archive"></i>
+												<p:outputLabel value=" Cargar" />
+											</p:commandLink>
+										</div>
+
+									</div>
+
 								</div>
 
 								<p:messages for="mensajeAgregarCantidad" id="msgCantidad" />
-								<p:messages for="mensajeAgregarProducto" id="msgAgregarProducto"/>
+								<p:messages for="mensajeAgregarProducto" id="msgAgregarProducto" />
 								<p:messages for="mensajeStock" id="msgStock" />
 								<p:messages for="mensajeCodigo" id="msgCodigo" />
 								<p:messages for="mensajeProductoRepetido" id="msgRepetido" />
@@ -449,13 +644,15 @@
 							<div class="col-12 col-sm-12 col-md-6">
 								<p:dataTable id="tablaBusqueda"
 									value="#{ventaActualizaBean.atributoUtil.productos}" var="p"
-									selectionMode="single" rows="10"
+									selectionMode="single" rows="20"
 									selection="#{ventaActualizaBean.productoSeleccionado}"
+									emptyMessage="No existe #{ventaActualizaBean.atributoUtil.descripcionProducto}"
 									reflow="true" rowKey="#{p.codProducto}">
 
 									<p:ajax event="rowSelect"
 										listener="#{ventaActualizaBean.seleccionarProducto}"
-										update=":formActualizaVenta:toggleableDetalle" process="@parent" />
+										update=":formActualizaVenta:toggleableDetalle"
+										process="@parent" />
 									<p:column>
 										<f:facet name="header">
 											<p:outputLabel value="COD" />
@@ -472,7 +669,7 @@
 										<f:facet name="header">
 											<p:outputLabel value="TIPO" />
 										</f:facet>
-										<p:outputLabel value="#{p.tipo.descripcion}" />
+										<p:outputLabel value="#{p.descripcionTipo}" />
 									</p:column>
 									<p:column>
 										<f:facet name="header">
@@ -482,6 +679,13 @@
 											<f:convertNumber type="currency" currencySymbol="S/" />
 										</p:outputLabel>
 									</p:column>
+									<p:column>
+										<f:facet name="header">
+											<p:outputLabel value="CANTIDAD" />
+										</f:facet>
+										<p:outputLabel value="#{p.cantidad}" />
+									</p:column>
+
 								</p:dataTable>
 								<p:blockUI block="toggleableDetalle" trigger="tablaBusqueda">
         										CARGANDO<br />
@@ -495,11 +699,14 @@
 						</div>
 					</p:panel>
 
+					<p:messages for="mensajeProductoLista" id="msgProductoLista" />
+
+
 					<br />
 
 					<p:outputPanel id="pnlDetalle">
-						<p:dataTable value="#{ventaActualizaBean.temporales}" var="t" id="tabla"
-							emptyMessage=" " reflow="true"
+						<p:dataTable value="#{ventaActualizaBean.temporales}" var="t"
+							id="tabla" emptyMessage=" " reflow="true"
 							rendered="#{ventaActualizaBean.temporales.size() > 0 eq true}">
 							<p:column width="5%">
 								<p:outputLabel value="#{t.id.codProducto}" />
@@ -507,25 +714,29 @@
 							<p:column width="50%" headerText="DESCRIPCION">
 								<p:outputLabel value="#{t.descripcionProducto}" />
 							</p:column>
-
 							<p:column headerText="PRECIO">
 								<p:outputLabel value="#{t.precio}" />
 							</p:column>
 							<p:column headerText="CANTIDAD">
 								<p:outputLabel value="#{t.cantidad}" />
 							</p:column>
+							<p:column headerText="U.M">
+								<p:outputLabel value="#{t.unidadMedida}" />
+							</p:column>
 							<p:column headerText="IMPORTE">
 								<p:outputLabel value="#{t.precio * t.cantidad}" />
 							</p:column>
 							<p:column width="8%">
-								<p:commandLink actionListener="#{ventaActualizaBean.editarProducto}"
+								<p:commandLink
+									actionListener="#{ventaActualizaBean.editaProducto}"
 									styleClass="#{r.celeste}" update="formActualizaVenta">
 									<i class="fa fa-fw fa-edit"></i>
 									<f:attribute value="#{t.id.codProducto}" name="codigo" />
 								</p:commandLink>
 							</p:column>
 							<p:column width="8%">
-								<p:commandLink actionListener="#{ventaActualizaBean.quitarListaProducto}"
+								<p:commandLink
+									actionListener="#{ventaActualizaBean.quitarListaProducto}"
 									styleClass="#{r.rojo}" update="formActualizaVenta">
 									<i class="fa fa-fw fa-trash"></i>
 									<f:attribute value="#{t.id.codProducto}" name="codigo" />
@@ -537,31 +748,34 @@
 						<!--  IMPORTE DE LA FACTURA -->
 						<div class="row">
 							<div class="col-12 col-sm-4 col-md-4">
-							
-									<p:panelGrid columns="2">
 
-										<p:outputLabel value="Subtotal" />
-										<p:outputLabel value="#{ventaActualizaBean.atributoUtil.subtotal}">
-											<f:convertNumber minFractionDigits="2" />
-										</p:outputLabel>
+								<p:panelGrid columns="2">
 
-										<p:outputLabel value="IGV" />
-										<p:outputLabel value="#{ventaActualizaBean.atributoUtil.igv}">
-											<f:convertNumber minFractionDigits="2" />
-										</p:outputLabel>
-										<p:outputLabel value="Total" />
-										<p:outputLabel value="#{ventaActualizaBean.atributoUtil.total}">
-											<f:convertNumber minFractionDigits="2" />
-										</p:outputLabel>
-									</p:panelGrid>
-							
+									<p:outputLabel value="Subtotal" />
+									<p:outputLabel
+										value="#{ventaActualizaBean.atributoUtil.subtotal}">
+										<f:convertNumber minFractionDigits="2" />
+									</p:outputLabel>
+
+									<p:outputLabel value="IGV" />
+									<p:outputLabel value="#{ventaActualizaBean.atributoUtil.igv}">
+										<f:convertNumber minFractionDigits="2" />
+									</p:outputLabel>
+									<p:outputLabel value="Total" />
+									<p:outputLabel value="#{ventaActualizaBean.atributoUtil.total}">
+										<f:convertNumber minFractionDigits="2" />
+									</p:outputLabel>
+								</p:panelGrid>
+
 							</div>
 
 							<div class="col-12 col-sm-4 col-md-2">
 								<div class="form-group">
 									<h:panelGroup id="pnlGrabar">
-										<p:commandLink action="#{ventaActualizaBean.actualizarVenta}"
-											update="formActualizaVenta dlg :formEditaVenta:tabla" styleClass="#{r.azul}" id="btnGrabar">
+										<p:commandLink
+											action="#{ventaActualizaBean.actualizarVenta()}"
+											update="formActualizaVenta dlg" styleClass="#{r.azul}"
+											id="btnGrabar">
 											<i class="fa fa-fw fa-save"></i>
 											<p:outputLabel value=" Grabar" />
 										</p:commandLink>
@@ -570,24 +784,36 @@
 							</div>
 							<div class="col-12 col-sm-4 col-md-2">
 								<div class="form-group">
-									<p:commandLink onclick="PF('dlgActualizaVenta').hide();" 
-									styleClass="#{r.rojo}" action="#{ventaActualizaBean.retornar}">
-										<i class="fa fa-fw fa-plus-circle"></i>										
+									<p:commandLink onclick="PF('dlgActualizaVenta').hide();"
+										styleClass="#{r.rojo}" action="#{ventaActualizaBean.retornar}">
+										<i class="fa fa-fw fa-plus-circle"></i>
 										<p:outputLabel value=" Retornar" />
 									</p:commandLink>
 								</div>
 							</div>
-
+							<div class="col-12 col-sm-12 col-md-4">
+								<div class="form-group">
+									<p:outputLabel value="Observacion" for="observacion" />
+									<p:inputTextarea
+										value="#{ventaActualizaBean.atributoUtil.observacion}"
+										id="observacion" styleClass="form-control form-control-sm"
+										rows="5" cols="20" maxlength="250">
+										<p:ajax event="keyup" update="msgMotivoNota" />
+									</p:inputTextarea>
+									<p:messages for="mensajeMotivoNota" id="msgMotivoNota" />
+								</div>
+							</div>
 						</div>
 						<p:blockUI block="pnlDetalle" trigger="btnGrabar">
         										GRABANDO<br />
 							<p:graphicImage url="imagenes/load.gif" />
 						</p:blockUI>
 					</p:outputPanel>
+
 				</h:form>
 
 			</p:dialog>
-			
+
 			<p:dialog header="MENSAJE DEL SISTEMA" widgetVar="dlgMensaje"
 				id="dlg" closable="false" showEffect="clip" hideEffect="clip"
 				responsive="true" modal="true" appendTo="@(body)">
@@ -601,7 +827,7 @@
 					</p:commandLink>
 				</h:form>
 			</p:dialog>
-		
+
 		</div>
 	</ui:define>
 </ui:composition>

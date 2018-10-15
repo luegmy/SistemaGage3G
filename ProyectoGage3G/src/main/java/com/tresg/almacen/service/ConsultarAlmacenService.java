@@ -18,8 +18,8 @@ public class ConsultarAlmacenService implements ConsultarAlmacenBusinessService 
 	}
 
 	@Override
-	public List<ProductoJPA> listaExistencia() {
-		return iAlmacen.listarExistencias();
+	public List<ProductoJPA> listaExistencia(String descripcion) {
+		return iAlmacen.listarExistencias(descripcion);
 	}
 
 }

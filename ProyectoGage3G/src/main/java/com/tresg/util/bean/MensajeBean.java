@@ -7,6 +7,7 @@ import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
+import com.tresg.incluido.jsf.AtributoBean;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.service.RegistrarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;
@@ -35,9 +36,11 @@ public class MensajeBean implements Serializable {
 	public String mostrarMensajeGrabarVenta(AtributoBean atributo, List<DetalleVentaJPA> temporales) {
 		String mensaje = "";
 
-		if (atributo.getCodigoComprobante() == 0) {
+		if ("".equals(atributo.getCodigoOperacion())) {
+			mensaje = "mensajeOperacion";
+		} else if (atributo.getCodigoComprobante() == 0) {
 			mensaje = "mensajeComprobante";
-		} else if (atributo.getCodigoPago() == 0) {
+		}else if (atributo.getCodigoPago() == 0) {
 			mensaje = "mensajePago";
 		} else if (atributo.getNumeroComprobante() == 0) {
 			mensaje = "mensajeCargarNumeroComprobante";
@@ -67,6 +70,9 @@ public class MensajeBean implements Serializable {
 			error = "No cuenta con ".concat(atributo.getCantidad().toString()).concat(" ").concat("unidades de ")
 					.concat(atributo.getDescripcionProducto())
 					.concat(" en stock, solicitar pedido para dicho punto de venta");
+			break;
+		case "mensajeOperacion":
+			error = "Seleccione una operacion";
 			break;
 		case "mensajeComprobante":
 			error = "Seleccione un Comprobante";
