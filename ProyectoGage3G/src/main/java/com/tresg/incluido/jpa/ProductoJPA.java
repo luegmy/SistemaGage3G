@@ -21,7 +21,6 @@ import javax.persistence.Transient;
 		@NamedQuery(name = "producto.listarProductoPorExistencia", query = "select d.producto.codProducto,d.producto.descripcion,d.producto.tipo.descripcion,d.producto.precioVenta,"
 				+ "d.producto.medida.abreviatura,sum(d.existencia) from DetalleAlmacenJPA d where d.producto.descripcion like :x "
 				+ "group by d.producto.codProducto"),
-		@NamedQuery(name = "producto.listarProductoPorDescripcion", query = "select p from ProductoJPA p where p.descripcion like :x"),
 		@NamedQuery(name = "producto.listarProducto", query = "select p from ProductoJPA p") })
 
 public class ProductoJPA implements Serializable {
@@ -29,7 +28,6 @@ public class ProductoJPA implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String LISTAR_PRODUCTO_EXISTENCIA = "producto.listarProductoPorExistencia";
-	public static final String LISTAR_PRODUCTO_DESCRIPCION = "producto.listarProductoPorDescripcion";
 	public static final String LISTAR_PRODUCTO = "producto.listarProducto";
 
 	@Id

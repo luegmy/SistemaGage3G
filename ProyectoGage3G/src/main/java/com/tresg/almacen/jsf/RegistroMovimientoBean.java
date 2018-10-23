@@ -55,17 +55,14 @@ public class RegistroMovimientoBean implements Serializable {
 	private Date fecha = new Date();
 	private String observacion;
 
-	private List<SelectItem> productos;
-	private List<SelectItem> tiposProductos;
-	private int codigoTipoProducto;
-
 	@ManagedProperty(value = "#{usuario.sesionCodigoUsuario}")
 	private int usuario;
 
 	// Para anadir elementos a la datatable
 	private List<DetalleMovimientoJPA> temporales;
+	
 	// Atributo de la tabla detalle_almacen
-	private int codigoProducto;
+	private ProductoJPA productoSeleccionado;
 	private int cantidad;
 
 	private List<DetalleMovimientoJPA> transferencias;
@@ -73,7 +70,7 @@ public class RegistroMovimientoBean implements Serializable {
 	// Instanciar los services
 	RegistrarMovimientoBusinessService sAlmacen = AlmacenBusinessDelegate.getRegistrarAlmacenService();
 	GestionarProductoService_I sProducto = IncluidoBusinessDelegate.getGestionarProductoService();
-	GestionarProveedorService_I sProveedor=IncluidoBusinessDelegate.getGestionarProveedorService();
+	GestionarProveedorService_I sProveedor = IncluidoBusinessDelegate.getGestionarProveedorService();
 	ComboService_I sCombo = IncluidoBusinessDelegate.getComboService();
 
 	public RegistroMovimientoBean() {
@@ -89,33 +86,48 @@ public class RegistroMovimientoBean implements Serializable {
 		}
 	}
 
+	public List<ProductoJPA> autocompletarProducto(String query) {
+		List<ProductoJPA> productos = new ArrayList<>();
+		sProducto.listaProducto().stream().filter(p -> p.getDescripcion().toLowerCase().contains(query.toLowerCase()))
+				.forEach(productos::add);
+
+		return productos;
+	}
+
+	public ProductoJPA obtenerProductoPorCodigo(int codigo) {
+		// Aqui se debe implementar una llamada a base de datos.
+		ProductoJPA objProducto = null;
+		for (ProductoJPA p : sProducto.listaProducto()) {
+			if (p.getCodProducto() == codigo) {
+				objProducto = p;
+			}
+		}
+		return objProducto;
+	}
+
 	public void agregarProductoAlmacen() {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		if (cantidad == 0) {
 			context.addMessage("mensajeAgregarCantidad",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ingrese una cantidad mayor a 0", null));
-		} else if (codigoTipoProducto == 0) {
-			context.addMessage("mensajeTipo",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione un tipo de producto", null));
-		} else if (codigoProducto == 0) {
+		} else if (productoSeleccionado == null) {
 			context.addMessage("mensajeProducto",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione un producto", null));
 		}
 
 		else {
 
-			ProductoJPA producto = sProducto.buscaProductoPorCodigo(codigoProducto);
 			if (codigoDestino != 0) {
 
 				DetalleMovimientoJPAPK dmpk2 = new DetalleMovimientoJPAPK();
 				dmpk2.setCodAlmacen(codigoDestino);
-				dmpk2.setCodProducto(codigoProducto);
+				dmpk2.setCodProducto(productoSeleccionado.getCantidad());
 				dmpk2.setNroMovimiento(getNumeroDocumento() + 1);
 
 				DetalleMovimientoJPA objDetalle2 = new DetalleMovimientoJPA();
 				objDetalle2.setDescripcionProducto(
-						producto.getDescripcion().concat(" ").concat(producto.getTipo().getDescripcion()));
+						productoSeleccionado.getDescripcion().concat(" ").concat(productoSeleccionado.getTipo().getDescripcion()));
 				objDetalle2.setCantidad(cantidad);
 				objDetalle2.setId(dmpk2);
 
@@ -124,13 +136,13 @@ public class RegistroMovimientoBean implements Serializable {
 
 			DetalleMovimientoJPAPK dmpk = new DetalleMovimientoJPAPK();
 			dmpk.setCodAlmacen(codigoOrigen);
-			dmpk.setCodProducto(codigoProducto);
+			dmpk.setCodProducto(productoSeleccionado.getCodProducto());
 			dmpk.setNroMovimiento(getNumeroDocumento());
 
 			DetalleMovimientoJPA objDetalle = new DetalleMovimientoJPA();
 			objDetalle.setCantidad(cantidad);
 			objDetalle.setDescripcionProducto(
-					producto.getDescripcion().concat(" ").concat(producto.getTipo().getDescripcion()));
+					productoSeleccionado.getDescripcion().concat(" ").concat(productoSeleccionado.getTipo().getDescripcion()));
 			objDetalle.setId(dmpk);
 
 			temporales.add(objDetalle);
@@ -236,7 +248,7 @@ public class RegistroMovimientoBean implements Serializable {
 		} else if (codigoProveedor == 0) {
 			context.addMessage("mensajeProveedor",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el proveedor", null));
-		}else if (numeroComprobante == 0 && codigoComprobante != 2) {
+		} else if (numeroComprobante == 0 && codigoComprobante != 2) {
 			context.addMessage("mensajeNumeroComprobante",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ingrese el numero de comprobante", null));
 		} else if (temporales.isEmpty()) {
@@ -288,26 +300,12 @@ public class RegistroMovimientoBean implements Serializable {
 
 	}
 
-	// lista despegable tipo de productos
-	public List<SelectItem> getTiposProductos() {
-		tiposProductos = new ArrayList<>();
-		sCombo.comboTipoProducto().forEach(p -> tiposProductos.add(new SelectItem(p.getCodTipo(), p.getDescripcion())));
-		return tiposProductos;
+	public ProductoJPA getProductoSeleccionado() {
+		return productoSeleccionado;
 	}
 
-	public void setTiposProductos(List<SelectItem> tiposProductos) {
-		this.tiposProductos = tiposProductos;
-	}
-
-	// lista despegable de productos
-	public List<SelectItem> getProductos() {
-		productos = new ArrayList<>();
-		sProducto.listaProductoPorDescripcion("").stream().forEach(p -> productos.add(new SelectItem(p.getCodProducto(), p.getDescripcion())));
-		return productos;
-	}
-
-	public void setProductos(List<SelectItem> productos) {
-		this.productos = productos;
+	public void setProductoSeleccionado(ProductoJPA productoSeleccionado) {
+		this.productoSeleccionado = productoSeleccionado;
 	}
 
 	// lista despegable de movimientos
@@ -373,7 +371,7 @@ public class RegistroMovimientoBean implements Serializable {
 	}
 
 	public List<SelectItem> getProveedores() {
-		proveedores=new ArrayList<>();
+		proveedores = new ArrayList<>();
 		sProveedor.listaProveedor().forEach(a -> proveedores.add(new SelectItem(a.getCodProveedor(), a.getNombre())));
 		return proveedores;
 	}
@@ -422,14 +420,6 @@ public class RegistroMovimientoBean implements Serializable {
 		this.observacion = observacion;
 	}
 
-	public int getCodigoTipoProducto() {
-		return codigoTipoProducto;
-	}
-
-	public void setCodigoTipoProducto(int codigoTipoProducto) {
-		this.codigoTipoProducto = codigoTipoProducto;
-	}
-
 	public int getUsuario() {
 		return usuario;
 	}
@@ -453,14 +443,6 @@ public class RegistroMovimientoBean implements Serializable {
 
 	public void setTransferencias(List<DetalleMovimientoJPA> transferencias) {
 		this.transferencias = transferencias;
-	}
-
-	public int getCodigoProducto() {
-		return codigoProducto;
-	}
-
-	public void setCodigoProducto(int codigoProducto) {
-		this.codigoProducto = codigoProducto;
 	}
 
 	public int getCantidad() {

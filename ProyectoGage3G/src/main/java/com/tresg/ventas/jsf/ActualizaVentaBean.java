@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +37,7 @@ import com.tresg.util.correo.Mensajeria;
 import com.tresg.util.formato.Formateo;
 import com.tresg.util.formato.MontoEnLetras;
 import com.tresg.util.impresion.Impresora;
+import com.tresg.util.optional.ValoresNulos;
 import com.tresg.util.sunat.Sunat;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.jpa.VentaJPA;
@@ -75,7 +75,8 @@ public class ActualizaVentaBean implements Serializable {
 	Sunat sunatUtil = new Sunat();
 	Mensajeria correoUtil = new Mensajeria();
 	Formateo formateo = new Formateo();
-	ClienteBean clienteBean=new ClienteBean();
+	ClienteBean clienteBean = new ClienteBean();
+	ValoresNulos optionalUtil=new ValoresNulos();
 
 	RegistrarVentaBusinessService sVenta = VentasBusinessDelegate.getRegistrarVentaService();
 	GestionarProductoService_I sProducto = IncluidoBusinessDelegate.getGestionarProductoService();
@@ -121,7 +122,16 @@ public class ActualizaVentaBean implements Serializable {
 		atributoUtil.getCliente().setNombre(objVenta.getCliente().getNombre());
 		atributoUtil.setCodigoComprobante(objVenta.getComprobante().getCodComprobante());
 		atributoUtil.setCodigoPago(objVenta.getPago().getCodPago());
+		
+		if(objVenta.getGuiaRemision()==null) {
+			atributoUtil.setGuiaNumero(0);
+		}else {
+			atributoUtil.setGuiaNumero(objVenta.getGuiaRemision().getNumGuia());
+			atributoUtil.setGuiaSerie("T001");
+			atributoUtil.setGuiaVenta(true);
+		}
 
+		atributoUtil.setCodigoOperacion("0101");
 		for (DetalleVentaJPA d : objVenta.getDetalles()) {
 			d.setDescripcionProducto(d.getProducto().getDescripcion());
 			temporales.add(d);
@@ -204,7 +214,7 @@ public class ActualizaVentaBean implements Serializable {
 			atributoUtil.setGuiaSerie("T001");
 		} else {
 			atributoUtil.setGuiaSerie("");
-			atributoUtil.setGuiaNumero("");
+			atributoUtil.setGuiaNumero(0);
 		}
 	}
 
@@ -255,13 +265,11 @@ public class ActualizaVentaBean implements Serializable {
 		int numero = (int) e.getComponent().getAttributes().get("numeroFactura");
 		BigDecimal monto = (BigDecimal) e.getComponent().getAttributes().get("monto");
 		String serie = (String) e.getComponent().getAttributes().get("serie");
-		Date vencimiento = (Date) e.getComponent().getAttributes().get("fechaVence");
 		String documento = (String) e.getComponent().getAttributes().get("documento");
 		String numeroDocumento = (String) e.getComponent().getAttributes().get("numeroDocumento");
 
+		String facturacionPDF = serie.concat("-").concat(formateo.obtenerFormatoNumeroComprobante(numero % 10000000));
 		BigDecimal valor = new BigDecimal("1.18");
-
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		sunatUtil.leerNodosXml(AtributoBean.RUC_EMISOR, comprobante, serie, numero % 10000000);
 		// generar el codigo de barra sin hash y sin firma digital, estos se
@@ -271,11 +279,11 @@ public class ActualizaVentaBean implements Serializable {
 				atributoUtil.getFecha().toString(), documento, numeroDocumento);
 
 		Impresora i = Impresora.getImpresora();
-		i.imprimirVenta(numero, cadenaSunatLeyenda(monto),
+		i.imprimirVenta(facturacionPDF, numero, cadenaSunatLeyenda(monto),
 				Sunat.RUTA_IMAGEN.concat(
 						sunatUtil.generarNombreArchivo(AtributoBean.RUC_EMISOR, comprobante, serie, numero % 10000000))
 						.concat(".png"),
-				sunatUtil.getDigestTexto(), "", "0", sdf.format(vencimiento));
+				sunatUtil.getDigestTexto());
 
 	}
 
@@ -316,8 +324,8 @@ public class ActualizaVentaBean implements Serializable {
 
 		Date fecha = (Date) e.getComponent().getAttributes().get("fechaCargar");
 		atributoUtil.setFecha(fecha);
-		
-		BigDecimal monto=(BigDecimal) e.getComponent().getAttributes().get("montoCargar");
+
+		BigDecimal monto = (BigDecimal) e.getComponent().getAttributes().get("montoCargar");
 		atributoUtil.setTotal(monto);
 
 	}
@@ -330,7 +338,7 @@ public class ActualizaVentaBean implements Serializable {
 				atributoUtil.getCodigoComprobante(), atributoUtil.getNumeroSerie(),
 				atributoUtil.getNumeroComprobante() % 10000000);
 		String facturacion = atributoUtil.getNumeroSerie().concat("-")
-				.concat(String.valueOf(atributoUtil.getNumeroComprobante()));
+				.concat(formateo.obtenerFormatoNumeroComprobante(atributoUtil.getNumeroComprobante() % 10000000));
 
 		// validar existencia del archivo, informar generacion de xml
 		if (!archivo.equals("")) {
@@ -339,7 +347,7 @@ public class ActualizaVentaBean implements Serializable {
 		} else {
 
 			correoUtil.envioFirma(atributoUtil.getCliente().getNombre(), facturacion,
-					formateo.obtenerFecha(atributoUtil.getFecha()),atributoUtil.getTotal().toString(),
+					formateo.obtenerFecha(atributoUtil.getFecha()), atributoUtil.getTotal().toString(),
 					sunatUtil.generarNombreArchivo(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
 							atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante() % 10000000),
 					atributoUtil.getCliente().getCorreo());

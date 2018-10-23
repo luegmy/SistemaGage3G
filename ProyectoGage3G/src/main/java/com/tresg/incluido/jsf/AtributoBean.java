@@ -74,8 +74,6 @@ public class AtributoBean implements Serializable {
 	private int codigoTipo;
 	private String observacion;
 	private BigDecimal valor = new BigDecimal("1.18");
-	private String serieGuia;
-	private String numeroSerieGuia;
 
 	// Adicional manejo interno
 	private List<SelectItem> pagos;
@@ -88,7 +86,7 @@ public class AtributoBean implements Serializable {
 	// atributo para adjuntar una guia
 	private boolean guiaVenta;
 	private String guiaSerie = "";
-	private String guiaNumero = "0";
+	private int guiaNumero = 0;
 
 	ComboService_I sCombo = IncluidoBusinessDelegate.getComboService();
 
@@ -218,22 +216,6 @@ public class AtributoBean implements Serializable {
 		this.valor = valor;
 	}
 
-	public String getSerieGuia() {
-		return serieGuia;
-	}
-
-	public void setSerieGuia(String serieGuia) {
-		this.serieGuia = serieGuia;
-	}
-
-	public String getNumeroSerieGuia() {
-		return numeroSerieGuia;
-	}
-
-	public void setNumeroSerieGuia(String numeroSerieGuia) {
-		this.numeroSerieGuia = numeroSerieGuia;
-	}
-
 	public List<SelectItem> getPagos() {
 		pagos = new ArrayList<>();
 		sCombo.comboPago().stream().filter(a -> !"Anulado".equals(a.getDescripcion()))
@@ -349,11 +331,11 @@ public class AtributoBean implements Serializable {
 		this.guiaSerie = guiaSerie;
 	}
 
-	public String getGuiaNumero() {
+	public int getGuiaNumero() {
 		return guiaNumero;
 	}
 
-	public void setGuiaNumero(String guiaNumero) {
+	public void setGuiaNumero(int guiaNumero) {
 		this.guiaNumero = guiaNumero;
 	}
 

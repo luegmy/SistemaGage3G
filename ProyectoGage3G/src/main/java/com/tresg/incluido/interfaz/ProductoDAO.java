@@ -7,7 +7,7 @@ import com.tresg.incluido.jpa.ProductoJPA;
 public interface ProductoDAO {
 
 	// CU Mantenimiento productos
-	List<ProductoJPA> listarProductoPorDescripcion(String descripcion);
+	List<ProductoJPA> listarProducto();
 
 	ProductoJPA buscarProductoPorCodigo(int codigo);
 

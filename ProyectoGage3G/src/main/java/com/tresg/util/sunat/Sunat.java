@@ -76,7 +76,7 @@ public class Sunat implements Serializable {
 	}
 
 	public void generarCabeceraSunat(String rucEmisor, int comprobante, String serie, int numero, String cadenaCabecera,
-			List<String> cadenaDetalle, String cadenaTributo, String cadenaLeyenda) throws IOException {
+			List<String> cadenaDetalle, String cadenaTributo, String cadenaLeyenda, String cadenaRelacionado) throws IOException {
 		String rutaDataCabecera;
 		String ruta = RUTA_DATA.concat(generarNombreArchivo(rucEmisor, comprobante, serie, numero));
 
@@ -89,11 +89,25 @@ public class Sunat implements Serializable {
 		String rutaDataDetalle = ruta.concat(".DET");
 		String rutaDataTributo = ruta.concat(".TRI");
 		String rutaDataLeyenda = ruta.concat(".LEY");
-
+		
+		String rutaDataRelacionado = "";
+		File archivoRelacionado = null;
+		System.out.println("---"+cadenaRelacionado);
+		if(!"".equals(cadenaRelacionado)) {
+			rutaDataRelacionado = ruta.concat(".REL");	
+			archivoRelacionado = new File(rutaDataRelacionado);
+			BufferedWriter bw5 = new BufferedWriter(new FileWriter(archivoRelacionado));
+			bw5.write(cadenaRelacionado);
+			bw5.close();
+		}
+		
 		File archivoCabecera = new File(rutaDataCabecera);
 		File archivoDetalle = new File(rutaDataDetalle);
 		File archivoTributo = new File(rutaDataTributo);
 		File archivoLeyenda = new File(rutaDataLeyenda);
+		
+		
+		
 
 		if (archivoCabecera.exists() || archivoDetalle.exists() || archivoTributo.exists() 
 				|| archivoLeyenda.exists()) {
@@ -116,6 +130,7 @@ public class Sunat implements Serializable {
 
 		BufferedWriter bw4 = new BufferedWriter(new FileWriter(archivoLeyenda));
 		bw4.write(cadenaLeyenda);
+		
 
 		bw.close();
 		bw2.close();

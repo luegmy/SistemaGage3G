@@ -8,12 +8,14 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,12 +42,12 @@ public class VentaJPA implements Serializable {
 
 	@Id
 	private int numComprobante;
-	
+
 	private String serie;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date fecha;
-	
+
 	private String fecVence;
 	private String hora;
 	private BigDecimal monto;
@@ -76,6 +78,9 @@ public class VentaJPA implements Serializable {
 
 	@OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
 	private List<CobranzaJPA> cobranzas;
+	
+	@OneToOne(mappedBy="venta",cascade = CascadeType.ALL)
+	private GuiaRemisionJPA guiaRemision;
 
 	public int getNumComprobante() {
 		return numComprobante;
@@ -188,5 +193,14 @@ public class VentaJPA implements Serializable {
 	public void setCobranzas(List<CobranzaJPA> cobranzas) {
 		this.cobranzas = cobranzas;
 	}
+
+	public GuiaRemisionJPA getGuiaRemision() {
+		return guiaRemision;
+	}
+
+	public void setGuiaRemision(GuiaRemisionJPA guiaRemision) {
+		this.guiaRemision = guiaRemision;
+	}
+	
 
 }

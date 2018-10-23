@@ -18,6 +18,7 @@ import com.tresg.util.conexion.Conexion;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -46,9 +47,8 @@ public class Impresora {
 		return instancia;
 	}
 
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void imprimirVenta(int numero, String montoLetra, String codigoBarra,String hash,String guiaSerie,String guia,String fechaPago)
+	public void imprimirVenta(String facturacionPDF, int numero, String montoLetra, String codigoBarra, String hash)
 			throws IOException, ClassNotFoundException, JRException, SQLException {
 		Conexion.getInstancia().conectar();
 
@@ -58,11 +58,17 @@ public class Impresora {
 		parametro.put("montoLetra", montoLetra);
 		parametro.put("codigoBarra", codigoBarra);
 		parametro.put("resumen", hash);
-		parametro.put("guia", guiaSerie.concat("-").concat(guia));
-		
+
 		JasperPrint ventaPrint = JasperFillManager.fillReport(ventaReporte, parametro,
 				Conexion.getInstancia().getConectar());
 		retornaExporter(ventaPrint).exportReport();
+
+		File destFile = new File("C:\\SFS_v1.2\\sunat_archivos\\sfs\\REPO\\", facturacionPDF + ".pdf");
+		if (destFile.exists()) {
+			destFile.canWrite();
+		}
+		String destFileName = destFile.toString();
+		JasperExportManager.exportReportToPdfFile(ventaPrint, destFileName);
 
 		FacesContext.getCurrentInstance().responseComplete();
 

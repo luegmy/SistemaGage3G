@@ -22,9 +22,9 @@ public class MysqlProductoDAO implements ProductoDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ProductoJPA> listarProductoPorDescripcion(String descripcion){
+	public List<ProductoJPA> listarProducto(){
 		open();
-		Query q=em.createNamedQuery(ProductoJPA.LISTAR_PRODUCTO_DESCRIPCION).setParameter("x", "%"+ descripcion+ "%");
+		Query q=em.createNamedQuery(ProductoJPA.LISTAR_PRODUCTO);
 		
 		return q.getResultList();
 	}

@@ -25,6 +25,7 @@ import com.tresg.seguridad.jpa.UsuarioJPA;
 import com.tresg.util.formato.Formateo;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.jpa.DetalleVentaJPAPK;
+import com.tresg.ventas.jpa.GuiaRemisionJPA;
 import com.tresg.ventas.jpa.VentaJPA;
 import com.tresg.ventas.service.RegistrarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;
@@ -46,6 +47,13 @@ public class GestionaBean implements Serializable {
 	public int retornaNumeroComprobante(int comprobante) {
 		return sVenta.listaVenta().stream().filter(v -> v.getComprobante().getCodComprobante() == comprobante)
 				.mapToInt(v -> v.getNumComprobante()).max().orElse(0) + 1;
+	}
+
+	// metodo para mostrar lista de clientes dentro la generacion de una venta
+	public List<ClienteJPA> listarCliente(String nombreCliente) {
+		List<ClienteJPA> clientes = new ArrayList<>();
+		sCliente.listaCliente().stream().filter(c->c.getNombre().toLowerCase().contains(nombreCliente.toLowerCase())).forEach(clientes::add);
+		return clientes;
 	}
 
 	// metodo para mostrar lista de productos dentro la generacion de una venta
@@ -92,8 +100,10 @@ public class GestionaBean implements Serializable {
 
 		UsuarioJPA objUsuario = new UsuarioJPA();
 		objUsuario.setCodUsuario(usuario);
-
+				
+		
 		VentaJPA objVenta = new VentaJPA();
+		
 		objVenta.setComprobante(objComprobante);
 		objVenta.setCliente(objCliente);
 		objVenta.setEstado(objEstado);
@@ -106,8 +116,16 @@ public class GestionaBean implements Serializable {
 		objVenta.setFecVence(formato.obtenerFecha(atributo.getFechaVence()));
 		objVenta.setHora(formato.obtenerHora());
 		objVenta.setObservacion(atributo.getObservacion());
-		objVenta.setUsuario(objUsuario);
+		objVenta.setUsuario(objUsuario);	
 		objVenta.setDetalles(temporales);
+		
+		if(atributo.getGuiaNumero()!=0) {
+			GuiaRemisionJPA objGuia=new GuiaRemisionJPA();
+			objGuia.setNumGuia(atributo.getGuiaNumero());
+			objGuia.setFecha(atributo.getFecha());
+			objGuia.setVenta(objVenta);
+			objVenta.setGuiaRemision(objGuia);
+		}
 
 		return objVenta;
 

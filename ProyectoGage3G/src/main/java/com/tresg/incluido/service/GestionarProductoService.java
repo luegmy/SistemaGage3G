@@ -18,8 +18,8 @@ public class GestionarProductoService implements GestionarProductoService_I{
 	UnidadMedidaDAO iMedida=fabrica.getUnidadMedidaDAO();
 	
 	@Override
-	public List<ProductoJPA> listaProductoPorDescripcion(String descripcion)  {
-		return iProducto.listarProductoPorDescripcion(descripcion);
+	public List<ProductoJPA> listaProducto()  {
+		return iProducto.listarProducto();
 	}
 	
 	@Override

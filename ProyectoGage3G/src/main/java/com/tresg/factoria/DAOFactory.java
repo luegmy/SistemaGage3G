@@ -13,6 +13,7 @@ import com.tresg.incluido.interfaz.UnidadMedidaDAO;
 import com.tresg.seguridad.interfaz.UsuarioDAO;
 import com.tresg.ventas.interfaz.CobranzaDAO;
 import com.tresg.ventas.interfaz.DetalleVentaDAO;
+import com.tresg.ventas.interfaz.GuiaRemisionDAO;
 import com.tresg.ventas.interfaz.VentaDAO;
 
 public abstract class DAOFactory{
@@ -42,6 +43,7 @@ public abstract class DAOFactory{
     public abstract VentaDAO getVentaDAO();
     public abstract DetalleVentaDAO getDetalleVentaDAO();
     public abstract CobranzaDAO getCobranzaDAO();
+    public abstract GuiaRemisionDAO getGuiaRemisionDAO();
     
     public abstract MovimientoDAO getMovimientoDAO();
     public abstract DetalleAlmacenDAO getDetalleAlmacenDAO();

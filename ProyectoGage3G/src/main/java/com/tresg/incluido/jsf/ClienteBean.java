@@ -155,7 +155,7 @@ public class ClienteBean implements Serializable {
 
 	public List<ClienteJPA> getClientes() {
 		clientes = new ArrayList<>();
-		sCliente.listaCliente().stream().filter(c -> c.getNombre().toLowerCase().contains(nombreCliente.toLowerCase()))
+		sCliente.listaCliente().stream().filter(c -> c.getNombre().toLowerCase().contains(busqueda.toLowerCase()))
 				.forEach(clientes::add);
 		return clientes;
 	}

@@ -22,9 +22,11 @@ import com.tresg.seguridad.dao.MysqlUsuarioDAO;
 import com.tresg.seguridad.interfaz.UsuarioDAO;
 import com.tresg.ventas.dao.MysqlCobranzaDAO;
 import com.tresg.ventas.dao.MysqlDetalleVentaDAO;
+import com.tresg.ventas.dao.MysqlGuiaRemisionDAO;
 import com.tresg.ventas.dao.MysqlVentaDAO;
 import com.tresg.ventas.interfaz.CobranzaDAO;
 import com.tresg.ventas.interfaz.DetalleVentaDAO;
+import com.tresg.ventas.interfaz.GuiaRemisionDAO;
 import com.tresg.ventas.interfaz.VentaDAO;
 
 public class MySqlDAOFactory extends DAOFactory {
@@ -74,6 +76,12 @@ public class MySqlDAOFactory extends DAOFactory {
 	}
 	
 	@Override
+	public GuiaRemisionDAO getGuiaRemisionDAO() {
+		return new MysqlGuiaRemisionDAO();
+	}
+
+	
+	@Override
 	public MovimientoDAO getMovimientoDAO() {
 		return new MysqlMovimientoDAO();
 	}
@@ -99,6 +107,7 @@ public class MySqlDAOFactory extends DAOFactory {
 	public ProveedorDAO getProveedorDAO() {
 		return new MysqlProveedorDAO();
 	}
+
 
 	
 

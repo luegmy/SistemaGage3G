@@ -24,7 +24,6 @@ import com.google.zxing.WriterException;
 import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.jsf.AtributoBean;
-import com.tresg.incluido.jsf.ClienteBean;
 import com.tresg.incluido.service.ComboService_I;
 import com.tresg.incluido.service.GestionarClienteService_I;
 import com.tresg.incluido.service.GestionarProductoService_I;
@@ -36,6 +35,9 @@ import com.tresg.util.formato.MontoEnLetras;
 import com.tresg.util.impresion.Impresora;
 import com.tresg.util.sunat.Sunat;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
+import com.tresg.ventas.jpa.GuiaRemisionJPA;
+import com.tresg.ventas.jpa.VentaJPA;
+import com.tresg.ventas.service.RegistrarGuiaRemisionBusinessService;
 import com.tresg.ventas.service.RegistrarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;
 
@@ -49,6 +51,9 @@ public class RegistroVentaBean implements Serializable {
 
 	private static final String MENSAJE_REGISTRO = "mensajeRegistroVenta";
 	private static final String MENSAJE_DIALOGO = "PF('dlgMensaje').show();";
+	
+	@ManagedProperty(value = "#{usuario.sesionCodigoUsuario}")
+	private int usuario;
 
 	// atributo para el rowSelect
 	private ClienteJPA clienteSeleccionado;
@@ -56,13 +61,10 @@ public class RegistroVentaBean implements Serializable {
 
 	// Para anadir elementos a la datatable
 	private List<DetalleVentaJPA> temporales;
-	
-	@ManagedProperty(value = "#{usuario.sesionCodigoUsuario}")
-	private int usuario;
 
+	
 	AtributoBean atributoUtil = new AtributoBean();
 	GestionaBean gestionUtil = new GestionaBean();
-	ClienteBean clienteBean=new ClienteBean();
 	MensajeBean mensajeUtil = new MensajeBean();
 	Sunat sunatUtil = new Sunat();
 	Formateo talonarioUtil = new Formateo();
@@ -72,6 +74,7 @@ public class RegistroVentaBean implements Serializable {
 	GestionarClienteService_I sCliente = IncluidoBusinessDelegate.getGestionarClienteService();
 	GestionarProductoService_I sProducto = IncluidoBusinessDelegate.getGestionarProductoService();
 	ComboService_I sCombo = IncluidoBusinessDelegate.getComboService();
+	RegistrarGuiaRemisionBusinessService sGuia = VentasBusinessDelegate.getRegistrarGuiaRemisionService();
 
 	public RegistroVentaBean() {
 		temporales = new ArrayList<>();
@@ -80,7 +83,7 @@ public class RegistroVentaBean implements Serializable {
 	public void cargarSerie() {
 		if (atributoUtil.getCodigoComprobante() == 1) {
 			atributoUtil.setNumeroSerie("F001");
-		} else if (atributoUtil.getCodigoComprobante() == 3){
+		} else if (atributoUtil.getCodigoComprobante() == 3) {
 			atributoUtil.setNumeroSerie("B001");
 		} else {
 			atributoUtil.setNumeroSerie("N001");
@@ -94,7 +97,7 @@ public class RegistroVentaBean implements Serializable {
 	}
 
 	public void listarCliente() {
-		atributoUtil.setClientes(clienteBean.getClientes());
+		atributoUtil.setClientes(gestionUtil.listarCliente(atributoUtil.getCliente().getNombre()));
 	}
 
 	// Metodo donde se agrega los atributos del cliente en las respectivas
@@ -136,8 +139,8 @@ public class RegistroVentaBean implements Serializable {
 
 		productoSeleccionado = (ProductoJPA) event.getObject();
 		atributoUtil.setCodigoProducto(productoSeleccionado.getCodProducto());
-		atributoUtil.setDescripcionProducto(productoSeleccionado.getDescripcion().concat(" ")
-				.concat(productoSeleccionado.getDescripcionTipo()));
+		atributoUtil.setDescripcionProducto(
+				productoSeleccionado.getDescripcion().concat(" ").concat(productoSeleccionado.getDescripcionTipo()));
 		atributoUtil.setUnidad(productoSeleccionado.getDescripcionMedida());
 		atributoUtil.setPrecio(productoSeleccionado.getPrecioVenta());
 
@@ -184,14 +187,14 @@ public class RegistroVentaBean implements Serializable {
 		}
 
 	}
-	
+
 	public void cargarGuia() {
 
 		if (atributoUtil.isGuiaVenta()) {
 			atributoUtil.setGuiaSerie("T001");
 		} else {
 			atributoUtil.setGuiaSerie("");
-			atributoUtil.setGuiaNumero("");
+			atributoUtil.setGuiaNumero(0);
 		}
 	}
 
@@ -205,19 +208,20 @@ public class RegistroVentaBean implements Serializable {
 			context.addMessage(mensajeVenta, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					mensajeUtil.mostrarMensajeError(mensajeVenta, atributoUtil), null));
 		} else {
-			//factura o boleta electronica
-			if(atributoUtil.getCodigoComprobante()!=2) {
+			// factura o boleta electronica
+			if (atributoUtil.getCodigoComprobante() != 2) {
 				// generar el archivo plano para facturador sunat
 				sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
 						atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), cadenaSunatCabecera(),
-						cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda());
+						cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda(),
+						cadenaSunatDocumentoRelacionado());
 
-			context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
-					sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales,usuario)), null));
-			RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
+				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
+						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales, usuario)), null));
+				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
 			} else {
 				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
-						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales,usuario)), null));
+						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales, usuario)), null));
 				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
 			}
 		}
@@ -308,15 +312,24 @@ public class RegistroVentaBean implements Serializable {
 		String letra = String.valueOf(atributoUtil.getTotal());
 		String leyenda = numeroLetra.convertir(letra, true);
 
+		// 1000 monto en letras
 		return "1000".concat("|").concat(leyenda);
 	}
-	
+
 	String cadenaSunatDocumentoRelacionado() {
-		return "1".concat("|").concat("-").concat(talonarioUtil.obtenerFormatoComprobante(atributoUtil.getCodigoComprobante()))
-				.concat("|").concat(atributoUtil.getSerieGuia())
-				.concat("|").concat(atributoUtil.getNumeroSerieGuia())
-				.concat("|").concat("6").concat("|").concat(AtributoBean.RUC_EMISOR)
-				.concat("|").concat(atributoUtil.getTotal().toString());
+		String cadena = "";
+		// 1 guia
+		if (atributoUtil.isGuiaVenta()) {
+			cadena = "1".concat("|").concat("-").concat("|")
+					.concat(talonarioUtil.obtenerFormatoComprobante(atributoUtil.getCodigoComprobante())).concat("|")
+					.concat(atributoUtil.getGuiaSerie()).concat("|").concat(String.valueOf(atributoUtil.getGuiaNumero())).concat("|")
+					.concat("6").concat("|").concat(AtributoBean.RUC_EMISOR).concat("|")
+					.concat(atributoUtil.getTotal().toString());
+		} else {
+			cadena = "";
+		}
+
+		return cadena;
 	}
 
 	public void editaProducto(ActionEvent e) {
@@ -357,9 +370,12 @@ public class RegistroVentaBean implements Serializable {
 		MontoEnLetras numeroLetra = new MontoEnLetras();
 		String letra = String.valueOf(atributoUtil.getTotal());
 		String leyenda = numeroLetra.convertir(letra, true);
-		
+
+		String facturacionPDF = atributoUtil.getNumeroSerie().concat("-")
+				.concat(talonarioUtil.obtenerFormatoNumeroComprobante(atributoUtil.getNumeroComprobante() % 10000000));
+
 		Impresora i = Impresora.getImpresora();
-		i.imprimirVenta(
+		i.imprimirVenta(facturacionPDF,
 				talonarioUtil
 						.obtenerTalonario(atributoUtil.getCodigoComprobante(), atributoUtil.getNumeroComprobante()),
 				leyenda,
@@ -367,7 +383,7 @@ public class RegistroVentaBean implements Serializable {
 						sunatUtil.generarNombreArchivo(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
 								atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante() % 10000000))
 						.concat(".png"),
-				sunatUtil.getDigestTexto(), "", "0",talonarioUtil.obtenerFecha(atributoUtil.getFechaVence()));
+				sunatUtil.getDigestTexto());
 	}
 
 	public AtributoBean getAtributoUtil() {

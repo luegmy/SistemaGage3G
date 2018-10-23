@@ -106,7 +106,7 @@ public class ProductoBean implements Serializable {
 	}
 
 	public void mostrarExistenciaXAlmacen(ActionEvent e) {
-		existencias=new ArrayList<>();
+		existencias = new ArrayList<>();
 		int codigo = (int) e.getComponent().getAttributes().get("codigo");
 		sConsultaAlmacen.listaDetalleAlmacen().stream().filter(d -> d.getId().getCodProducto() == codigo)
 				.forEach(existencias::add);
@@ -127,7 +127,9 @@ public class ProductoBean implements Serializable {
 
 	public List<ProductoJPA> getProductos() {
 		productos = new ArrayList<>();
-		sProducto.listaProductoPorDescripcion(descripcionProducto).stream().forEach(productos::add);
+		sProducto.listaProducto().stream()
+				.filter(p -> p.getDescripcion().toLowerCase().contains(descripcionProducto.toLowerCase()))
+				.forEach(productos::add);
 		return productos;
 	}
 

@@ -8,7 +8,7 @@ import com.tresg.incluido.jpa.UnidadMedidaJPA;
 
 public interface GestionarProductoService_I {
 
-	public List<ProductoJPA> listaProductoPorDescripcion(String descripcion);
+	public List<ProductoJPA> listaProducto();
 
 	public ProductoJPA buscaProductoPorCodigo(int codigo);
 

@@ -23,7 +23,7 @@ import javax.mail.internet.MimeMultipart;
 public class Mensajeria {
 
 
-	public void envioFirma(String cliente, String factura, String fecha, String monto, String firma, String destinatario) throws Exception {
+	public void envioFirma(String cliente, String facturacion, String fecha, String monto, String firma, String destinatario) throws Exception {
 		// Propiedades de la conexi�n
 		Properties props = new Properties();
 
@@ -42,20 +42,27 @@ public class Mensajeria {
 
 		// Construir un correo de texto con un adjunto
 		BodyPart texto = new MimeBodyPart();
-		Map<String, String> input = new HashMap<String, String>();
+		Map<String, String> input = new HashMap<>();
 		input.put("cliente", cliente);
-		input.put("factura", factura);
+		input.put("factura", facturacion);
 		input.put("fecha", fecha);
 		input.put("monto", monto);
+		
 		String contenidoHTML = leerEmailDesdeHtml("C:/repositorioGitGage3G/ProyectoGage3G/src/main/webapp/email.xhtml", input);
 		texto.setContent(contenidoHTML, "text/html");
 		multiParte.addBodyPart(texto);
 
-		BodyPart adjunto = new MimeBodyPart();
-		adjunto.setDataHandler(
+		BodyPart adjuntoXML = new MimeBodyPart();
+		adjuntoXML.setDataHandler(
 				new DataHandler(new FileDataSource("C:\\SFS_v1.2\\sunat_archivos\\sfs\\FIRMA\\" + firma + ".xml")));
-		adjunto.setFileName(firma + ".xml");
-		multiParte.addBodyPart(adjunto);
+		adjuntoXML.setFileName(firma + ".xml");
+		multiParte.addBodyPart(adjuntoXML);
+		
+		BodyPart adjuntoPDF = new MimeBodyPart();
+		adjuntoPDF.setDataHandler(
+				new DataHandler(new FileDataSource("C:\\SFS_v1.2\\sunat_archivos\\sfs\\REPO\\" + facturacion + ".pdf")));
+		adjuntoPDF.setFileName(facturacion + ".pdf");
+		multiParte.addBodyPart(adjuntoPDF);
 
 		// Lo enviamos.
 		Transport t = sesionEmail.getTransport();// "smtp"
@@ -67,7 +74,7 @@ public class Mensajeria {
 		// Se rellenan los destinatarios
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
 		// Se rellena el subject
-		message.setSubject("EXTINTORES CAPELO PERU te ha enviado la Factura Electronica : "+ factura);
+		message.setSubject("EXTINTORES CAPELO PERU te ha enviado la Factura Electronica : "+ facturacion);
 		// Se mete el texto y la foto adjunta.
 		message.setContent(multiParte, "text/html");
 

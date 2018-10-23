@@ -136,28 +136,23 @@
 							<p:panel id="pnlDetalle"
 								visible="#{almacenBean.codigoTipoMovimiento==3 || almacenBean.codigoComprobante!=0}">
 								<div class="row">
-									<div class="col-12 col-sm-4 col-md-2">
-										<div class="form-group">
-											<p:outputLabel value="#{r.categoria}" />
-											<p:selectOneMenu value="#{almacenBean.codigoTipoProducto}"
-												styleClass="form-control form-control-sm" id="tipo">
-												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
-												<f:selectItems value="#{almacenBean.tiposProductos}" />
-												<p:ajax event="change" update="producto msgTipo" />
-											</p:selectOneMenu>
-											<p:messages for="mensajeTipo" id="msgTipo" />
-										</div>
-									</div>
 									<div class="col-12 col-sm-8 col-md-6">
 										<div class="form-group">
-											<p:outputLabel value="#{r.descripcion}" />
-											<p:selectOneMenu value="#{almacenBean.codigoProducto}"
-												id="producto" filter="true" filterMatchMode="startsWith"
-												styleClass="form-control form-control-sm">
-												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
-												<f:selectItems value="#{almacenBean.productos}" />
-												<p:ajax event="change" update="msgProducto" />
-											</p:selectOneMenu>
+											<p:outputLabel value="#{r.descripcion}" for="producto"/>
+											<p:autoComplete minQueryLength="3" queryDelay="1000"
+												id="producto" maxResults="20" placeholder="Seleccione un producto"
+												value="#{almacenBean.productoSeleccionado}"
+												completeMethod="#{almacenBean.autocompletarProducto}"
+												var="p" itemLabel="#{p.descripcion.concat(' ').concat(p.tipo.descripcion)}" itemValue="#{p}"
+												converter="productoConverter" onclick="this.value='';"
+												inputStyleClass="form-control" size="100">
+												<p:column style="width:20%;text-align:center">
+												#{p.tipo.descripcion}
+												</p:column>
+												<p:column style="width:80%">
+												#{p.descripcion}
+												</p:column>
+											</p:autoComplete>
 											<p:messages for="mensajeProducto" id="msgProducto" />
 										</div>
 									</div>
