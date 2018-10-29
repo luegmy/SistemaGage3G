@@ -7,7 +7,6 @@ import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
-import com.tresg.incluido.jsf.AtributoBean;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
 import com.tresg.ventas.service.RegistrarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;

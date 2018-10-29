@@ -25,11 +25,11 @@ import org.xml.sax.SAXException;
 import com.google.zxing.WriterException;
 import com.tresg.incluido.jpa.ClienteJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
-import com.tresg.incluido.jsf.AtributoBean;
 import com.tresg.incluido.jsf.ClienteBean;
 import com.tresg.incluido.service.ComboService_I;
 import com.tresg.incluido.service.GestionarProductoService_I;
 import com.tresg.incluido.service.IncluidoBusinessDelegate;
+import com.tresg.util.bean.AtributoBean;
 import com.tresg.util.bean.GestionaBean;
 import com.tresg.util.bean.ListaConsultaBean;
 import com.tresg.util.bean.MensajeBean;
@@ -75,7 +75,6 @@ public class ActualizaVentaBean implements Serializable {
 	Sunat sunatUtil = new Sunat();
 	Mensajeria correoUtil = new Mensajeria();
 	Formateo formateo = new Formateo();
-	ClienteBean clienteBean = new ClienteBean();
 	ValoresNulos optionalUtil=new ValoresNulos();
 
 	RegistrarVentaBusinessService sVenta = VentasBusinessDelegate.getRegistrarVentaService();
@@ -153,7 +152,7 @@ public class ActualizaVentaBean implements Serializable {
 	}
 
 	public void listarCliente() {
-		atributoUtil.setClientes(clienteBean.getClientes());
+		atributoUtil.setClientes(gestionUtil.listarCliente(atributoUtil.getCliente().getNombre()));
 	}
 
 	// Metodo donde se agrega los atributos del producto en las respectivas
@@ -411,30 +410,6 @@ public class ActualizaVentaBean implements Serializable {
 
 	public void setAtributoUtil(AtributoBean atributoUtil) {
 		this.atributoUtil = atributoUtil;
-	}
-
-	public ListaConsultaBean getListaUtil() {
-		return listaUtil;
-	}
-
-	public void setListaUtil(ListaConsultaBean listaUtil) {
-		this.listaUtil = listaUtil;
-	}
-
-	public GestionaBean getGestionUtil() {
-		return gestionUtil;
-	}
-
-	public void setGestionUtil(GestionaBean gestionUtil) {
-		this.gestionUtil = gestionUtil;
-	}
-
-	public MensajeBean getMensajeUtil() {
-		return mensajeUtil;
-	}
-
-	public void setMensajeUtil(MensajeBean mensajeUtil) {
-		this.mensajeUtil = mensajeUtil;
 	}
 
 	public int getUsuario() {

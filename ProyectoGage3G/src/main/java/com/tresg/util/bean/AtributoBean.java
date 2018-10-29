@@ -1,4 +1,4 @@
-package com.tresg.incluido.jsf;
+package com.tresg.util.bean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

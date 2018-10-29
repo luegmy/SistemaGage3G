@@ -17,7 +17,6 @@ import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.EstadoJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
-import com.tresg.incluido.jsf.AtributoBean;
 import com.tresg.incluido.service.GestionarClienteService_I;
 import com.tresg.incluido.service.GestionarProductoService_I;
 import com.tresg.incluido.service.IncluidoBusinessDelegate;

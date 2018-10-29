@@ -99,7 +99,7 @@
 						<p:column width="6%" headerText="MONTO">
 							<h:outputText value="#{t.monto}" />
 						</p:column>
-						<p:column width="6%" headerText="guia">
+						<p:column width="6%" headerText="GUIA">
 							<h:outputText value="#{t.guiaRemision.numGuia}" />
 						</p:column>
 						<p:column width="6%" filterBy="#{t.pago.descripcion}"
@@ -730,7 +730,7 @@
 							</p:column>
 							<p:column width="8%">
 								<p:commandLink
-									actionListener="#{ventaActualizaBean.editaProducto}"
+									actionListener="#{ventaActualizaBean.editarProducto}"
 									styleClass="#{r.celeste}" update="formActualizaVenta">
 									<i class="fa fa-fw fa-edit"></i>
 									<f:attribute value="#{t.id.codProducto}" name="codigo" />

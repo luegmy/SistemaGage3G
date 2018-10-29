@@ -9,7 +9,6 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tb_detalle_movimiento")
@@ -25,8 +24,6 @@ public class DetalleMovimientoJPA implements Serializable {
 
 	private int cantidad;
 
-	@Transient
-	private String descripcionProducto;
 
 	@ManyToOne
 	@JoinColumn(name = "nroMovimiento", nullable = false, insertable = false, updatable = false)
@@ -54,13 +51,7 @@ public class DetalleMovimientoJPA implements Serializable {
 		this.cantidad = cantidad;
 	}
 
-	public String getDescripcionProducto() {
-		return descripcionProducto;
-	}
 
-	public void setDescripcionProducto(String descripcionProducto) {
-		this.descripcionProducto = descripcionProducto;
-	}
 
 	public MovimientoJPA getMovimiento() {
 		return movimiento;
@@ -103,4 +94,5 @@ public class DetalleMovimientoJPA implements Serializable {
 		return true;
 	}
 
+	
 }
