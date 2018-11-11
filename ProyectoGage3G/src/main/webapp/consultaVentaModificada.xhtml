@@ -14,7 +14,7 @@
 		<div class="container-fluid">
 
 			<h:form id="formEditaVenta">
-				<p:fieldset legend="LISTA DE VENTAS">
+				<p:fieldset legend="LISTA DE VENTAS" id="lista">
 					<div class="row justify-content-md-center">
 						<div class="col-xs-12 col-sm-12 col-md-4">
 							<p:tabView dynamic="true" cache="true" id="tabVenta"
@@ -99,9 +99,6 @@
 						<p:column width="6%" headerText="MONTO">
 							<h:outputText value="#{t.monto}" />
 						</p:column>
-						<p:column width="6%" headerText="GUIA">
-							<h:outputText value="#{t.guiaRemision.numGuia}" />
-						</p:column>
 						<p:column width="6%" filterBy="#{t.pago.descripcion}"
 							headerText="ESTADO">
 							<h:outputText value="#{t.estado.descripcion}" />
@@ -166,6 +163,10 @@
 						</p:column>
 
 					</p:dataTable>
+					<p:blockUI block="lista" trigger="tabVenta:fecha">
+        										CARGANDO<br />
+						<p:graphicImage url="imagenes/load.gif" />
+					</p:blockUI>
 
 					<!--  DETALLE DE LA VENTA -->
 					<p:dialog header="DETALLE DE LA VENTA" widgetVar="dlgDetalle"
@@ -822,7 +823,8 @@
 				<p:messages for="mensajeActualizaVenta" />
 				<h:form>
 					<p:commandLink onclick="PF('dlgMensaje').hide();" immediate="true"
-						styleClass="#{r.rojo}" action="#{ventaActualizaBean.cancelarVenta()}"
+						styleClass="#{r.rojo}"
+						action="#{ventaActualizaBean.cancelarVenta()}"
 						update="formActualizaVenta">
 						<i class="fa fa-fw fa-sign-out"></i>
 						<p:outputLabel value=" Salir" />

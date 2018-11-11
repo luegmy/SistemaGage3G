@@ -45,7 +45,7 @@ public class Sunat implements Serializable {
 
 	}
 
-	/*public String verificarExistenciaArchivo(String rucEmisor, int comprobante, String serie, int numero) {
+	public String verificarExistenciaArchivo(String rucEmisor, int comprobante, String serie, int numero) {
 
 		File xml = new File(
 				RUTA_FIRMA.concat(generarNombreArchivo(rucEmisor, comprobante, serie, numero)).concat(".xml"));
@@ -55,7 +55,7 @@ public class Sunat implements Serializable {
 		}
 		return "";
 
-	}*/
+	}
 
 	public void leerNodosXml(String rucEmisor, int comprobante, String serie, int numero)
 			throws ParserConfigurationException, SAXException, IOException {

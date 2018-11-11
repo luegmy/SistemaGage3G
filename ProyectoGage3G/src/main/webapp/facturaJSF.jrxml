@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaJSF" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9d593da5-58bf-4279-a629-98d3f5661dbb">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="50"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -144,8 +144,8 @@ WHERE
 				<textFieldExpression><![CDATA[$F{comprobante}.toUpperCase()]]></textFieldExpression>
 			</textField>
 			<image scaleImage="FillFrame">
-				<reportElement x="2" y="1" width="335" height="98" uuid="b21e751c-65d5-4f70-b1e1-ad52bdc4e7c2"/>
-				<imageExpression><![CDATA["C:\\workspaceCapelo\\ExtintoresCapelo\\WebContent\\imagenes\\logo.jpg"]]></imageExpression>
+				<reportElement x="2" y="1" width="179" height="98" uuid="b21e751c-65d5-4f70-b1e1-ad52bdc4e7c2"/>
+				<imageExpression><![CDATA["C:\\Program Files\\Apache Software Foundation\\apache-tomcat-8.0.14\\webapps\\ProyectoGage3G\\imagenes\\logo.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="339" y="46" width="214" height="20" uuid="40f7c7f4-2139-475e-a634-7f07d7691cd7"/>
@@ -153,6 +153,15 @@ WHERE
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ELECTRONICA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="6" width="148" height="80" uuid="e0ac17dc-b29a-405c-9391-5a181a7c6626"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Av. Argentina 639 INT. A080
+C.C.UDAMPE - LIMA - LIMA
+CELULAR:  944641764  982495189 - 992039949]]></text>
 			</staticText>
 		</band>
 	</title>

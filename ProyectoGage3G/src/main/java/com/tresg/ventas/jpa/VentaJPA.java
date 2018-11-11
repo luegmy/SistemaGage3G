@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -78,7 +79,7 @@ public class VentaJPA implements Serializable {
 	@OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
 	private List<CobranzaJPA> cobranzas;
 	
-	@OneToOne(mappedBy="venta",cascade = CascadeType.ALL)
+	@OneToOne(mappedBy="venta",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	private GuiaRemisionJPA guiaRemision;
 
 	public int getNumComprobante() {
