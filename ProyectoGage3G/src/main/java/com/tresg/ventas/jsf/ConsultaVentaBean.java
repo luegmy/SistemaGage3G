@@ -59,6 +59,10 @@ public class ConsultaVentaBean implements Serializable{
 		ventas = listaUtil.listarVentaPorCliente(atributoUtil.getCliente().getNombre());
 		acumuladoContado=listaUtil.acumuladoXCliente(atributoUtil.getCliente().getNombre());
 	}
+	
+	public void listarVentaXNumero() {
+		ventas = listaUtil.listarVentaPorNumero(String.valueOf(atributoUtil.getNumeroComprobante()));
+	}
 
 	public void mostrarDetalleVenta(ActionEvent e) {
 		int numero = (int) e.getComponent().getAttributes().get("numeroDetalle");

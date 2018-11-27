@@ -27,6 +27,14 @@
 							</div>
 						</div>
 						<div class="btn-group" role="group">
+							<h:commandLink styleClass="#{r.rojo}">
+								<p:dataExporter type="xls" target="tabla" fileName="proveedorReporte"
+									encoding="ISO-8859-1" />
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<h:outputText value="Excel" />
+							</h:commandLink>
+						</div>
+						<div class="btn-group" role="group">
 						<p:commandLink action="ACTUALIZAR_PROVEEDOR"
 								onclick="PF('dlgProveedor').show();" styleClass="#{r.verde}">
 								<i class="fa fa-fw fa-user-plus"></i>

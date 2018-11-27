@@ -28,6 +28,15 @@
 						</div>
 
 						<div class="btn-group" role="group">
+							<h:commandLink styleClass="#{r.rojo}">
+								<p:dataExporter type="xls" target="tabla" fileName="clienteReporte"
+									encoding="ISO-8859-1" />
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<h:outputText value="Excel" />
+							</h:commandLink>
+						</div>
+
+						<div class="btn-group" role="group">
 							<p:commandLink action="ACTUALIZAR_CLIENTE" id="nuevo"
 								onclick="PF('dlgCliente').show();" styleClass="#{r.verde}">
 								<i class="fa fa-fw fa-user-plus"></i>
@@ -37,8 +46,8 @@
 
 					</div>
 
-					<p:dataTable id="tabla" value="#{clienteBean.clientes}"
-						var="c" widgetVar="tablaCliente"
+					<p:dataTable id="tabla" value="#{clienteBean.clientes}" var="c"
+						widgetVar="tablaCliente"
 						emptyMessage="No existe el cliente #{clienteBean.busqueda}, has click en boton nuevo"
 						paginator="true" rows="15" reflow="true"
 						rowsPerPageTemplate="15,20,25,30">
@@ -54,8 +63,7 @@
 						<p:column filterBy="#{c.nombre}" headerText="NOMBRE">
 							<h:outputText value="#{c.nombre}" />
 						</p:column>
-						<p:column filterBy="#{c.direccion}"
-							headerText="DIRECCION">
+						<p:column filterBy="#{c.direccion}" headerText="DIRECCION">
 							<h:outputText value="#{c.direccion}" />
 						</p:column>
 						<p:column filterBy="#{c.nroDocumento}" width="10%"
@@ -73,7 +81,8 @@
 						<p:column width="5%" exportable="false">
 							<p:commandLink actionListener="#{clienteBean.editarCliente}"
 								update="dialogo" action="ACTUALIZAR_CLIENTE"
-								oncomplete="PF('dlgCliente').show();" styleClass="btn btn-primary">
+								oncomplete="PF('dlgCliente').show();"
+								styleClass="btn btn-primary">
 								<i class="fa fa-fw fa-edit"></i>
 								<f:attribute value="#{c.codCliente}" name="codigo" />
 							</p:commandLink>
@@ -166,7 +175,7 @@
 									</p:commandLink>
 								</div>
 								<div class="col">
-									<p:commandLink actionListener="#{clienteBean.cancelarCliente}"
+									<p:commandLink actionListener="#{clienteBean.limpiar()}"
 										update="formClienteNuevo" immediate="true"
 										styleClass="#{r.gris}" action="ACTUALIZAR_CLIENTE"
 										onclick="PF('dlgCliente').hide();">

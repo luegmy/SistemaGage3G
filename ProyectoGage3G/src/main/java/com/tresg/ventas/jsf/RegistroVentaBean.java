@@ -1,5 +1,6 @@
 package com.tresg.ventas.jsf;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -35,8 +36,6 @@ import com.tresg.util.formato.MontoEnLetras;
 import com.tresg.util.impresion.Impresora;
 import com.tresg.util.sunat.Sunat;
 import com.tresg.ventas.jpa.DetalleVentaJPA;
-import com.tresg.ventas.jpa.GuiaRemisionJPA;
-import com.tresg.ventas.jpa.VentaJPA;
 import com.tresg.ventas.service.RegistrarGuiaRemisionBusinessService;
 import com.tresg.ventas.service.RegistrarVentaBusinessService;
 import com.tresg.ventas.service.VentasBusinessDelegate;
@@ -51,7 +50,7 @@ public class RegistroVentaBean implements Serializable {
 
 	private static final String MENSAJE_REGISTRO = "mensajeRegistroVenta";
 	private static final String MENSAJE_DIALOGO = "PF('dlgMensaje').show();";
-	
+
 	@ManagedProperty(value = "#{usuario.sesionCodigoUsuario}")
 	private int usuario;
 
@@ -61,8 +60,9 @@ public class RegistroVentaBean implements Serializable {
 
 	// Para anadir elementos a la datatable
 	private List<DetalleVentaJPA> temporales;
-
 	
+	private int dias;
+
 	AtributoBean atributoUtil = new AtributoBean();
 	GestionaBean gestionUtil = new GestionaBean();
 	MensajeBean mensajeUtil = new MensajeBean();
@@ -80,6 +80,7 @@ public class RegistroVentaBean implements Serializable {
 		temporales = new ArrayList<>();
 	}
 
+	// Cargar la serie correspondiente al comprobante
 	public void cargarSerie() {
 		if (atributoUtil.getCodigoComprobante() == 1) {
 			atributoUtil.setNumeroSerie("F001");
@@ -91,10 +92,19 @@ public class RegistroVentaBean implements Serializable {
 
 	}
 
+	// Carga el numero correlativo
 	public void cargarComprobante() {
 		atributoUtil.setNumeroComprobante(
 				gestionUtil.retornaNumeroComprobante(atributoUtil.getCodigoComprobante()) % 10000000);
 	}
+	
+	//Cuando es credito se suma los dias a la fecha vencimiento
+	
+	public void obtenerFechaVencimiento() {
+
+
+	}
+	
 
 	public void listarCliente() {
 		atributoUtil.setClientes(gestionUtil.listarCliente(atributoUtil.getCliente().getNombre()));
@@ -170,6 +180,7 @@ public class RegistroVentaBean implements Serializable {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 
+		// Validacion de los componentes
 		String mensajeAgregar = mensajeUtil.mostrarMensajeAgregarVenta(atributoUtil, temporales);
 
 		if (!"".equals(mensajeAgregar)) {
@@ -177,6 +188,8 @@ public class RegistroVentaBean implements Serializable {
 					mensajeUtil.mostrarMensajeError(mensajeAgregar, atributoUtil), null));
 		} else {
 			temporales.add(gestionUtil.retornarProductoVenta(atributoUtil));
+
+			// Iterar la lista para no ingresar producto duplicado
 			String mensajeRepetido = gestionUtil.iterarListaVenta(temporales, atributoUtil);
 			if (!"".equals(mensajeRepetido)) {
 				context.addMessage("mensajeProductoRepetido",
@@ -188,6 +201,7 @@ public class RegistroVentaBean implements Serializable {
 
 	}
 
+	// Venta adjunta una guia remision
 	public void cargarGuia() {
 
 		if (atributoUtil.isGuiaVenta()) {
@@ -202,6 +216,8 @@ public class RegistroVentaBean implements Serializable {
 	public void grabarVenta() throws IOException {
 
 		FacesContext context = FacesContext.getCurrentInstance();
+
+		// Validar los componentes
 		String mensajeVenta = mensajeUtil.mostrarMensajeGrabarVenta(atributoUtil, temporales);
 
 		if (!"".equals(mensajeVenta)) {
@@ -322,9 +338,9 @@ public class RegistroVentaBean implements Serializable {
 		if (atributoUtil.isGuiaVenta()) {
 			cadena = "1".concat("|").concat("-").concat("|")
 					.concat(talonarioUtil.obtenerFormatoComprobante(atributoUtil.getCodigoComprobante())).concat("|")
-					.concat(atributoUtil.getGuiaSerie()).concat("|").concat(String.valueOf(atributoUtil.getGuiaNumero())).concat("|")
-					.concat("6").concat("|").concat(AtributoBean.RUC_EMISOR).concat("|")
-					.concat(atributoUtil.getTotal().toString());
+					.concat(atributoUtil.getGuiaSerie()).concat("|")
+					.concat(String.valueOf(atributoUtil.getGuiaNumero())).concat("|").concat("6").concat("|")
+					.concat(AtributoBean.RUC_EMISOR).concat("|").concat(atributoUtil.getTotal().toString());
 		} else {
 			cadena = "";
 		}
@@ -341,7 +357,6 @@ public class RegistroVentaBean implements Serializable {
 	public void quitarListaProducto(ActionEvent e) {
 
 		int codigo = (int) e.getComponent().getAttributes().get("codigo");
-
 		gestionUtil.quitarListaProductoVenta(codigo, temporales, atributoUtil);
 	}
 
@@ -355,10 +370,15 @@ public class RegistroVentaBean implements Serializable {
 	public void imprimirVenta() throws IOException, ClassNotFoundException, JRException, SQLException,
 			ParserConfigurationException, SAXException, WriterException {
 
+		// Obtener la firma digital en XML
+		File xml = new File(Sunat.RUTA_FIRMA
+				.concat(sunatUtil.generarNombreArchivo(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
+						atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante() % 10000000))
+				.concat(".xml"));
+
 		// leer archivo xml firma, para obtener el digestValue (hash o valor
 		// resumen) y signatureValue (firma digital)
-		sunatUtil.leerNodosXml(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
-				atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante() % 10000000);
+		sunatUtil.leerNodosXml(xml);
 
 		// generar el codigo de barra sin hash y sin firma digital, estos se
 		// añaden em la clase sunat
@@ -367,10 +387,12 @@ public class RegistroVentaBean implements Serializable {
 				atributoUtil.getTotal().toString(), atributoUtil.getFecha().toString(),
 				atributoUtil.getCliente().getCodigoDocumento(), atributoUtil.getCliente().getNroDocumento());
 
+		// El monto de la venta en letras
 		MontoEnLetras numeroLetra = new MontoEnLetras();
 		String letra = String.valueOf(atributoUtil.getTotal());
 		String leyenda = numeroLetra.convertir(letra, true);
 
+		// Concatenar la serie y numero comprobante
 		String facturacionPDF = atributoUtil.getNumeroSerie().concat("-")
 				.concat(talonarioUtil.obtenerFormatoNumeroComprobante(atributoUtil.getNumeroComprobante() % 10000000));
 
@@ -424,6 +446,14 @@ public class RegistroVentaBean implements Serializable {
 
 	public void setUsuario(int usuario) {
 		this.usuario = usuario;
+	}
+
+	public int getDias() {
+		return dias;
+	}
+
+	public void setDias(int dias) {
+		this.dias = dias;
 	}
 
 }

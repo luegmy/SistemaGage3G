@@ -12,9 +12,10 @@
 		<div class="container-fluid">
 			<p:fieldset legend="CONSULTAR MOVIMIENTOS">
 				<h:form id="formMovimientos">
-					<div class="row">
+				
+					<div class="row justify-content-md-center">
 
-						<div class="col-xs-12 col-sm-6 col-md-6 col-md-offset-1">
+						<div class="col-12 col-sm-12 col-md-4">
 							<p:tabView dynamic="true" cache="true" effect="fade">
 								<p:ajax event="tabChange"
 									update=":formMovimientos:msgRangoFecha" />
@@ -44,10 +45,10 @@
 							</p:tabView>
 							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
 						</div>
-						<div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-0">
-							<h:commandLink styleClass="#{r.celeste}" title="Exportar">
+						<div class="col-12 col-sm-12 col-md-2">
+							<h:commandLink styleClass="btn btn-danger btn-sm" title="Exportar">
 								<i class="fa fa-fw fa-file-excel-o"></i>
-								<p:outputLabel value=" Exportar" />
+								<p:outputLabel value=" Excel" />
 								<p:dataExporter type="xls" target="tabla" fileName="movimientos" />
 							</h:commandLink>
 						</div>

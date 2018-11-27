@@ -33,7 +33,6 @@ public class CobranzaJPA implements Serializable {
 
 	@EmbeddedId
 	private CobranzaFacturaJPAPK id;
-
 	@Temporal(TemporalType.DATE)
 	private Date fecha;
 	private String hora;

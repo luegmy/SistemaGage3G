@@ -52,6 +52,7 @@ public class RegistroMovimientoBean implements Serializable {
 	private List<SelectItem> proveedores;
 	private int codigoProveedor;
 
+	private String serie;
 	private Date fecha = new Date();
 	private String observacion;
 
@@ -60,7 +61,7 @@ public class RegistroMovimientoBean implements Serializable {
 
 	// Para anadir elementos a la datatable
 	private List<DetalleMovimientoJPA> temporales;
-	
+
 	// Atributo de la tabla detalle_almacen
 	private ProductoJPA productoSeleccionado;
 	private int cantidad;
@@ -122,12 +123,12 @@ public class RegistroMovimientoBean implements Serializable {
 
 				DetalleMovimientoJPAPK dmpk2 = new DetalleMovimientoJPAPK();
 				dmpk2.setCodAlmacen(codigoDestino);
-				dmpk2.setCodProducto(productoSeleccionado.getCantidad());
+				dmpk2.setCodProducto(productoSeleccionado.getCodProducto());
 				dmpk2.setNroMovimiento(getNumeroDocumento() + 1);
 
 				DetalleMovimientoJPA objDetalle2 = new DetalleMovimientoJPA();
-				objDetalle2.setDescripcionProducto(
-						productoSeleccionado.getDescripcion().concat(" ").concat(productoSeleccionado.getTipo().getDescripcion()));
+				objDetalle2.setDescripcionProducto(productoSeleccionado.getDescripcion().concat(" ")
+						.concat(productoSeleccionado.getTipo().getDescripcion()));
 				objDetalle2.setCantidad(cantidad);
 				objDetalle2.setId(dmpk2);
 
@@ -141,8 +142,8 @@ public class RegistroMovimientoBean implements Serializable {
 
 			DetalleMovimientoJPA objDetalle = new DetalleMovimientoJPA();
 			objDetalle.setCantidad(cantidad);
-			objDetalle.setDescripcionProducto(
-					productoSeleccionado.getDescripcion().concat(" ").concat(productoSeleccionado.getTipo().getDescripcion()));
+			objDetalle.setDescripcionProducto(productoSeleccionado.getDescripcion().concat(" ")
+					.concat(productoSeleccionado.getTipo().getDescripcion()));
 			objDetalle.setId(dmpk);
 
 			temporales.add(objDetalle);
@@ -221,6 +222,7 @@ public class RegistroMovimientoBean implements Serializable {
 		MovimientoJPA objMovimiento = new MovimientoJPA();
 		objMovimiento.setNroMovimiento(getNumeroDocumento());
 		objMovimiento.setComprobante(objComprobante);
+		objMovimiento.setSerie(serie);
 		objMovimiento.setNumComprobante(numeroComprobante);
 		objMovimiento.setFecha(fecha);
 		objMovimiento.setHora(formatoHora.obtenerHora());
@@ -245,12 +247,15 @@ public class RegistroMovimientoBean implements Serializable {
 		} else if (codigoComprobante == 0) {
 			context.addMessage("mensajeComprobante",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el tipo de comprobante", null));
-		} else if (codigoProveedor == 0) {
-			context.addMessage("mensajeProveedor",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el proveedor", null));
+		} else if ("".equals(serie) && codigoComprobante != 2) {
+			context.addMessage("mensajeSerieComprobante",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ingrese la serie", null));
 		} else if (numeroComprobante == 0 && codigoComprobante != 2) {
 			context.addMessage("mensajeNumeroComprobante",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ingrese el numero de comprobante", null));
+		} else if (codigoProveedor == 0 && codigoTipoMovimiento != 3) {
+			context.addMessage("mensajeProveedor",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione el proveedor", null));
 		} else if (temporales.isEmpty()) {
 			context.addMessage("mensajeLista", new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Agregue un producto a la lista, pulse el boton AGREGAR", null));
@@ -280,6 +285,7 @@ public class RegistroMovimientoBean implements Serializable {
 		MovimientoJPA objMovimiento = new MovimientoJPA();
 		objMovimiento.setNroMovimiento(getNumeroDocumento());
 		objMovimiento.setComprobante(objComprobante);
+		objMovimiento.setSerie(serie);
 		objMovimiento.setNumComprobante(numeroComprobante);
 		objMovimiento.setFecha(fecha);
 		objMovimiento.setHora(formatoHora.obtenerHora());
@@ -386,6 +392,14 @@ public class RegistroMovimientoBean implements Serializable {
 
 	public void setCodigoProveedor(int codigoProveedor) {
 		this.codigoProveedor = codigoProveedor;
+	}
+
+	public String getSerie() {
+		return serie;
+	}
+
+	public void setSerie(String serie) {
+		this.serie = serie;
 	}
 
 	public Date getFecha() {

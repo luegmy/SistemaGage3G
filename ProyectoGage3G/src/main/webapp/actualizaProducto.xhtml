@@ -27,6 +27,15 @@
 								</p:inputText>
 							</div>
 						</div>
+						
+						<div class="btn-group" role="group">
+							<h:commandLink styleClass="#{r.rojo}">
+								<p:dataExporter type="xls" target="tablaProducto" fileName="productoReporte"
+									encoding="ISO-8859-1" />
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<h:outputText value="Excel" />
+							</h:commandLink>
+						</div>
 
 						<div class="btn-group" role="group">
 							<p:commandLink action="ACTUALIZAR_PRODUCTO" id="nuevo"
@@ -63,7 +72,7 @@
 						<p:column headerText="U.M">
 							<h:outputText value="#{p.medida.abreviatura}" />
 						</p:column>
-						<p:column width="12%" styleClass="text-center">
+						<p:column width="12%" styleClass="text-center" exportable="false">
 							<p:commandLink actionListener="#{productoBean.editarProducto}"
 								update="dialogo" action="actualizaProducto" title="Editar"
 								oncomplete="PF('dlgProducto').show();" styleClass="btn btn-primary">

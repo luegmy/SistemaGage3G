@@ -21,7 +21,6 @@ public class GuiaRemisionJPA implements Serializable {
 
 	@Id
 	private int numGuia;
-
 	@Temporal(TemporalType.DATE)
 	private Date fecha;
 	

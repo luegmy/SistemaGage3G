@@ -42,6 +42,7 @@ public class MovimientoJPA implements Serializable {
 	@Id
 	private int nroMovimiento;
 
+	private String serie;
 	private int numComprobante;
 
 	@Temporal(TemporalType.DATE)
@@ -75,6 +76,14 @@ public class MovimientoJPA implements Serializable {
 
 	public void setNroMovimiento(int nroMovimiento) {
 		this.nroMovimiento = nroMovimiento;
+	}
+
+	public String getSerie() {
+		return serie;
+	}
+
+	public void setSerie(String serie) {
+		this.serie = serie;
 	}
 
 	public int getNumComprobante() {

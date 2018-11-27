@@ -57,10 +57,8 @@ public class Sunat implements Serializable {
 
 	}
 
-	public void leerNodosXml(String rucEmisor, int comprobante, String serie, int numero)
+	public void leerNodosXml(File xml)
 			throws ParserConfigurationException, SAXException, IOException {
-		File xml = new File(
-				RUTA_FIRMA.concat(generarNombreArchivo(rucEmisor, comprobante, serie, numero)).concat(".xml"));
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

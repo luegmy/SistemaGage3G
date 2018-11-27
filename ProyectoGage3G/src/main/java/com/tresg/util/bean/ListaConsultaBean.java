@@ -39,6 +39,13 @@ public class ListaConsultaBean implements Serializable {
 				.forEach(ventas::add);
 		return ventas;
 	}
+	
+	public List<VentaJPA> listarVentaPorNumero(String numero) {
+		List<VentaJPA> ventas = new ArrayList<>();
+		sVenta.listaVenta().stream().filter(v -> String.valueOf(v.getNumComprobante()).contains(numero))
+				.forEach(ventas::add);
+		return ventas;
+	}
 
 	public double acumuladoContadoVentaXFecha(Date fecha) {
 		return sVenta.listaVenta().stream().filter(f -> (fecha.equals(f.getFecha()) && f.getEstado().getCodEstado()==1))

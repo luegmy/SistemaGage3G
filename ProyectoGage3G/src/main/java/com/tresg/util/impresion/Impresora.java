@@ -50,9 +50,11 @@ public class Impresora {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void imprimirVenta(String facturacionPDF, int numero, String montoLetra, String codigoBarra, String hash)
 			throws IOException, ClassNotFoundException, JRException, SQLException {
+		
 		Conexion.getInstancia().conectar();
 
 		JasperReport ventaReporte = (JasperReport) JRLoader.loadObject(retornaFile("/facturaJSF.jasper"));
+		
 		Map parametro = new HashMap();
 		parametro.put("numComprobante", numero);
 		parametro.put("montoLetra", montoLetra);

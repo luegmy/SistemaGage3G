@@ -42,12 +42,9 @@ public class VentaJPA implements Serializable {
 
 	@Id
 	private int numComprobante;
-
 	private String serie;
-
 	@Temporal(TemporalType.DATE)
 	private Date fecha;
-
 	private String fecVence;
 	private String hora;
 	private BigDecimal monto;

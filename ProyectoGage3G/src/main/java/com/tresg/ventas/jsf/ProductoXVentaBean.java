@@ -84,10 +84,10 @@ public class ProductoXVentaBean {
 
 		if (detalles != null && !detalles.isEmpty()) {
 
-			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+			HttpServletResponse respuesta = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
 					.getResponse();
-			response.addHeader("Content-disposition", "attachment; filename=reporteProductosPorVentas.xlsx");
-			response.setContentType("application/vnd.ms-excel");
+			respuesta.addHeader("Content-disposition", "attachment; filename=reporteProductosPorVentas.xlsx");
+			respuesta.setContentType("application/vnd.ms-excel");
 
 			XSSFWorkbook libro = new XSSFWorkbook();
 			XSSFSheet hoja = libro.createSheet("Productos por venta");
@@ -144,9 +144,9 @@ public class ProductoXVentaBean {
 				rowNo++;
 			}
 
-			OutputStream out = response.getOutputStream();
+			OutputStream out = respuesta.getOutputStream();
 			libro.write(out);
-			response.getOutputStream().flush();
+			respuesta.getOutputStream().flush();
 			FacesContext.getCurrentInstance().responseComplete();
 
 		}

@@ -9,13 +9,15 @@
 <ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
 	<ui:define name="title">MODULO ALMACEN</ui:define>
 	<ui:define name="content">
+	
 		<div class="container-fluid">
+		
 			<h:form id="formAlmacen">
 				<p:fieldset legend="REGISTRO DE MOVIMIENTOS DE ALMACEN">
 
-					<div class="form-row ">
+					<div class="form-row">
 
-						<div class="col-6 col-sm-6 col-md-6">
+						<div class="col-12 col-sm-6 col-md-6">
 							<p:panel id="pnlAlmacen">
 								<div class="form-row">
 									<div class="col-6 col-sm-6 col-md-6">
@@ -73,27 +75,11 @@
 							</p:panel>
 						</div>
 
-
-
-
-						<div class="col-6 col-sm-6 col-md-6">
+						<div class="col-12 col-sm-6 col-md-6">
 							<p:panel id="pnlComprobante">
 								<div class="form-row">
 
-									<div class="col-6 col-sm-12 col-md-12">
-										<div class="form-group">
-											<p:outputLabel value="#{r.proveedor}" />
-											<p:selectOneMenu value="#{almacenBean.codigoProveedor}"
-												id="proveedor" styleClass="form-control form-control-sm">
-												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
-												<f:selectItems value="#{almacenBean.proveedores}" />
-												<p:ajax event="change" update="msgProveedor" />
-											</p:selectOneMenu>
-											<p:messages for="mensajeProveedor" id="msgProveedor" />
-										</div>
-									</div>
-
-									<div class="col-12 col-sm-6 col-md-6">
+									<div class="col-12 col-sm-6 col-md-4">
 										<div class="form-group">
 											<p:outputLabel value="Comprobante" />
 											<p:selectOneMenu value="#{almacenBean.codigoComprobante}"
@@ -108,8 +94,21 @@
 											<p:messages for="mensajeComprobante" id="msgComprobante" />
 										</div>
 									</div>
+									
+									<div class="col-6 col-sm-6 col-md-4">
+										<div class="form-group">
+											<p:outputLabel value="#{r.serie}" for="serie" />
+											<p:inputText value="#{almacenBean.serie}"
+												id="serie" styleClass="form-control">
+												<p:ajax event="change" update="msgSerieComprobante" />
+											</p:inputText>
 
-									<div class="col-12 col-sm-6 col-md-6">
+											<p:messages for="mensajeSerieComprobante"
+												id="msgSerieComprobante" />
+										</div>
+									</div>
+
+									<div class="col-6 col-sm-6 col-md-4">
 										<div class="form-group">
 											<p:outputLabel value="#{r.numero}" for="comprobante" />
 											<p:inputText value="#{almacenBean.numeroComprobante}"
@@ -119,6 +118,20 @@
 
 											<p:messages for="mensajeNumeroComprobante"
 												id="msgNumeroComprobante" />
+										</div>
+									</div>
+									
+									
+									<div class="col-12 col-sm-6 col-md-12">
+										<div class="form-group">
+											<p:outputLabel value="#{r.proveedor}" />
+											<p:selectOneMenu value="#{almacenBean.codigoProveedor}"
+												id="proveedor" styleClass="form-control form-control-sm">
+												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+												<f:selectItems value="#{almacenBean.proveedores}" />
+												<p:ajax event="change" update="msgProveedor" />
+											</p:selectOneMenu>
+											<p:messages for="mensajeProveedor" id="msgProveedor" />
 										</div>
 									</div>
 
@@ -138,14 +151,17 @@
 								<div class="row">
 									<div class="col-12 col-sm-8 col-md-6">
 										<div class="form-group">
-											<p:outputLabel value="#{r.descripcion}" for="producto"/>
+											<p:outputLabel value="#{r.descripcion}" for="producto" />
 											<p:autoComplete minQueryLength="3" queryDelay="1000"
-												id="producto" maxResults="20" placeholder="Seleccione un producto"
+												id="producto" maxResults="20"
+												placeholder="Seleccione un producto"
 												value="#{almacenBean.productoSeleccionado}"
 												completeMethod="#{almacenBean.autocompletarProducto}"
-												var="p" itemLabel="#{p.descripcion.concat(' ').concat(p.tipo.descripcion)}" itemValue="#{p}"
-												converter="productoConverter" onclick="this.value='';"
-												inputStyleClass="form-control" size="100">
+												var="p"
+												itemLabel="#{p.descripcion.concat(' ').concat(p.tipo.descripcion)}"
+												itemValue="#{p}" converter="productoConverter"
+												onclick="this.value='';" inputStyleClass="form-control"
+												size="100">
 												<p:column style="width:20%;text-align:center">
 												#{p.tipo.descripcion}
 												</p:column>

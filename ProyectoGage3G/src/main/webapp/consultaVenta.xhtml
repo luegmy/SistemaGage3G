@@ -20,7 +20,7 @@
 								<p:ajax event="tabChange"
 									update=":formConsultaVenta:msgRangoFecha" />
 
-								<p:tab title="Consulta por fecha">
+								<p:tab title="Fecha">
 									<p:calendar value="#{ventaConsultaBean.atributoUtil.fecha}"
 										pattern="dd-MM-yyyy" id="fecha" locale="es">
 										<f:ajax event="dateSelect" execute="@this"
@@ -28,7 +28,7 @@
 											listener="#{ventaConsultaBean.listarVentaXFecha}" />
 									</p:calendar>
 								</p:tab>
-								<p:tab title="Consulta por rango de fecha">
+								<p:tab title="Rango de fecha">
 									<p:calendar value="#{ventaConsultaBean.atributoUtil.fechaIni}"
 										pattern="dd-MM-yyyy" pages="3" locale="es">
 										<f:ajax event="dateSelect" execute="@this" render="ffinal"
@@ -42,13 +42,21 @@
 											listener="#{ventaConsultaBean.listarVentaRangoFecha}" />
 									</p:calendar>
 								</p:tab>
-								<p:tab title="Consulta por cliente">
+								<p:tab title="Cliente">
 									<p:inputText
 										value="#{ventaConsultaBean.atributoUtil.cliente.nombre}"
 										id="nombre" placeholder="Ingrese un cliente">
 										<f:ajax event="keyup" execute="@this"
 											render=":formConsultaVenta:tabla :formConsultaVenta:acumulado"
 											listener="#{ventaConsultaBean.listarVentaXCliente}" />
+									</p:inputText>
+								</p:tab>
+								<p:tab title="Numero">
+									<p:inputText
+										value="#{ventaConsultaBean.atributoUtil.numeroComprobante}"
+										id="numero" placeholder="Ingrese numero comprobante">
+										<p:ajax event="keyup" update=":formConsultaVenta:tabla"
+											listener="#{ventaConsultaBean.listarVentaXNumero()}" />
 									</p:inputText>
 								</p:tab>
 							</p:tabView>
@@ -87,7 +95,7 @@
 						paginatorTemplate="{Exportar}" paginator="true">
 
 						<f:facet name="{Exportar}">
-							<h:commandLink styleClass="btn btn-success btn-sm"
+							<h:commandLink styleClass="btn btn-danger btn-sm"
 								title="Exportar">
 								<i class="fa fa-fw fa-file-excel-o"></i>
 								<p:outputLabel value=" Exportar" />

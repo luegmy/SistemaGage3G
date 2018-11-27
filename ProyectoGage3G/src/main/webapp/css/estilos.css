@@ -3,13 +3,14 @@
 /*  login */
 .login {
 	font-family: 'Roboto', sans-serif;
-	background-image: url(../imagenes/extintor.jpg);
+	background-image: url(../imagenes/inicio.png);
 	background-size: cover;
 }
 
 .container-login {
 	margin: 0 auto;
-	margin-top: 150px;
+	margin-top: 280px;
+	margin-left:100px;
 	padding: 0;
 }
 

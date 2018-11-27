@@ -95,9 +95,6 @@ public class ClienteBean implements Serializable {
 		correo = "";
 	}
 
-	public void cancelarCliente() {
-		limpiar();
-	}
 
 	public void setCodigoCliente(int codigoCliente) {
 		this.codigoCliente = codigoCliente;

@@ -101,8 +101,7 @@ public class GestionaBean implements Serializable {
 		objUsuario.setCodUsuario(usuario);
 				
 		
-		VentaJPA objVenta = new VentaJPA();
-		
+		VentaJPA objVenta = new VentaJPA();		
 		objVenta.setComprobante(objComprobante);
 		objVenta.setCliente(objCliente);
 		objVenta.setEstado(objEstado);
@@ -146,9 +145,9 @@ public class GestionaBean implements Serializable {
 	int estadoVenta(int formaPago) {
 		int estado = 0;
 		if (formaPago == 1 || formaPago == 3) {
-			estado = 1;// cancelado
+			estado = 1;// pagado
 		} else if (formaPago == 2) {
-			estado = 2;// creditado
+			estado = 2;// adeudado
 		}
 		return estado;
 	}
@@ -172,9 +171,8 @@ public class GestionaBean implements Serializable {
 			Iterator<Integer> itaux2 = auxLista2.iterator();
 			while (itaux1.hasNext() && itaux2.hasNext()) {
 				int aux1 = (int) itaux1.next();
-				int aux2 = (int) itaux2.next();
 				// Realiza la comparacion de listas
-				if (detalleJPA.getId().getCodProducto() == aux1 && detalleJPA.getId().getPolvo() == aux2) {
+				if (detalleJPA.getId().getCodProducto() == aux1) {
 					it.remove();
 					mensaje = "Ya ingreso dicho producto";
 					auxSubtotal = new java.math.BigDecimal("0.00");
@@ -184,7 +182,7 @@ public class GestionaBean implements Serializable {
 			// ingresados para su posterior comparacion con la lista
 			// principal
 			auxLista1.add(detalleJPA.getId().getCodProducto());
-			auxLista2.add(detalleJPA.getId().getPolvo());
+
 		}
 
 		atributo.setTotal(atributo.getTotal().add(auxSubtotal).setScale(2, RoundingMode.HALF_EVEN));
@@ -203,8 +201,7 @@ public class GestionaBean implements Serializable {
 		atributo.setCantidad(new java.math.BigDecimal("0.00"));
 	}
 
-	// metodo si a la hora de modificar la venta se elimina un item de la lista
-	// detalle
+	// metodo modificar la venta se elimina un item de la lista detalle
 	public void quitarListaProductoModificado(int codigo, List<DetalleVentaJPA> temporales, AtributoBean atributo) {
 
 		BigDecimal monto = new java.math.BigDecimal("0.00");

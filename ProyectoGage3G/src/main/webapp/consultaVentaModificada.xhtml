@@ -49,6 +49,14 @@
 											listener="#{ventaActualizaBean.listarVentaXCliente}" />
 									</p:inputText>
 								</p:tab>
+								<p:tab title="Numero">
+									<p:inputText
+										value="#{ventaActualizaBean.atributoUtil.numeroComprobante}"
+										id="numero" placeholder="Ingrese numero comprobante">
+										<p:ajax event="keyup" update=":formEditaVenta:tabla"
+											listener="#{ventaActualizaBean.listarVentaXNumero()}" />
+									</p:inputText>
+								</p:tab>
 							</p:tabView>
 							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
 						</div>
@@ -120,15 +128,6 @@
 								<f:attribute value="#{t.numComprobante}" name="numeroEdicion" />
 							</p:commandLink>
 							<p:commandLink
-								actionListener="#{ventaActualizaBean.cargarNumeroComprobante}"
-								action="consultaVentaModificada"
-								update=":formEditaVenta:dialogoAnula" title="Anular venta"
-								oncomplete="PF('dlgAnulacion').show();"
-								styleClass="btn btn-danger" disabled="#{t.estado.codEstado==3}">
-								<i class="fa fa-fw fa-times-circle"></i>
-								<f:attribute value="#{t.numComprobante}" name="numeroCargar" />
-							</p:commandLink>
-							<p:commandLink
 								actionListener="#{ventaActualizaBean.imprimirFactura}"
 								title="Imprimir" target="_blank" ajax="false"
 								styleClass="btn btn-dark">
@@ -196,53 +195,6 @@
 					</p:dialog>
 
 				</p:fieldset>
-
-				<p:dialog header="ANULAR VENTA" widgetVar="dlgAnulacion"
-					closable="false" id="dialogoAnula" showEffect="scale"
-					hideEffect="explode" height="300" width="400">
-
-					<h:panelGroup id="pnlAnulacion">
-						<div class="row">
-							<div class="col-xs-12 col-sm-10 col-sm-offset-1">
-								<div class="form-group">
-									<p:outputLabel value="Nro. Comprobante" />
-									<h:inputText
-										value="#{ventaActualizaBean.atributoUtil.numeroComprobante%10000000}"
-										disabled="true" styleClass="form-control" />
-								</div>
-
-								<div class="row">
-									<div class="col-xs-12 col-sm-6">
-										<div class="form-group">
-											<p:commandLink
-												actionListener="#{ventaActualizaBean.anularVenta}"
-												update="formEditaVenta:pnlAnulacion" styleClass="#{r.azul}">
-												<i class="fa fa-fw fa-times"></i>
-												<f:attribute
-													value="#{ventaActualizaBean.atributoUtil.numeroComprobante}"
-													name="numeroAnular" />
-												<p:outputLabel value="Anular" />
-											</p:commandLink>
-										</div>
-									</div>
-
-									<div class="col-xs-12 col-sm-6">
-										<div class="form-group">
-											<p:commandLink onclick="PF('dlgAnulacion').hide();"
-												styleClass="#{r.gris}">
-												<i class="fa fa-fw fa-sign-out"></i>
-												<p:outputLabel value="Salir" />
-											</p:commandLink>
-										</div>
-									</div>
-								</div>
-							</div>
-
-						</div>
-						<p:messages for="mensajeAnulacion" id="msgAnulacion" />
-					</h:panelGroup>
-
-				</p:dialog>
 
 				<p:dialog header="ENVIAR CORREO" widgetVar="dlgCorreo"
 					closable="false" id="dialogoCorreo" showEffect="scale"
@@ -777,8 +729,8 @@
 									<h:panelGroup id="pnlGrabar">
 										<p:commandLink
 											action="#{ventaActualizaBean.actualizarVenta()}"
-											update="formActualizaVenta dlg" styleClass="#{r.azul}"
-											id="btnGrabar">
+											update="formActualizaVenta dlg :formEditaVenta:tabla"
+											styleClass="#{r.azul}" id="btnGrabar">
 											<i class="fa fa-fw fa-save"></i>
 											<p:outputLabel value=" Grabar" />
 										</p:commandLink>
@@ -823,9 +775,7 @@
 				<p:messages for="mensajeActualizaVenta" />
 				<h:form>
 					<p:commandLink onclick="PF('dlgMensaje').hide();" immediate="true"
-						styleClass="#{r.rojo}"
-						action="#{ventaActualizaBean.cancelarVenta()}"
-						update="formActualizaVenta">
+						styleClass="#{r.rojo}">
 						<i class="fa fa-fw fa-sign-out"></i>
 						<p:outputLabel value=" Salir" />
 					</p:commandLink>

@@ -119,8 +119,17 @@
 										</div>
 									</div>
 
-
-									<div class="col-4">
+									<div class="col-6 col-md-4">
+										<div class="form-group">
+											<p:outputLabel value="Dias" for="dias"/>
+											<p:inputText disabled="#{ventaBean.atributoUtil.codigoPago==2}"
+												value="#{ventaBean.dias}"
+												id="dias" styleClass="form-control">
+												<p:ajax event="keyup" update="fechaVence"/>
+											</p:inputText>
+										</div>
+									</div>
+									<div class="col-2">
 										<div class="form-group">
 											<p:outputLabel value="Generar guia" />
 											<br />
@@ -132,7 +141,7 @@
 										</div>
 									</div>
 
-									<div class="col-4">
+									<div class="col-3">
 										<div class="form-group">
 											<p:outputLabel value="#{r.serie}" for="guiaSerie" />
 											<p:inputText disabled="#{!ventaBean.atributoUtil.guiaVenta}"
@@ -141,7 +150,7 @@
 
 										</div>
 									</div>
-									<div class="col-4">
+									<div class="col-3">
 										<div class="form-group">
 											<p:outputLabel value="#{r.numero}" for="guia" />
 											<p:inputText disabled="#{!ventaBean.atributoUtil.guiaVenta}"

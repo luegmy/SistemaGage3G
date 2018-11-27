@@ -14,7 +14,7 @@ public class DetalleVentaJPAPK implements Serializable{
 	
 	private int codProducto;
 	private int numComprobante;
-	private int polvo;
+
 	public int getCodProducto() {
 		return codProducto;
 	}
@@ -27,19 +27,13 @@ public class DetalleVentaJPAPK implements Serializable{
 	public void setNumComprobante(int numComprobante) {
 		this.numComprobante = numComprobante;
 	}
-	public int getPolvo() {
-		return polvo;
-	}
-	public void setPolvo(int polvo) {
-		this.polvo = polvo;
-	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + codProducto;
 		result = prime * result + numComprobante;
-		result = prime * result + polvo;
 		return result;
 	}
 	@Override
@@ -54,8 +48,6 @@ public class DetalleVentaJPAPK implements Serializable{
 		if (codProducto != other.codProducto)
 			return false;
 		if (numComprobante != other.numComprobante)
-			return false;
-		if (polvo != other.polvo)
 			return false;
 		return true;
 	}
