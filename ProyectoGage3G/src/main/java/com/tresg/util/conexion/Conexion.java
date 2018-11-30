@@ -10,8 +10,7 @@ public class Conexion {
 
 	private Connection conectar; // Abstrae una conexion a la base de datos
 	private String driver = "com.mysql.cj.jdbc.Driver";
-	private String baseDatos = "jdbc:mysql://localhost:3306/bd_3g";
-
+	private String baseDatos = "jdbc:mysql://localhost:3306/bd_3g?zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC";
 	private static Conexion instancia;
 
 	private Conexion() {

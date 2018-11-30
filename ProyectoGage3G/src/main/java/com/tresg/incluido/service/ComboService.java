@@ -74,7 +74,7 @@ public class ComboService implements ComboService_I,Serializable {
 
 	@Override
 	public List<NotaCreditoJPA> comboCredito() {
-		return iComboDAO.comboNota();
+		return iComboDAO.comboCredito();
 	}
 
 	@Override
