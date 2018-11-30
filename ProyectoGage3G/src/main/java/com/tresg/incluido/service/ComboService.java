@@ -13,6 +13,8 @@ import com.tresg.incluido.jpa.MediosPagoJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 import com.tresg.seguridad.jpa.RolJPA;
+import com.tresg.ventas.jpa.NotaCreditoJPA;
+import com.tresg.ventas.jpa.NotaDebitoJPA;
 import com.tresg.ventas.jpa.OperacionJPA;
 
 
@@ -68,6 +70,16 @@ public class ComboService implements ComboService_I,Serializable {
 	@Override
 	public List<OperacionJPA> comboOperacion() {
 		return iComboDAO.comboOperacion();
+	}
+
+	@Override
+	public List<NotaCreditoJPA> comboCredito() {
+		return iComboDAO.comboNota();
+	}
+
+	@Override
+	public List<NotaDebitoJPA> comboDebito() {
+		return iComboDAO.comboDebito();
 	}
 
 	

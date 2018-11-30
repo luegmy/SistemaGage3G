@@ -316,12 +316,6 @@ public class ActualizaVentaBean implements Serializable {
 
 	}
 
-/*	String cadenaSunatLeyenda(BigDecimal total) {
-		MontoEnLetras numeroLetra = new MontoEnLetras();
-		String letra = String.valueOf(total);
-
-		return numeroLetra.convertir(letra, true);
-	}*/
 
 	String cadenaSunatCabecera() {
 
@@ -355,19 +349,19 @@ public class ActualizaVentaBean implements Serializable {
 
 		for (DetalleVentaJPA s : temporales) {
 
-			precioUnitario = s.getPrecio().multiply(s.getCantidad());
+			precioUnitario = s.getPrecio().multiply(s.getCantidad()).setScale(2, RoundingMode.HALF_UP);
 			valorUnitario = s.getPrecio().divide(atributoUtil.getValor(), 2, RoundingMode.HALF_DOWN);
-			valorVenta = valorUnitario.multiply(s.getCantidad());
+			valorVenta = valorUnitario.multiply(s.getCantidad()).setScale(2, RoundingMode.HALF_UP);
 
 			cadenas.add(s.getUnidadMedida().concat("|").concat(s.getCantidad().toString()).concat("|")
 					.concat(String.valueOf(s.getId().getCodProducto())).concat("|")
-					.concat(AtributoBean.CODIGO_PRODUCTO_SUNAT).concat("|").concat(s.getDescripcionProducto())
-					.concat("|")
+					.concat(AtributoBean.CODIGO_PRODUCTO_SUNAT).concat("|")
+					.concat(s.getDescripcionProducto()).concat("|")
 					// valor unitario por item (sin igv)
 					.concat(valorUnitario.toString()).concat("|")
 					// sumatoria de tributos por item
-					.concat(precioUnitario.subtract(valorVenta).toString()).concat("|").concat(AtributoBean.CODIGO_IGV)
-					.concat("|")
+					.concat(precioUnitario.subtract(valorVenta).toString()).concat("|")
+					.concat(AtributoBean.CODIGO_IGV).concat("|")
 					// monto de igv por item
 					.concat(precioUnitario.subtract(valorVenta).toString()).concat("|")
 					// base imponible igv
@@ -399,18 +393,17 @@ public class ActualizaVentaBean implements Serializable {
 
 	String cadenaSunatTributo() {
 		return AtributoBean.CODIGO_IGV.concat("|").concat(AtributoBean.NOMBRE_TRIBUTO_ITEM_IGV).concat("|")
-				.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_IGV).concat("|").concat(atributoUtil.getSubtotal().toString())
-				.concat("|").concat(atributoUtil.getIgv().toString());
+				.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_IGV).concat("|")
+				.concat(atributoUtil.getSubtotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
+				.concat(atributoUtil.getIgv().setScale(2, RoundingMode.HALF_UP).toString());
 	}
 
 	String cadenaSunatLeyenda() {
 		MontoEnLetras numeroLetra = new MontoEnLetras();
-		String letra = String.valueOf(atributoUtil.getTotal());
-		String leyenda = numeroLetra.convertir(letra, true);
-
 		// 1000 monto en letras
-		return "1000".concat("|").concat(leyenda);
+		return "1000".concat("|").concat(numeroLetra.convertir(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString(), true));
 	}
+	
 
 	String cadenaSunatDocumentoRelacionado() {
 		String cadena = "";

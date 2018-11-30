@@ -15,6 +15,8 @@ import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 import com.tresg.seguridad.jpa.RolJPA;
 import com.tresg.util.jpa.JpaUtil;
+import com.tresg.ventas.jpa.NotaCreditoJPA;
+import com.tresg.ventas.jpa.NotaDebitoJPA;
 import com.tresg.ventas.jpa.OperacionJPA;
 
 public class MysqlComboDAO implements ComboDAO {
@@ -103,6 +105,24 @@ public class MysqlComboDAO implements ComboDAO {
 	public List<OperacionJPA> comboOperacion() {
 		open();
 		Query q=em.createNamedQuery("operacion.comboOperacion");
+		return q.getResultList();
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<NotaCreditoJPA> comboCredito() {
+		open();
+		Query q=em.createNamedQuery("notaCredito.comboNotaCredito");
+		return q.getResultList();
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<NotaDebitoJPA> comboDebito() {
+		open();
+		Query q=em.createNamedQuery("notaCredito.comboNotaDebito");
 		return q.getResultList();
 	}
 	

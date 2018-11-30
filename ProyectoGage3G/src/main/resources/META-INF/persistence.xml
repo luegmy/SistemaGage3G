@@ -30,6 +30,8 @@
 		<class>com.tresg.ventas.jpa.DetalleVentaJPAPK</class>
 		<class>com.tresg.ventas.jpa.CobranzaJPA</class>
 		<class>com.tresg.ventas.jpa.OperacionJPA</class>
+		<class>com.tresg.ventas.jpa.NotaCreditoJPA</class>
+		<class>com.tresg.ventas.jpa.NotaDebitoJPA</class>
 		<class>com.tresg.ventas.jpa.GuiaRemisionJPA</class>
 		
 		<class>com.tresg.seguridad.jpa.UsuarioJPA</class>

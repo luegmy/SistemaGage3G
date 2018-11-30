@@ -60,7 +60,7 @@ public class RegistroVentaBean implements Serializable {
 
 	// Para anadir elementos a la datatable
 	private List<DetalleVentaJPA> temporales;
-	
+
 	private int dias;
 
 	AtributoBean atributoUtil = new AtributoBean();
@@ -97,14 +97,12 @@ public class RegistroVentaBean implements Serializable {
 		atributoUtil.setNumeroComprobante(
 				gestionUtil.retornaNumeroComprobante(atributoUtil.getCodigoComprobante()) % 10000000);
 	}
-	
-	//Cuando es credito se suma los dias a la fecha vencimiento
-	
+
+	// Cuando es credito se suma los dias a la fecha vencimiento
+
 	public void obtenerFechaVencimiento() {
 
-
 	}
-	
 
 	public void listarCliente() {
 		atributoUtil.setClientes(gestionUtil.listarCliente(atributoUtil.getCliente().getNombre()));
@@ -225,10 +223,20 @@ public class RegistroVentaBean implements Serializable {
 					mensajeUtil.mostrarMensajeError(mensajeVenta, atributoUtil), null));
 		} else {
 			// factura o boleta electronica
-			if (atributoUtil.getCodigoComprobante() != 2) {
+			if (atributoUtil.getCodigoComprobante() == 1 || atributoUtil.getCodigoComprobante() == 3) {
 				// generar el archivo plano para facturador sunat
 				sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
 						atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), cadenaSunatCabecera(),
+						cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda(),
+						cadenaSunatDocumentoRelacionado());
+
+				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
+						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales, usuario)), null));
+				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
+			} else if (atributoUtil.getCodigoComprobante() == 7 || atributoUtil.getCodigoComprobante() == 8) {
+				// generar el archivo plano para facturador sunat
+				sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
+						atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), cadenaSunatNota(),
 						cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda(),
 						cadenaSunatDocumentoRelacionado());
 
@@ -253,6 +261,32 @@ public class RegistroVentaBean implements Serializable {
 				.concat(atributoUtil.getCliente().getNroDocumento()).concat("|")
 				.concat(atributoUtil.getCliente().getNombre()).concat("|").concat(AtributoBean.CODIGO_MONEDA)
 				.concat("|")
+				// sumatoria de tributos
+				.concat(atributoUtil.getIgv().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
+				// total valor de venta
+				.concat(atributoUtil.getSubtotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
+				// total precio de venta
+				.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
+				.concat(AtributoBean.TOTAL_DESCUENTOS).concat("|").concat(AtributoBean.SUMATORIA_OTROS_CARGOS)
+				.concat("|").concat(AtributoBean.TOTAL_ANTICIPOS).concat("|")
+				// importe total de venta
+				.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
+				.concat(AtributoBean.VERSION_UBL).concat("|").concat(AtributoBean.CUSTOMIZACION_DOCUMENTO);
+	}
+
+	String cadenaSunatNota() {
+
+		return atributoUtil.getCodigoOperacion().concat("|").concat(talonarioUtil.obtenerFecha(atributoUtil.getFecha()))
+				.concat("|").concat(talonarioUtil.obtenerHora()).concat("|")
+				.concat(talonarioUtil.obtenerFecha(atributoUtil.getFechaVence())).concat("|")
+				.concat(AtributoBean.CODIGO_DOMICILIO_FISCAL).concat("|")
+				.concat(atributoUtil.getCliente().getCodigoDocumento()).concat("|")
+				.concat(atributoUtil.getCliente().getNroDocumento()).concat("|")
+				.concat(atributoUtil.getCliente().getNombre()).concat("|").concat(AtributoBean.CODIGO_MONEDA)
+				.concat("|").concat(atributoUtil.getCodigoNota()).concat("|").concat(atributoUtil.getObservacion())
+				.concat("|").concat(talonarioUtil.obtenerFormatoComprobante(atributoUtil.getFacturaNota())).concat("|")
+				.concat(atributoUtil.getSerieNota().concat("-")
+						.concat(talonarioUtil.obtenerFormatoNumeroComprobante(atributoUtil.getNroFacturaNota())))
 				// sumatoria de tributos
 				.concat(atributoUtil.getIgv().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
 				// total valor de venta

@@ -38,6 +38,14 @@ public class AtributoBean implements Serializable {
 	private List<ClienteJPA> clientes;
 	public static final String CODIGO_MONEDA = "PEN";
 
+	// para las notas de credito y debito
+	private List<SelectItem> notaCreditos;
+	private List<SelectItem> notaDebitos;
+	private String codigoNota;
+	private int facturaNota;
+	private String serieNota;
+	private int nroFacturaNota;
+
 	private BigDecimal igv = new java.math.BigDecimal("0.00");
 	private BigDecimal subtotal = new java.math.BigDecimal("0.00");
 	private BigDecimal total = new java.math.BigDecimal("0.00");
@@ -182,6 +190,54 @@ public class AtributoBean implements Serializable {
 
 	public void setClientes(List<ClienteJPA> clientes) {
 		this.clientes = clientes;
+	}
+
+	public List<SelectItem> getNotaCreditos() {
+		return notaCreditos;
+	}
+
+	public void setNotaCreditos(List<SelectItem> notaCreditos) {
+		this.notaCreditos = notaCreditos;
+	}
+
+	public List<SelectItem> getNotaDebitos() {
+		return notaDebitos;
+	}
+
+	public void setNotaDebitos(List<SelectItem> notaDebitos) {
+		this.notaDebitos = notaDebitos;
+	}
+
+	public String getCodigoNota() {
+		return codigoNota;
+	}
+
+	public void setCodigoNota(String codigoNota) {
+		this.codigoNota = codigoNota;
+	}
+
+	public int getFacturaNota() {
+		return facturaNota;
+	}
+
+	public void setFacturaNota(int facturaNota) {
+		this.facturaNota = facturaNota;
+	}
+
+	public String getSerieNota() {
+		return serieNota;
+	}
+
+	public void setSerieNota(String serieNota) {
+		this.serieNota = serieNota;
+	}
+
+	public int getNroFacturaNota() {
+		return nroFacturaNota;
+	}
+
+	public void setNroFacturaNota(int nroFacturaNota) {
+		this.nroFacturaNota = nroFacturaNota;
 	}
 
 	public BigDecimal getSubtotal() {

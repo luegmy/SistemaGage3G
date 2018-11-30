@@ -157,7 +157,6 @@ public class GestionaBean implements Serializable {
 		String mensaje = "";
 		// Crea una lista auxiliar
 		List<Integer> auxLista1 = new ArrayList<>();
-		List<Integer> auxLista2 = new ArrayList<>();
 		BigDecimal auxSubtotal = new java.math.BigDecimal("0.00");
 
 		// Recorre la lista principal
@@ -168,8 +167,7 @@ public class GestionaBean implements Serializable {
 
 			// Recorre la lista auxiliar
 			Iterator<Integer> itaux1 = auxLista1.iterator();
-			Iterator<Integer> itaux2 = auxLista2.iterator();
-			while (itaux1.hasNext() && itaux2.hasNext()) {
+			while (itaux1.hasNext()) {
 				int aux1 = (int) itaux1.next();
 				// Realiza la comparacion de listas
 				if (detalleJPA.getId().getCodProducto() == aux1) {

@@ -10,6 +10,8 @@ import com.tresg.incluido.jpa.MediosPagoJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 import com.tresg.seguridad.jpa.RolJPA;
+import com.tresg.ventas.jpa.NotaCreditoJPA;
+import com.tresg.ventas.jpa.NotaDebitoJPA;
 import com.tresg.ventas.jpa.OperacionJPA;
 
 public interface ComboService_I {
@@ -27,6 +29,10 @@ public interface ComboService_I {
 	public List<ComprobanteJPA> comboComprobante();
 	
 	public List<OperacionJPA> comboOperacion();
+	
+	public List<NotaCreditoJPA> comboCredito();
+	
+	public List<NotaDebitoJPA> comboDebito();
 
 	public List<MediosPagoJPA> comboPago();
 	
