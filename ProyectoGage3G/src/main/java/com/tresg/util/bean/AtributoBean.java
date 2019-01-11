@@ -21,7 +21,7 @@ public class AtributoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// Para generar el archivo de la cabecera .cab
-	public static final String RUC_EMISOR = "20515589873";
+	public static final String RUC_EMISOR = "20601534208";
 	private List<SelectItem> comprobantes;
 	private int codigoComprobante;
 	private String numeroSerie;
@@ -33,7 +33,7 @@ public class AtributoBean implements Serializable {
 	private Date fecha = new Date();
 	private String hora;
 	private Date fechaVence;
-	public static final String CODIGO_DOMICILIO_FISCAL = "000";
+	public static final String CODIGO_DOMICILIO_FISCAL = "0000";
 	ClienteJPA cliente = new ClienteJPA();
 	private List<ClienteJPA> clientes;
 	public static final String CODIGO_MONEDA = "PEN";
@@ -41,10 +41,14 @@ public class AtributoBean implements Serializable {
 	// para las notas de credito y debito
 	private List<SelectItem> notaCreditos;
 	private List<SelectItem> notaDebitos;
+	private List<SelectItem> notas;
+	private int codigoComprobanteNota;
+	private int numeroNota;
 	private String codigoNota;
-	private int facturaNota;
-	private String serieNota;
-	private int nroFacturaNota;
+		
+	private int facturaAnulada;
+	private int nroFacturaAnulada;	
+	private String serieAnulada;
 
 	private BigDecimal igv = new java.math.BigDecimal("0.00");
 	private BigDecimal subtotal = new java.math.BigDecimal("0.00");
@@ -100,7 +104,7 @@ public class AtributoBean implements Serializable {
 
 	public List<SelectItem> getComprobantes() {
 		comprobantes = new ArrayList<>();
-		sCombo.comboComprobante().stream()
+		sCombo.comboComprobante().stream().filter(c->c.getCodComprobante()!=7||c.getCodComprobante()!=8)
 				.forEach(c -> comprobantes.add(new SelectItem(c.getCodComprobante(), c.getDescripcion())));
 		return comprobantes;
 	}
@@ -193,6 +197,9 @@ public class AtributoBean implements Serializable {
 	}
 
 	public List<SelectItem> getNotaCreditos() {
+		notaCreditos = new ArrayList<>();
+		sCombo.comboCredito().stream()
+				.forEach(c -> notaCreditos.add(new SelectItem(c.getCodCredito(), c.getDescripcion())));
 		return notaCreditos;
 	}
 
@@ -201,11 +208,25 @@ public class AtributoBean implements Serializable {
 	}
 
 	public List<SelectItem> getNotaDebitos() {
+		notaDebitos=new ArrayList<>();
+		sCombo.comboDebito().stream()
+		.forEach(c -> notaDebitos.add(new SelectItem(c.getCodDebito(), c.getDescripcion())));
 		return notaDebitos;
 	}
 
 	public void setNotaDebitos(List<SelectItem> notaDebitos) {
 		this.notaDebitos = notaDebitos;
+	}
+
+	public List<SelectItem> getNotas() {
+		notas=new ArrayList<>();
+		sCombo.comboComprobante().stream().filter(c->c.getCodComprobante()==7 || c.getCodComprobante()==8)
+		.forEach(c->notas.add(new SelectItem(c.getCodComprobante(),c.getDescripcion())));
+		return notas;
+	}
+
+	public void setNotas(List<SelectItem> notas) {
+		this.notas = notas;
 	}
 
 	public String getCodigoNota() {
@@ -216,28 +237,44 @@ public class AtributoBean implements Serializable {
 		this.codigoNota = codigoNota;
 	}
 
-	public int getFacturaNota() {
-		return facturaNota;
+	public int getCodigoComprobanteNota() {
+		return codigoComprobanteNota;
 	}
 
-	public void setFacturaNota(int facturaNota) {
-		this.facturaNota = facturaNota;
+	public void setCodigoComprobanteNota(int codigoComprobanteNota) {
+		this.codigoComprobanteNota = codigoComprobanteNota;
 	}
 
-	public String getSerieNota() {
-		return serieNota;
+	public int getFacturaAnulada() {
+		return facturaAnulada;
 	}
 
-	public void setSerieNota(String serieNota) {
-		this.serieNota = serieNota;
+	public void setFacturaAnulada(int facturaAnulada) {
+		this.facturaAnulada = facturaAnulada;
 	}
 
-	public int getNroFacturaNota() {
-		return nroFacturaNota;
+	public int getNroFacturaAnulada() {
+		return nroFacturaAnulada;
 	}
 
-	public void setNroFacturaNota(int nroFacturaNota) {
-		this.nroFacturaNota = nroFacturaNota;
+	public void setNroFacturaAnulada(int nroFacturaAnulada) {
+		this.nroFacturaAnulada = nroFacturaAnulada;
+	}
+
+	public String getSerieAnulada() {
+		return serieAnulada;
+	}
+
+	public void setSerieAnulada(String serieAnulada) {
+		this.serieAnulada = serieAnulada;
+	}
+
+	public int getNumeroNota() {
+		return numeroNota;
+	}
+
+	public void setNumeroNota(int numeroNota) {
+		this.numeroNota = numeroNota;
 	}
 
 	public BigDecimal getSubtotal() {

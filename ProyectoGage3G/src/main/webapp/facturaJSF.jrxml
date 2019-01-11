@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaJSF" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9d593da5-58bf-4279-a629-98d3f5661dbb">
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="453"/>
+	<property name="ireport.y" value="630"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -127,7 +127,7 @@ WHERE
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[RUC : 20515589873]]></text>
+				<text><![CDATA[RUC : 20601534208]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="359" y="66" width="176" height="20" uuid="04883e6d-8c54-4668-812f-2c8ba2de59d9"/>
@@ -463,14 +463,6 @@ CELULAR:  944641764  982495189 - 992039949]]></text>
 					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Resumen : ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="235" y="62" width="131" height="22" uuid="c7ba2fdb-2791-471f-9ea4-34f628a3e241"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Autorizado mediante Resolución
-N° 018-005-0000]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="380" y="73" width="80" height="13" uuid="c7fb3684-f26b-4701-bbdc-7aaa37f1ff81"/>

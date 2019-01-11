@@ -15,11 +15,10 @@
 
 				<!--  CABECERA DE LA FACTURA -->
 				<p:fieldset legend="GENERAR VENTA">
-					<div class="form-row justify-content-center">
+					<div class="form-row">
 
 						<div class="col-6 col-md-6">
 							<p:panel>
-
 								<div class="form-row">
 
 									<div class="col-12 col-md-12">
@@ -30,8 +29,9 @@
 												id="operacion" styleClass="form-control form-control-sm">
 												<f:selectItem itemValue="" itemLabel="--Seleccione--" />
 												<f:selectItems value="#{ventaBean.atributoUtil.operaciones}" />
-												<p:ajax event="change" update="tipo" />
+												<p:ajax event="change" update="msgOperacion" />
 											</p:selectOneMenu>
+											<p:messages for="mensajeOperacion" id="msgOperacion" />
 										</div>
 									</div>
 									<div class="col-12 col-md-4">
@@ -121,11 +121,12 @@
 
 									<div class="col-6 col-md-4">
 										<div class="form-group">
-											<p:outputLabel value="Dias" for="dias"/>
-											<p:inputText disabled="#{ventaBean.atributoUtil.codigoPago==2}"
-												value="#{ventaBean.dias}"
-												id="dias" styleClass="form-control">
-												<p:ajax event="keyup" update="fechaVence"/>
+											<p:outputLabel value="Dias" for="dias" />
+											<p:inputText
+												disabled="#{ventaBean.atributoUtil.codigoPago==2}"
+												value="#{ventaBean.dias}" id="dias"
+												styleClass="form-control">
+												<p:ajax event="keyup" update="fechaVence" />
 											</p:inputText>
 										</div>
 									</div>
@@ -162,9 +163,9 @@
 								</div>
 							</p:panel>
 						</div>
-
 					</div>
 
+				
 					<!--  DATOS DEL CLIENTE -->
 					<p:panel id="toggleableCliente" header="CLIENTE" toggleable="true">
 

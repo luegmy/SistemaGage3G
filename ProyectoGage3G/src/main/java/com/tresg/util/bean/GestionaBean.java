@@ -128,6 +128,50 @@ public class GestionaBean implements Serializable {
 		return objVenta;
 
 	}
+	
+	public VentaJPA retornarVentaAnulada(AtributoBean atributo, int usuario) {
+
+		ComprobanteJPA objComprobante = new ComprobanteJPA();
+		objComprobante.setCodComprobante(atributo.getCodigoComprobanteNota());
+
+		MediosPagoJPA objPago = new MediosPagoJPA();
+		objPago.setCodPago(atributo.getCodigoPago());
+
+		ClienteJPA objCliente = tipoCliente(atributo);
+
+		EstadoJPA objEstado = new EstadoJPA();
+		objEstado.setCodEstado(4);
+
+		UsuarioJPA objUsuario = new UsuarioJPA();
+		objUsuario.setCodUsuario(usuario);
+				
+		
+		VentaJPA objVenta = new VentaJPA();		
+		objVenta.setComprobante(objComprobante);
+		objVenta.setCliente(objCliente);
+		objVenta.setEstado(objEstado);
+		objVenta.setPago(objPago);
+		objVenta.setNumComprobante(
+				formato.obtenerTalonario(atributo.getCodigoComprobanteNota(), atributo.getNumeroNota()));
+		objVenta.setSerie("F001");
+		objVenta.setMonto(atributo.getTotal());
+		objVenta.setFecha(atributo.getFecha());
+		objVenta.setHora(formato.obtenerHora());
+		objVenta.setObservacion(atributo.getObservacion());
+		objVenta.setNumNota(atributo.getNroFacturaAnulada());
+		objVenta.setUsuario(objUsuario);	
+		
+		if(atributo.getGuiaNumero()!=0) {
+			GuiaRemisionJPA objGuia=new GuiaRemisionJPA();
+			objGuia.setNumGuia(atributo.getGuiaNumero());
+			objGuia.setFecha(atributo.getFecha());
+			objGuia.setVenta(objVenta);
+			objVenta.setGuiaRemision(objGuia);
+		}
+
+		return objVenta;
+
+	}
 
 	// metodo de la propia clase
 	ClienteJPA tipoCliente(AtributoBean atributo) {
@@ -250,6 +294,7 @@ public class GestionaBean implements Serializable {
 		atributo.setCodigoTipo(objProducto.getTipo().getCodTipo());
 		atributo.setCodigoProducto(objProducto.getCodProducto());
 		atributo.setDescripcionProducto(objProducto.getDescripcion().concat(objProducto.getTipo().getDescripcion()));
+		atributo.setUnidad(objProducto.getMedida().getAbreviatura());
 		atributo.setPrecio(objProducto.getPrecioVenta());
 		// quita de la lista
 		Iterator<DetalleVentaJPA> it = temporales.iterator();

@@ -30,7 +30,7 @@ public class Mensajeria {
 		props.setProperty("mail.smtp.host", "smtp-mail.outlook.com");
 		props.setProperty("mail.smtp.starttls.enable", "true");
 		props.setProperty("mail.smtp.port", "587");
-		props.setProperty("mail.smtp.user", "muygel@hotmail.com");
+		props.setProperty("mail.smtp.user", "Importaciones-seg-ind-3G@outlook.com");
 		props.setProperty("mail.smtp.auth", "true");
 
 		// Preparamos la sesion
@@ -48,7 +48,7 @@ public class Mensajeria {
 		input.put("fecha", fecha);
 		input.put("monto", monto);
 		
-		String contenidoHTML = leerEmailDesdeHtml("C:/repositorioGitGage3G/ProyectoGage3G/src/main/webapp/email.xhtml", input);
+		String contenidoHTML = leerEmailDesdeHtml("C:\\Program Files\\Apache Software Foundation\\apache-tomcat-8.0.14\\webapps\\ProyectoGage3G\\email.xhtml", input);
 		texto.setContent(contenidoHTML, "text/html");
 		multiParte.addBodyPart(texto);
 
@@ -70,15 +70,15 @@ public class Mensajeria {
 		// Construimos el mensaje
 		MimeMessage message = new MimeMessage(sesionEmail);
 		// Agregar quien env�a el correo
-		message.setFrom(new InternetAddress("muygel@hotmail.com"));
+		message.setFrom(new InternetAddress("Importaciones-seg-ind-3G@outlook.com"));
 		// Se rellenan los destinatarios
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
 		// Se rellena el subject
-		message.setSubject("EXTINTORES CAPELO PERU te ha enviado la Factura Electronica : "+ facturacion);
+		message.setSubject("IMPORTACIONES & SEGURIDAD INDUSTRIAL 3G te ha enviado la Factura Electronica : "+ facturacion);
 		// Se mete el texto y la foto adjunta.
 		message.setContent(multiParte, "text/html");
 
-		t.connect("muygel@hotmail.com", "gage24neyra");
+		t.connect("Importaciones-seg-ind-3G@outlook.com", "trinidad3G");
 		t.sendMessage(message, message.getAllRecipients());
 		t.close();
 

@@ -31,7 +31,7 @@ import com.tresg.seguridad.jpa.UsuarioJPA;
 @Table(name = "tb_venta")
 @NamedQueries({ @NamedQuery(name = "venta.listarVentas", query = "select v from VentaJPA v"),
 
-		@NamedQuery(name = "venta.anularVenta", query = "update VentaJPA v set v.estado=:x , v.monto=0 where v.numComprobante=:y") })
+		@NamedQuery(name = "venta.anularVenta", query = "update VentaJPA v set v.estado=:x where v.numComprobante=:z") })
 
 public class VentaJPA implements Serializable {
 
@@ -49,6 +49,7 @@ public class VentaJPA implements Serializable {
 	private String hora;
 	private BigDecimal monto;
 	private String observacion;
+	private int numNota;
 
 	@ManyToOne
 	@JoinColumn(name = "codCliente")
@@ -197,6 +198,14 @@ public class VentaJPA implements Serializable {
 
 	public void setGuiaRemision(GuiaRemisionJPA guiaRemision) {
 		this.guiaRemision = guiaRemision;
+	}
+
+	public int getNumNota() {
+		return numNota;
+	}
+
+	public void setNumNota(int numNota) {
+		this.numNota = numNota;
 	}
 	
 

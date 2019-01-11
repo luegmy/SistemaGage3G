@@ -9,7 +9,7 @@
 	<ui:define name="content">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-12 col-sm-3 col-md-4">
+				<div class="col-12 col-sm-4 col-md-2">
 					<h:link outcome="registroVenta.xhtml" immediate="true"
 						styleClass="#{r.azul}">
 						<p:graphicImage url="imagenes/venta.png" width="50" />
@@ -19,7 +19,7 @@
 
 				</div>
 
-				<div class="col-xs-12 col-sm-3 col-md-4">
+				<div class="col-12 col-sm-4 col-md-2">
 					<h:link outcome="consultaFacturaPendiente.xhtml" immediate="true"
 						styleClass="#{r.azul}">
 						<p:graphicImage url="imagenes/moneda.png" width="50" />
@@ -27,12 +27,36 @@
 						<p:outputLabel value="COBRAR LETRAS" />
 					</h:link>
 				</div>
-				<div class="col-xs-12 col-sm-3 col-md-4">
+				<div class="col-12 col-sm-4 col-md-2">
 					<h:link outcome="consultaVentaModificada.xhtml" immediate="true"
 						styleClass="#{r.azul}">
 						<p:graphicImage url="imagenes/consultaVenta.png" width="50" />
 						<br></br>
-						<p:outputLabel value="ACTUALIZAR VENTA" />
+						<p:outputLabel value="MODIFICAR VENTA" />
+					</h:link>
+				</div>
+				<div class="col-12 col-sm-4 col-md-2">
+					<h:link outcome="consultaVentaModificada.xhtml" immediate="true"
+						styleClass="#{r.azul}">
+						<p:graphicImage url="imagenes/consultaVenta.png" width="50" />
+						<br></br>
+						<p:outputLabel value="IMPRIMIR VENTA" />
+					</h:link>
+				</div>
+				<div class="col-12 col-sm-4 col-md-2">
+					<h:link outcome="consultaVentaModificada.xhtml" immediate="true"
+						styleClass="#{r.azul}">
+						<p:graphicImage url="imagenes/consultaVenta.png" width="50" />
+						<br></br>
+						<p:outputLabel value="ANULAR VENTA" />
+					</h:link>
+				</div>
+				<div class="col-12 col-sm-4 col-md-2">
+					<h:link outcome="consultaVentaModificada.xhtml" immediate="true"
+						styleClass="#{r.azul}">
+						<p:graphicImage url="imagenes/consultaVenta.png" width="50" />
+						<br></br>
+						<p:outputLabel value="ENVIAR CORREO" />
 					</h:link>
 				</div>
 			</div>

@@ -233,17 +233,7 @@ public class RegistroVentaBean implements Serializable {
 				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
 						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales, usuario)), null));
 				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
-			} else if (atributoUtil.getCodigoComprobante() == 7 || atributoUtil.getCodigoComprobante() == 8) {
-				// generar el archivo plano para facturador sunat
-				sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
-						atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), cadenaSunatNota(),
-						cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda(),
-						cadenaSunatDocumentoRelacionado());
-
-				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
-						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales, usuario)), null));
-				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
-			} else {
+			}  else {
 				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
 						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales, usuario)), null));
 				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
@@ -274,32 +264,7 @@ public class RegistroVentaBean implements Serializable {
 				.concat(AtributoBean.VERSION_UBL).concat("|").concat(AtributoBean.CUSTOMIZACION_DOCUMENTO);
 	}
 
-	String cadenaSunatNota() {
-
-		return atributoUtil.getCodigoOperacion().concat("|").concat(talonarioUtil.obtenerFecha(atributoUtil.getFecha()))
-				.concat("|").concat(talonarioUtil.obtenerHora()).concat("|")
-				.concat(talonarioUtil.obtenerFecha(atributoUtil.getFechaVence())).concat("|")
-				.concat(AtributoBean.CODIGO_DOMICILIO_FISCAL).concat("|")
-				.concat(atributoUtil.getCliente().getCodigoDocumento()).concat("|")
-				.concat(atributoUtil.getCliente().getNroDocumento()).concat("|")
-				.concat(atributoUtil.getCliente().getNombre()).concat("|").concat(AtributoBean.CODIGO_MONEDA)
-				.concat("|").concat(atributoUtil.getCodigoNota()).concat("|").concat(atributoUtil.getObservacion())
-				.concat("|").concat(talonarioUtil.obtenerFormatoComprobante(atributoUtil.getFacturaNota())).concat("|")
-				.concat(atributoUtil.getSerieNota().concat("-")
-						.concat(talonarioUtil.obtenerFormatoNumeroComprobante(atributoUtil.getNroFacturaNota())))
-				// sumatoria de tributos
-				.concat(atributoUtil.getIgv().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
-				// total valor de venta
-				.concat(atributoUtil.getSubtotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
-				// total precio de venta
-				.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
-				.concat(AtributoBean.TOTAL_DESCUENTOS).concat("|").concat(AtributoBean.SUMATORIA_OTROS_CARGOS)
-				.concat("|").concat(AtributoBean.TOTAL_ANTICIPOS).concat("|")
-				// importe total de venta
-				.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
-				.concat(AtributoBean.VERSION_UBL).concat("|").concat(AtributoBean.CUSTOMIZACION_DOCUMENTO);
-	}
-
+	
 	List<String> cadenaSunatDetalle() {
 
 		List<String> cadenas = new ArrayList<>();
@@ -309,9 +274,9 @@ public class RegistroVentaBean implements Serializable {
 
 		for (DetalleVentaJPA s : temporales) {
 
-			precioUnitario = s.getPrecio().multiply(s.getCantidad());
-			valorUnitario = s.getPrecio().divide(atributoUtil.getValor(), 2, RoundingMode.HALF_DOWN);
-			valorVenta = valorUnitario.multiply(s.getCantidad());
+			precioUnitario = s.getPrecio().multiply(s.getCantidad()).setScale(2, RoundingMode.HALF_UP);
+			valorUnitario = s.getPrecio().divide(atributoUtil.getValor(), 10, RoundingMode.HALF_DOWN);
+			valorVenta = valorUnitario.multiply(s.getCantidad()).setScale(2, RoundingMode.HALF_UP);
 
 			cadenas.add(s.getUnidadMedida().concat("|").concat(s.getCantidad().toString()).concat("|")
 					.concat(String.valueOf(s.getId().getCodProducto())).concat("|")
@@ -371,8 +336,8 @@ public class RegistroVentaBean implements Serializable {
 		// 1 guia
 		if (atributoUtil.isGuiaVenta()) {
 			cadena = "1".concat("|").concat("-").concat("|")
-					.concat(talonarioUtil.obtenerFormatoComprobante(atributoUtil.getCodigoComprobante())).concat("|")
-					.concat(atributoUtil.getGuiaSerie()).concat("|")
+					.concat("09").concat("|")
+					.concat(atributoUtil.getGuiaSerie()).concat("-")
 					.concat(String.valueOf(atributoUtil.getGuiaNumero())).concat("|").concat("6").concat("|")
 					.concat(AtributoBean.RUC_EMISOR).concat("|").concat(atributoUtil.getTotal().toString());
 		} else {

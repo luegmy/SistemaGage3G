@@ -2,7 +2,6 @@ package com.tresg.util.sunat;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -57,8 +56,7 @@ public class Sunat implements Serializable {
 
 	}
 
-	public void leerNodosXml(File xml)
-			throws ParserConfigurationException, SAXException, IOException {
+	public void leerNodosXml(File xml) throws ParserConfigurationException, SAXException, IOException {
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -74,7 +72,8 @@ public class Sunat implements Serializable {
 	}
 
 	public void generarCabeceraSunat(String rucEmisor, int comprobante, String serie, int numero, String cadenaCabecera,
-			List<String> cadenaDetalle, String cadenaTributo, String cadenaLeyenda, String cadenaRelacionado) throws IOException {
+			List<String> cadenaDetalle, String cadenaTributo, String cadenaLeyenda, String cadenaRelacionado)
+			throws IOException {
 		String rutaDataCabecera;
 		String ruta = RUTA_DATA.concat(generarNombreArchivo(rucEmisor, comprobante, serie, numero));
 
@@ -87,34 +86,32 @@ public class Sunat implements Serializable {
 		String rutaDataDetalle = ruta.concat(".DET");
 		String rutaDataTributo = ruta.concat(".TRI");
 		String rutaDataLeyenda = ruta.concat(".LEY");
-		
+
 		String rutaDataRelacionado = "";
 		File archivoRelacionado = null;
-		System.out.println("---"+cadenaRelacionado);
-		if(!"".equals(cadenaRelacionado)) {
-			rutaDataRelacionado = ruta.concat(".REL");	
+
+		if (!"".equals(cadenaRelacionado)) {
+			rutaDataRelacionado = ruta.concat(".REL");
 			archivoRelacionado = new File(rutaDataRelacionado);
+			if (archivoRelacionado.exists()) {
+				archivoRelacionado.delete();
+			}
 			BufferedWriter bw5 = new BufferedWriter(new FileWriter(archivoRelacionado));
 			bw5.write(cadenaRelacionado);
 			bw5.close();
 		}
-		
+
 		File archivoCabecera = new File(rutaDataCabecera);
 		File archivoDetalle = new File(rutaDataDetalle);
 		File archivoTributo = new File(rutaDataTributo);
 		File archivoLeyenda = new File(rutaDataLeyenda);
-		
-		
-		
 
-		if (archivoCabecera.exists() || archivoDetalle.exists() || archivoTributo.exists() 
-				|| archivoLeyenda.exists()) {
+		if (archivoCabecera.exists() || archivoDetalle.exists() || archivoTributo.exists() || archivoLeyenda.exists()) {
 			archivoCabecera.delete();
 			archivoDetalle.delete();
 			archivoTributo.delete();
 			archivoLeyenda.delete();
 		}
-
 		BufferedWriter bw = new BufferedWriter(new FileWriter(archivoCabecera));
 		bw.write(cadenaCabecera);
 
@@ -128,13 +125,12 @@ public class Sunat implements Serializable {
 
 		BufferedWriter bw4 = new BufferedWriter(new FileWriter(archivoLeyenda));
 		bw4.write(cadenaLeyenda);
-		
 
 		bw.close();
 		bw2.close();
 		bw3.close();
 		bw4.close();
-		
+
 	}
 
 	public void generarArchivoRelacionado(String rucEmisor, int comprobante, String serie, int numero,
@@ -171,12 +167,13 @@ public class Sunat implements Serializable {
 
 	public void generarCodigoBarra(String rucEmisor, int comprobante, String serie, int numero, String igv,
 			String monto, String fecha, String identidad, String numeroIdentidad)
-			throws WriterException, FileNotFoundException, IOException {
-		
-		String codigoBarra = rucEmisor.concat("|").concat(formato.obtenerFormatoComprobante(comprobante)).concat("|").concat(serie)
-				.concat("|").concat(formato.obtenerFormatoNumeroComprobante(numero)).concat("|").concat(String.valueOf(igv)).concat("|")
-				.concat(String.valueOf(monto)).concat("|").concat(fecha).concat("|").concat(identidad).concat("|")
-				.concat(numeroIdentidad).concat("|").concat(digestTexto).concat("|").concat(signatureTexto);
+			throws WriterException, IOException {
+
+		String codigoBarra = rucEmisor.concat("|").concat(formato.obtenerFormatoComprobante(comprobante)).concat("|")
+				.concat(serie).concat("|").concat(formato.obtenerFormatoNumeroComprobante(numero)).concat("|")
+				.concat(String.valueOf(igv)).concat("|").concat(String.valueOf(monto)).concat("|").concat(fecha)
+				.concat("|").concat(identidad).concat("|").concat(numeroIdentidad).concat("|").concat(digestTexto)
+				.concat("|").concat(signatureTexto);
 
 		BitMatrix bitMatrix;
 		Writer escritura = new PDF417Writer();

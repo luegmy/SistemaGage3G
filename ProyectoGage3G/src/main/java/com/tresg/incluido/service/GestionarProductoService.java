@@ -21,6 +21,7 @@ public class GestionarProductoService implements GestionarProductoService_I{
 	public List<ProductoJPA> listaProducto()  {
 		return iProducto.listarProducto();
 	}
+
 	
 	@Override
 	public ProductoJPA buscaProductoPorCodigo(int codigo)

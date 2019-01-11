@@ -203,11 +203,11 @@ public class MysqlVentaDAO implements VentaDAO {
 
 		em.getTransaction().begin();
 		EstadoJPA objEstado = new EstadoJPA();
-		objEstado.setCodEstado(3);
+		objEstado.setCodEstado(4);
 		try {
 			Query q = em.createNamedQuery(VentaJPA.ANULAR_VENTA);
 			q.setParameter("x", objEstado);
-			q.setParameter("y", venta);
+			q.setParameter("z", venta);
 			q.executeUpdate();
 
 		} catch (RuntimeException e) {

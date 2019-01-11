@@ -8,8 +8,6 @@ import com.tresg.incluido.jpa.EmpleadoJPA;
 import com.tresg.seguridad.interfaz.UsuarioDAO;
 import com.tresg.seguridad.jpa.UsuarioJPA;
 
-
-
 public class AutenticarUsuarioService implements
 		AutenticarUsuarioBusinessService {
 	DAOFactory fabrica=DAOFactory.getDAOFactory(DAOFactory.MYSQL);

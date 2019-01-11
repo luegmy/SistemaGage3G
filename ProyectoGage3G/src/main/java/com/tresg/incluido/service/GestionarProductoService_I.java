@@ -5,7 +5,6 @@ import java.util.List;
 import com.tresg.incluido.jpa.ProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 
-
 public interface GestionarProductoService_I {
 
 	public List<ProductoJPA> listaProducto();

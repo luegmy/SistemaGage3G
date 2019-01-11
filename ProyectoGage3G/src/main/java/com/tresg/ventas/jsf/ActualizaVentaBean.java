@@ -280,6 +280,70 @@ public class ActualizaVentaBean implements Serializable {
 		return "consultaVentaModificada.xhtml";
 	}
 
+	// metodo para anular venta
+	public void cargarNumeroAnulacion(ActionEvent e) {
+		int codigo = (Integer) e.getComponent().getAttributes().get("numeroCargar");
+
+		VentaJPA objVenta = sVenta.obtieneVenta(codigo);
+
+		atributoUtil
+				.setNumeroNota(gestionUtil.retornaNumeroComprobante(atributoUtil.getCodigoComprobante()) % 10000000);
+		atributoUtil.setFacturaAnulada(objVenta.getComprobante().getCodComprobante());
+		atributoUtil.setSerieAnulada(objVenta.getSerie());
+		atributoUtil.setNroFacturaAnulada(codigo);
+
+		atributoUtil.getCliente().setCodCliente(objVenta.getCliente().getCodCliente());
+		atributoUtil.getCliente().setDireccion(objVenta.getCliente().getDireccion());
+		atributoUtil.getCliente().setCodigoDocumento(objVenta.getCliente().getDocumento().getCodDocumento());
+		atributoUtil.getCliente().setNroDocumento(objVenta.getCliente().getNroDocumento());
+		atributoUtil.getCliente().setNombre(objVenta.getCliente().getNombre());
+		
+		atributoUtil.setCodigoPago(objVenta.getPago().getCodPago());
+
+		atributoUtil.setCodigoOperacion("0101");
+
+		if (objVenta.getGuiaRemision() == null) {
+			atributoUtil.setGuiaNumero(0);
+		} else {
+			atributoUtil.setGuiaNumero(objVenta.getGuiaRemision().getNumGuia());
+			atributoUtil.setGuiaSerie("T001");
+			atributoUtil.setGuiaVenta(true);
+		}
+
+		for (DetalleVentaJPA d : objVenta.getDetalles()) {
+			d.setDescripcionProducto(d.getProducto().getDescripcion());
+			d.setUnidadMedida(d.getProducto().getMedida().getAbreviatura());
+			temporales.add(d);
+
+			atributoUtil.setTotal(atributoUtil.getTotal().add(d.getPrecio().multiply(d.getCantidad())));
+			atributoUtil.setSubtotal(atributoUtil.getTotal().divide(atributoUtil.getValor(), 2, RoundingMode.CEILING));
+			atributoUtil.setIgv(atributoUtil.getTotal().subtract(atributoUtil.getSubtotal()));
+		}
+	}
+
+	public void anularVenta() throws IOException {
+		FacesContext context = FacesContext.getCurrentInstance();
+		// generar el archivo plano para facturador sunat
+		if ("".equals(atributoUtil.getCodigoNota())) {
+			context.addMessage("mensajeMotivoNota",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione un motivo de nota", null));
+		} else if("".equals(atributoUtil.getObservacion()) ){
+			context.addMessage("mensajeMotivo",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ingrese un motivo de la anulacion", null));
+		}else {
+			// generar el archivo plano para facturador sunat
+			sunatUtil.generarCabeceraSunat(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobanteNota(),
+					"F001", atributoUtil.getNumeroNota(), cadenaSunatNota(),
+					cadenaSunatDetalle(), cadenaSunatTributo(), cadenaSunatLeyenda(),
+					cadenaSunatDocumentoRelacionado());
+			
+			sVenta.registraVenta(gestionUtil.retornarVentaAnulada(atributoUtil, usuario));
+			context.addMessage("mensajeAnulacion", new FacesMessage(FacesMessage.SEVERITY_INFO,
+					sVenta.anulaVenta(atributoUtil.getNroFacturaAnulada()), null));
+		}
+
+	}
+
 	public void imprimirFactura(ActionEvent e) throws IOException, ClassNotFoundException, JRException, SQLException,
 			ParserConfigurationException, SAXException, WriterException {
 
@@ -304,9 +368,8 @@ public class ActualizaVentaBean implements Serializable {
 				monto.subtract(monto.divide(valor, 2, RoundingMode.HALF_EVEN)).toString(), monto.toString(),
 				atributoUtil.getFecha().toString(), documento, numeroDocumento);
 		// El monto de la venta en letras
-				MontoEnLetras numeroLetra = new MontoEnLetras();
-				String letra = String.valueOf(atributoUtil.getTotal());
-				String leyenda = numeroLetra.convertir(letra, true);
+		MontoEnLetras numeroLetra = new MontoEnLetras();
+		String leyenda = numeroLetra.convertir(monto.toString(), true);
 		Impresora i = Impresora.getImpresora();
 		i.imprimirVenta(facturacionPDF, numero, leyenda,
 				Sunat.RUTA_IMAGEN.concat(
@@ -315,7 +378,6 @@ public class ActualizaVentaBean implements Serializable {
 				sunatUtil.getDigestTexto());
 
 	}
-
 
 	String cadenaSunatCabecera() {
 
@@ -340,6 +402,34 @@ public class ActualizaVentaBean implements Serializable {
 				.concat(AtributoBean.VERSION_UBL).concat("|").concat(AtributoBean.CUSTOMIZACION_DOCUMENTO);
 	}
 
+	String cadenaSunatNota() {
+
+		return atributoUtil.getCodigoOperacion().concat("|")
+				.concat(formateo.obtenerFecha(atributoUtil.getFecha())).concat("|")
+				.concat(formateo.obtenerHora()).concat("|")
+				.concat(AtributoBean.CODIGO_DOMICILIO_FISCAL).concat("|")
+				.concat(atributoUtil.getCliente().getCodigoDocumento()).concat("|")
+				.concat(atributoUtil.getCliente().getNroDocumento()).concat("|")
+				.concat(atributoUtil.getCliente().getNombre()).concat("|")
+				.concat(AtributoBean.CODIGO_MONEDA).concat("|")
+				.concat(atributoUtil.getCodigoNota()).concat("|")
+				.concat(atributoUtil.getObservacion()).concat("|")
+				.concat(formateo.obtenerFormatoComprobante(atributoUtil.getFacturaAnulada())).concat("|")
+				.concat(atributoUtil.getSerieAnulada().concat("-")
+						.concat(formateo.obtenerFormatoNumeroComprobante(atributoUtil.getNroFacturaAnulada()%10000000))).concat("|")
+				// sumatoria de tributos
+				.concat(atributoUtil.getIgv().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
+				// total valor de venta
+				.concat(atributoUtil.getSubtotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
+				// total precio de venta
+				.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
+				.concat(AtributoBean.TOTAL_DESCUENTOS).concat("|").concat(AtributoBean.SUMATORIA_OTROS_CARGOS)
+				.concat("|").concat(AtributoBean.TOTAL_ANTICIPOS).concat("|")
+				// importe total de venta
+				.concat(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString()).concat("|")
+				.concat(AtributoBean.VERSION_UBL).concat("|").concat(AtributoBean.CUSTOMIZACION_DOCUMENTO);
+	}
+
 	List<String> cadenaSunatDetalle() {
 
 		List<String> cadenas = new ArrayList<>();
@@ -350,18 +440,18 @@ public class ActualizaVentaBean implements Serializable {
 		for (DetalleVentaJPA s : temporales) {
 
 			precioUnitario = s.getPrecio().multiply(s.getCantidad()).setScale(2, RoundingMode.HALF_UP);
-			valorUnitario = s.getPrecio().divide(atributoUtil.getValor(), 2, RoundingMode.HALF_DOWN);
+			valorUnitario = s.getPrecio().divide(atributoUtil.getValor(), 10, RoundingMode.HALF_DOWN);
 			valorVenta = valorUnitario.multiply(s.getCantidad()).setScale(2, RoundingMode.HALF_UP);
 
 			cadenas.add(s.getUnidadMedida().concat("|").concat(s.getCantidad().toString()).concat("|")
 					.concat(String.valueOf(s.getId().getCodProducto())).concat("|")
-					.concat(AtributoBean.CODIGO_PRODUCTO_SUNAT).concat("|")
-					.concat(s.getDescripcionProducto()).concat("|")
+					.concat(AtributoBean.CODIGO_PRODUCTO_SUNAT).concat("|").concat(s.getDescripcionProducto())
+					.concat("|")
 					// valor unitario por item (sin igv)
 					.concat(valorUnitario.toString()).concat("|")
 					// sumatoria de tributos por item
-					.concat(precioUnitario.subtract(valorVenta).toString()).concat("|")
-					.concat(AtributoBean.CODIGO_IGV).concat("|")
+					.concat(precioUnitario.subtract(valorVenta).toString()).concat("|").concat(AtributoBean.CODIGO_IGV)
+					.concat("|")
 					// monto de igv por item
 					.concat(precioUnitario.subtract(valorVenta).toString()).concat("|")
 					// base imponible igv
@@ -401,9 +491,9 @@ public class ActualizaVentaBean implements Serializable {
 	String cadenaSunatLeyenda() {
 		MontoEnLetras numeroLetra = new MontoEnLetras();
 		// 1000 monto en letras
-		return "1000".concat("|").concat(numeroLetra.convertir(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString(), true));
+		return "1000".concat("|").concat(
+				numeroLetra.convertir(atributoUtil.getTotal().setScale(2, RoundingMode.HALF_UP).toString(), true));
 	}
-	
 
 	String cadenaSunatDocumentoRelacionado() {
 		String cadena = "";

@@ -122,7 +122,7 @@ public class MysqlComboDAO implements ComboDAO {
 	@Override
 	public List<NotaDebitoJPA> comboDebito() {
 		open();
-		Query q=em.createNamedQuery("notaCredito.comboNotaDebito");
+		Query q=em.createNamedQuery("notaDebito.comboNotaDebito");
 		return q.getResultList();
 	}
 	
