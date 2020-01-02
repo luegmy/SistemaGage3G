@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<link rel="stylesheet" type="text/css" href="css/estilos.css" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+</h:head>
+<h:body styleClass="login">
+	<div class="modal-dialog text-center">
+		<div class="col-sm-9 container-login">
+			<div class="modal-content">
+				<div class="col-12  imagen-usuario">
+					<h:graphicImage value="imagenes/login.png" />
+				</div>
+				<h:form styleClass="col-12">
+					<div class="form-group">
+
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-fw fa-user" />
+								</div>
+							</div>
+							<p:inputText value="#{usuario.usuario}" id="usuario"
+								required="true" requiredMessage="Ingrese un usuario"
+								styleClass="form-control" placeholder="Ingrese su usuario">
+								<p:ajax event="keyup" update="msgUsuario" />
+							</p:inputText>
+						</div>
+						<p:message for="usuario" id="msgUsuario" />
+					</div>
+					<div class="form-group">
+
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-fw fa-lock" />
+								</div>
+							</div>
+							<p:password value="#{usuario.clave}" id="clave" required="true"
+								requiredMessage="Ingrese una clave" styleClass="form-control"
+								placeholder="Ingrese su clave">
+								<p:ajax event="keyup" update="msgClave" />
+							</p:password>
+						</div>
+						<p:message for="clave" id="msgClave" />
+					</div>
+
+					<h:commandLink action="#{usuario.login}" id="boton"
+						styleClass="btn btn-info boton-login">
+						<i class="fa fa-fw fa-sign-in" />
+						<p:outputLabel value="Ingresar" styleClass="white-text" />
+					</h:commandLink>
+					<p:messages for="mensajeLogin" />
+
+					<p:defaultCommand target="boton" />
+
+				</h:form>
+			</div>
+		</div>
+
+	</div>
+
+</h:body>
+
+</html>

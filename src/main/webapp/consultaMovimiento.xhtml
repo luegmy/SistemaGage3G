@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO ALMACEN</ui:define>
+	<ui:define name="content">
+		<div class="container-fluid">
+			<p:fieldset legend="CONSULTAR MOVIMIENTOS">
+				<h:form id="formMovimientos">
+				
+					<div class="row justify-content-md-center">
+
+						<div class="col-12 col-sm-12 col-md-4">
+							<p:tabView dynamic="true" cache="true" effect="fade">
+								<p:ajax event="tabChange"
+									update=":formMovimientos:msgRangoFecha" />
+
+								<p:tab title="Fecha">
+									<p:calendar value="#{movimientoConsultaBean.fecha}"
+										pattern="dd-MM-yyyy" id="fecha">
+										<p:ajax event="dateSelect" update=":formMovimientos:tabla"
+											listener="#{movimientoConsultaBean.listarMovimientoXFecha}" />
+									</p:calendar>
+								</p:tab>
+
+								<p:tab title="Rango de fecha">
+									<p:calendar value="#{movimientoConsultaBean.fechaIni}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<p:ajax event="dateSelect" update="ffinal"
+											listener="#{movimientoConsultaBean.listarMovimientoXRangoFecha}" />
+									</p:calendar>
+
+									<p:calendar id="ffinal" value="#{movimientoConsultaBean.fechaFin}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<p:ajax event="dateSelect"
+											update=":formMovimientos:tabla :formMovimientos:msgRangoFecha"
+											listener="#{movimientoConsultaBean.listarMovimientoXRangoFecha}" />
+									</p:calendar>
+								</p:tab>
+							</p:tabView>
+							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
+						</div>
+						<div class="col-12 col-sm-12 col-md-2">
+							<h:commandLink styleClass="btn btn-danger btn-sm" title="Exportar">
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<p:outputLabel value=" Excel" />
+								<p:dataExporter type="xls" target="tabla" fileName="movimientos" />
+							</h:commandLink>
+						</div>
+					</div>
+					<br />
+					<p:dataTable id="tabla" value="#{movimientoConsultaBean.movimientos}"
+						var="t" emptyMessage="No hay movimientos registrados"
+						reflow="true" paginator="true" rows="25">
+						
+						<p:column headerText="ALMACEN">
+							<h:outputText value="#{t.detalleAlmacen.almacen.descripcion}" />
+						</p:column>
+						<p:column width="8%" headerText="FECHA">
+							<h:outputText value="#{t.movimiento.fecha}">
+								<f:convertDateTime pattern="dd - MM - yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="HORA" exportable="false">
+							<h:outputText value="#{t.movimiento.hora}">
+								<f:convertDateTime pattern="hh - mm - ss" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="NUMERO">
+							<h:outputText value="#{t.movimiento.numComprobante % 10000000}" />
+						</p:column>
+						<p:column headerText="DOC.">
+							<h:outputText value="#{t.movimiento.comprobante.descripcion}" />
+						</p:column>
+						<p:column width="30%" headerText="PRODUCTO">
+							<h:outputText value="#{t.detalleAlmacen.producto.descripcion}" />
+						</p:column>
+						<p:column headerText="TIPO">
+							<h:outputText
+								value="#{t.detalleAlmacen.producto.tipo.descripcion}" />
+						</p:column>
+						<p:column headerText="MOVIM.">
+							<h:outputText
+								value="#{t.movimiento.tipoMovimiento.descripcion}" />
+						</p:column>
+						<p:column headerText="CANT.">
+							<h:outputText
+								value="#{t.cantidad}" />
+						</p:column>
+						<p:column exportable="false" headerText="OBS">
+							<h:outputLink value="#" id="obs">
+								<h:outputText value="OBS" />
+							</h:outputLink>
+							<p:tooltip id="toolTipFocus" for="obs" trackMouse="true"
+								styleClass="lead" hideEffect="explode"
+								value="#{t.movimiento.observacion}" />
+						</p:column>
+					</p:dataTable>
+
+				</h:form>
+			</p:fieldset>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

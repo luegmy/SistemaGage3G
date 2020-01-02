@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO VENTAS</ui:define>
+	<ui:define name="content">
+		<div class="container-fluid">
+			<h:form id="formProductoCliente">
+				<p:fieldset legend="CONSULTA VENTA DE PRODUCTOS POR CLIENTE">
+
+					<div class="d-flex flex-row">
+
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i
+									class="fa fa-fw fa-search"></i></span>
+								<p:inputText value="#{productoClienteBean.nombreCliente}"
+									id="nombre" placeholder="Buscar cliente"
+									styleClass="form-control input-sm">
+									<p:ajax event="keyup" update="tabla"
+										listener="#{productoClienteBean.listarProducto()}" />
+								</p:inputText>
+							</div>
+						</div>
+						<div class="btn-group" role="group">
+							<h:commandLink styleClass="#{r.rojo}">
+								<p:dataExporter type="xls" target="tabla"
+									fileName="clienteXProductoReporte" encoding="ISO-8859-1" />
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<h:outputText value="Excel" />
+							</h:commandLink>
+						</div>
+					</div>
+
+					<p:dataTable id="tabla" value="#{productoClienteBean.detalles}"
+						var="t" paginator="true" emptyMessage="No existe ventas" rows="30"
+						reflow="true" widgetVar="ventaTabla">
+						<f:facet name="header">
+							<p:outputPanel styleClass="text-center">
+								<p:outputLabel value="FILTRO :" />
+								<p:inputText id="globalFilter"
+									rendered="#{productoClienteBean.nombreCliente!=''}"
+									onkeyup="PF('ventaTabla').filter()"
+									placeholder="Filtrar busqueda" />
+							</p:outputPanel>
+						</f:facet>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="CLIENTE" />
+							</f:facet>
+							<h:outputText value="#{t.venta.cliente.nombre}" />
+						</p:column>
+						<p:column width="5%" filterBy="#{t.venta.comprobante.descripcion}">
+							<f:facet name="header">
+								<h:outputText value="CDP" />
+							</f:facet>
+							<h:outputText value="#{t.venta.comprobante.descripcion}" />
+						</p:column>
+						<p:column width="5%">
+							<f:facet name="header">
+								<h:outputText value="Nro." />
+							</f:facet>
+							<h:outputText value="#{t.venta.numComprobante%10000000}" />
+						</p:column>
+						<p:column width="8%">
+							<f:facet name="header">
+								<h:outputText value="FECHA" />
+							</f:facet>
+							<h:outputText value="#{t.venta.fecha}">
+								<f:convertDateTime pattern="dd - MM - yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column filterBy="#{t.producto.descripcion}">
+							<f:facet name="header">
+								<h:outputText value="PRODUCTO" />
+							</f:facet>
+							<h:outputText value="#{t.producto.descripcion}" />
+						</p:column>
+						<p:column filterBy="#{t.producto.tipo.descripcion}" width="8%">
+							<f:facet name="header">
+								<h:outputText value="TIPO" />
+							</f:facet>
+							<h:outputText value="#{t.producto.tipo.descripcion}" />
+						</p:column>
+						<p:column width="8%">
+							<f:facet name="header">
+								<h:outputText value="PRECIO" />
+							</f:facet>
+							<h:outputText value="#{t.precio}">
+								<f:convertNumber type="currency" currencySymbol="S/." />
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+					<p:blockUI block="tabla" trigger="nombre">
+        										CARGANDO<br />
+						<p:graphicImage url="imagenes/load.gif" />
+					</p:blockUI>
+				</p:fieldset>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO VENTAS</ui:define>
+	<ui:define name="content">
+		<div class="container-fluid">
+
+			<h:form id="formConsultaVenta">
+				<p:fieldset legend="CONSULTA VENTA">
+					<div class="row justify-content-md-center">
+						<div class="col-12 col-sm-6">
+							<p:tabView dynamic="true" cache="true" id="tabVenta"
+								effect="fade">
+								<p:ajax event="tabChange"
+									update=":formConsultaVenta:msgRangoFecha" />
+
+								<p:tab title="Fecha">
+									<p:calendar value="#{ventaConsultaBean.atributoUtil.fecha}"
+										pattern="dd-MM-yyyy" id="fecha" locale="es">
+										<f:ajax event="dateSelect" execute="@this"
+											render=":formConsultaVenta:tabla :formConsultaVenta:acumulado"
+											listener="#{ventaConsultaBean.listarVentaXFecha}" />
+									</p:calendar>
+								</p:tab>
+								<p:tab title="Rango de fecha">
+									<p:calendar value="#{ventaConsultaBean.atributoUtil.fechaIni}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<f:ajax event="dateSelect" execute="@this" render="ffinal"
+											listener="#{ventaConsultaBean.listarVentaRangoFecha}" />
+									</p:calendar>
+									<p:calendar id="ffinal"
+										value="#{ventaConsultaBean.atributoUtil.fechaFin}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<f:ajax event="dateSelect" execute="@this"
+											render=":formConsultaVenta:tabla :formConsultaVenta:msgRangoFecha :formConsultaVenta:acumulado"
+											listener="#{ventaConsultaBean.listarVentaRangoFecha}" />
+									</p:calendar>
+								</p:tab>
+								<p:tab title="Cliente">
+									<p:inputText
+										value="#{ventaConsultaBean.atributoUtil.cliente.nombre}"
+										id="nombre" placeholder="Ingrese un cliente">
+										<f:ajax event="keyup" execute="@this"
+											render=":formConsultaVenta:tabla :formConsultaVenta:acumulado"
+											listener="#{ventaConsultaBean.listarVentaXCliente}" />
+									</p:inputText>
+								</p:tab>
+								<p:tab title="Numero">
+									<p:inputText
+										value="#{ventaConsultaBean.atributoUtil.numeroComprobante}"
+										id="numero" placeholder="Ingrese numero comprobante">
+										<p:ajax event="keyup" update=":formConsultaVenta:tabla"
+											listener="#{ventaConsultaBean.listarVentaXNumero()}" />
+									</p:inputText>
+								</p:tab>
+							</p:tabView>
+							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
+						</div>
+
+						<div class="col-12 col-sm-4">
+							<p:panel id="acumulado">
+								<h3>
+									<p:outputLabel value="Contado" for="acumuladoCo" />
+									<span class="badge badge-secondary"><p:outputLabel
+											value="#{ventaConsultaBean.acumuladoContado}"
+											id="acumuladoCo" /></span>
+								</h3>
+
+								<h3>
+									<p:outputLabel value="Deposito" for="acumuladoD" />
+									<span class="badge badge-secondary"><p:outputLabel
+											value="#{ventaConsultaBean.acumuladoDeposito}"
+											id="acumuladoD" /></span>
+								</h3>
+								<h3>
+									<p:outputLabel value="Credito" for="acumuladoCr" />
+									<span class="badge badge-secondary"><p:outputLabel
+											value="#{ventaConsultaBean.acumuladoCredito}"
+											id="acumuladoCr" /></span>
+								</h3>
+							</p:panel>
+						</div>
+
+					</div>
+					<br />
+
+					<p:dataTable id="tabla" value="#{ventaConsultaBean.ventas}" var="t"
+						emptyMessage="No existe ventas" reflow="true"
+						paginatorTemplate="{Exportar}" paginator="true">
+
+						<f:facet name="{Exportar}">
+							<h:commandLink styleClass="btn btn-danger btn-sm"
+								title="Exportar">
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<p:outputLabel value=" Exportar" />
+								<p:dataExporter type="xls" target="tabla" fileName="ventas" />
+							</h:commandLink>
+						</f:facet>
+
+						<p:column width="5%" headerText="NRO.">
+							<h:outputText value="#{t.numComprobante % 10000000}" />
+						</p:column>
+						<p:column width="5%" headerText="CDP">
+							<h:outputText value="#{t.comprobante.descripcion}" />
+						</p:column>
+						<p:column width="10%" headerText="FECHA">
+							<h:outputText value="#{t.fecha}">
+								<f:convertDateTime pattern="dd - MM - yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column width="5%" headerText="HORA" exportable="false">
+							<h:outputText value="#{t.hora}">
+								<f:convertDateTime pattern="hh - mm - ss" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="CLIENTE">
+							<h:outputText value="#{t.cliente.nombre}" />
+						</p:column>
+						<p:column headerText="DIRECCION" exportable="false">
+							<h:outputText value="#{t.cliente.direccion}" />
+						</p:column>
+						<p:column width="8%" headerText="RUC">
+							<h:outputText value="#{t.cliente.nroDocumento}" />
+						</p:column>
+						<p:column width="8%" headerText="MONTO">
+							<h:outputText value="#{t.monto}" />
+						</p:column>
+						<p:column width="5%" headerText="ESTADO">
+							<h:outputText value="#{t.estado.descripcion}" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+		</div>
+
+	</ui:define>
+</ui:composition>
+</html>

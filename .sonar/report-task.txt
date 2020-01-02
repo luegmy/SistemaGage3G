@@ -1,0 +1,6 @@
+projectKey=ProyectoGage3G
+serverUrl=http://localhost:9000
+serverVersion=6.7.4.38452
+dashboardUrl=http://localhost:9000/dashboard/index/ProyectoGage3G
+ceTaskId=AWWtSxrrBz-R8e_RXOd9
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWWtSxrrBz-R8e_RXOd9

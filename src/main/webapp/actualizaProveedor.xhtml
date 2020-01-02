@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO GESTION</ui:define>
+	<ui:define name="content">
+	
+		<div class="container-fluid">
+			<h:form id="formProveedor">
+				<p:fieldset id="pnlProveedor" legend="GESTION DE PROVEEDOR">
+					
+					<div class="d-flex justify-content-between">
+					
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"> <i
+									class="fa fa-fw fa-search"></i></span>
+								<p:inputText value="#{proveedorBean.busqueda}"
+									placeholder="Buscar proveedor" styleClass="form-control input-sm">
+									<p:ajax event="keyup" update="tabla" />
+								</p:inputText>
+							</div>
+						</div>
+						<div class="btn-group" role="group">
+							<h:commandLink styleClass="#{r.rojo}">
+								<p:dataExporter type="xls" target="tabla" fileName="proveedorReporte"
+									encoding="ISO-8859-1" />
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<h:outputText value="Excel" />
+							</h:commandLink>
+						</div>
+						<div class="btn-group" role="group">
+						<p:commandLink action="ACTUALIZAR_PROVEEDOR"
+								onclick="PF('dlgProveedor').show();" styleClass="#{r.verde}">
+								<i class="fa fa-fw fa-user-plus"></i>
+								<p:outputLabel value="Nuevo" />
+							</p:commandLink>
+						</div>
+					</div>
+
+					<p:dataTable id="tabla" value="#{proveedorBean.proveedores}"
+						var="c" widgetVar="tablaProveedor"
+						emptyMessage="No existe el proveedor #{proveedorBean.busqueda}, haz click en Proveedor nuevo"
+						paginator="true" rowsPerPageTemplate="5,10,15,20,25" rows="15"
+						reflow="true">
+						
+						<f:facet name="header">
+							<p:outputPanel styleClass="text-center">
+								<h:outputText value="FILTRO :" />
+								<p:inputText id="globalFilter"
+									onkeyup="PF('tablaProveedor').filter()"
+									placeholder="Filtrar busqueda" />
+							</p:outputPanel>
+						</f:facet>
+
+						<p:column filterBy="#{c.nombre}" width="25%">
+							<f:facet name="header">
+								<p:outputLabel value="NOMBRE" />
+							</f:facet>
+							<p:outputLabel value="#{c.nombre}" />
+						</p:column>
+						<p:column filterBy="#{c.direccion}" width="25%">
+							<f:facet name="header">
+								<p:outputLabel value="DIRECCION" />
+							</f:facet>
+							<p:outputLabel value="#{c.direccion}" />
+						</p:column>
+						<p:column filterBy="#{c.ruc}">
+							<f:facet name="header">
+								<p:outputLabel value="RUC" />
+							</f:facet>
+							<p:outputLabel value="#{c.ruc}" />
+						</p:column>
+						<p:column filterBy="#{c.telefono}">
+							<f:facet name="header">
+								<p:outputLabel value="TELEFONO" />
+							</f:facet>
+							<p:outputLabel value="#{c.telefono}" />
+						</p:column>
+						<p:column filterBy="#{c.correo}">
+							<f:facet name="header">
+								<p:outputLabel value="CORREO" />
+							</f:facet>
+							<p:outputLabel value="#{c.correo}" />
+						</p:column>
+
+						<p:column width="5%">
+							<p:commandLink actionListener="#{proveedorBean.editarProveedor}"
+								update="dialogo" action="ACTUALIZAR_PROVEEDOR"
+								oncomplete="PF('dlgProveedor').show();"
+								styleClass="btn btn-primary">
+								<i class="fa fa-fw fa-edit"></i>
+								<f:attribute value="#{c.codProveedor}" name="codigo" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+			<p:dialog header="REGISTRAR PROVEEDOR" widgetVar="dlgProveedor"
+				closable="false" id="dialogo" showEffect="scale"
+				hideEffect="explode" height="600" width="600" modal="true"
+				appendTo="@(body)">
+				<h:form id="formProveedorNuevo">
+					<h:panelGroup id="pnlProveedor">
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+								<div class="form-group">
+									<p:outputLabel value="#{r.codigo}" />
+									<p:inputText value="#{proveedorBean.codigoProveedor}"
+										disabled="true" />
+								</div>
+								<div class="form-group">
+									<p:outputLabel value="Proveedor" />
+									<p:inputText value="#{proveedorBean.nombreProveedor}"
+										id="nombre" required="true" styleClass="form-control input-sm"
+										requiredMessage="Ingrese un nombre">
+										<f:ajax event="keyup" execute="@this" render="msgNombre" />
+									</p:inputText>
+									<p:message for="nombre" id="msgNombre" />
+								</div>
+								<div class="form-group">
+									<p:outputLabel value="#{r.direccion}" />
+									<p:inputText value="#{proveedorBean.direccion}"
+										styleClass="form-control input-sm" />
+								</div>
+								<div class="form-group">
+									<p:outputLabel value="#{r.ruc}" />
+									<p:inputText value="#{proveedorBean.ruc}"
+										styleClass="form-control input-sm" maxlength="11" id="ruc"
+										required="true" requiredMessage="Ingrese numero de documento"
+										validatorMessage="Ingrese 8 digitos para DNI o 11 digitos para RUC">
+										<f:validateLength minimum="8" maximum="11" />
+										<f:ajax event="keyup" execute="@this" render="msgRuc" />
+									</p:inputText>
+									<p:message for="ruc" id="msgRuc" />
+								</div>
+								<div class="form-group">
+									<p:outputLabel value="Telefono" />
+									<p:inputText value="#{proveedorBean.telefono}"
+										styleClass="form-control input-sm" mask="999 999 999" />
+								</div>
+								<div class="form-group">
+									<p:outputLabel value="Correo" />
+									<p:inputText value="#{proveedorBean.correo}"
+										styleClass="form-control input-sm" />
+								</div>
+								<div class="row">
+									<div class="col-xs-12 col-sm-6">
+										<div class="form-group">
+											<p:commandLink action="ACTUALIZAR_PROVEEDOR"
+												actionListener="#{proveedorBean.actualizarProveedor}"
+												styleClass="#{r.verde}"
+												update="formProveedorNuevo:pnlProveedor msgProveedor :formProveedor:tabla">
+												<p:graphicImage url="imagenes/save.png" width="25"
+													height="25" />
+												<p:outputLabel value=" Grabar" />
+											</p:commandLink>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-6">
+										<div class="form-group">
+											<p:commandLink onclick="PF('dlgProveedor').hide();"
+												immediate="true" action="ACTUALIZAR_PROVEEDOR"
+												update="formProveedorNuevo" styleClass="#{r.rojo}"
+												actionListener="#{proveedorBean.cancelarProveedor}">
+												<p:graphicImage url="imagenes/exit.png" width="25"
+													height="25" />
+												<p:outputLabel value=" Salir" />
+											</p:commandLink>
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<p:messages for="mensajeRegistroProveedor" id="msgProveedor" />
+						<p:messages for="mensajeRucExiste" id="msgRucExiste" />
+					</h:panelGroup>
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

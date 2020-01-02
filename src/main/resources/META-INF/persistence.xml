@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="tresg" transaction-type="RESOURCE_LOCAL">
+
+		<class>com.tresg.incluido.jpa.ProductoJPA</class>
+		<class>com.tresg.incluido.jpa.UnidadMedidaJPA</class>
+		<class>com.tresg.incluido.jpa.TipoProductoJPA</class>
+		<class>com.tresg.incluido.jpa.EstadoJPA</class>
+		<class>com.tresg.incluido.jpa.ComprobanteJPA</class>
+		<class>com.tresg.incluido.jpa.MediosPagoJPA</class>
+		<class>com.tresg.incluido.jpa.MonedaJPA</class>
+		<class>com.tresg.incluido.jpa.EmpleadoJPA</class>
+		<class>com.tresg.incluido.jpa.ClienteJPA</class>
+		<class>com.tresg.incluido.jpa.ProveedorJPA</class>
+		<class>com.tresg.incluido.jpa.DocumentoIdentidadJPA</class>
+
+		<class>com.tresg.almacen.jpa.AlmacenJPA</class>
+		<class>com.tresg.almacen.jpa.DetalleAlmacenJPA</class>
+		<class>com.tresg.almacen.jpa.DetalleAlmacenJPAPK</class>
+		<class>com.tresg.almacen.jpa.TipoMovimientoJPA</class>
+		<class>com.tresg.almacen.jpa.MovimientoJPA</class>
+		<class>com.tresg.almacen.jpa.DetalleMovimientoJPA</class>
+		<class>com.tresg.almacen.jpa.DetalleMovimientoJPAPK</class>
+				
+		<class>com.tresg.ventas.jpa.VentaJPA</class>
+		<class>com.tresg.ventas.jpa.DetalleVentaJPA</class>
+		<class>com.tresg.ventas.jpa.DetalleVentaJPAPK</class>
+		<class>com.tresg.ventas.jpa.CobranzaJPA</class>
+		<class>com.tresg.ventas.jpa.OperacionJPA</class>
+		<class>com.tresg.ventas.jpa.NotaCreditoJPA</class>
+		<class>com.tresg.ventas.jpa.NotaDebitoJPA</class>
+		<class>com.tresg.ventas.jpa.GuiaRemisionJPA</class>
+		
+		<class>com.tresg.seguridad.jpa.UsuarioJPA</class>
+		<class>com.tresg.seguridad.jpa.RolJPA</class>
+		
+		
+		
+
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/bd_3g?zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC"/>
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="admin" />
+			<property name="eclipselink.logging.level" value="FINE" />
+		</properties>
+
+
+	</persistence-unit>
+</persistence>

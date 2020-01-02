@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form>
+	<div class="container-fluid">
+
+		<div class="d-flex">
+			<div class="p-2 flex-fill">
+				<i class="fa fa-fw fa-fire-extinguisher"></i><b>3G</b>
+			</div>
+
+			<div class="p-2 flex-fill">
+				<i class="fa fa-fw fa-user"></i>
+				<p:outputLabel value="#{usuario.sesionUsuario}"/>
+			</div>
+
+			<div class="p-2">
+				<h:link outcome="home.xhtml" immediate="true" title="HOME">
+					<i class="fa fa-fw fas fa-home"></i>
+					<p:outputLabel value=" Home " />
+				</h:link>
+			</div>
+			<div class="p-2 ml-auto">
+				<h:commandLink action="#{usuario.logout}" immediate="true"
+					title="CERRAR SESION">
+					<i class="fa fa-fw fa-sign-out"></i>
+					<p:outputLabel value=" Salir " />
+				</h:commandLink>
+			</div>
+		</div>
+	</div>
+</h:form>
+</html>

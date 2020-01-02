@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/*  login */
+.login {
+	font-family: 'Roboto', sans-serif;
+	background-image: url(../imagenes/inicio.png);
+	background-size: cover;
+}
+
+.container-login {
+	margin: 0 auto;
+	margin-top: 280px;
+	margin-left:100px;
+	padding: 0;
+}
+
+.login .modal-content {
+	background-color: #343a40;
+	opacity: .95;
+	padding: 0 28px;
+	box-shadow: 0 0 3px #848484
+}
+
+.imagen-usuario {
+	margin-top: -50px;
+	margin-bottom: 35px;
+}
+
+.imagen-usuario img {
+	width: 100px;
+	height: 100px;
+}
+
+.login .form-group {
+	margin-bottom: 25px;
+}
+
+.login .form-group input {
+	height: 42px;
+	border-radius: 5px;
+	border: 0;
+	font-size: 18px;
+}
+
+.white-text {
+	font-size: 19px;
+	margin-right: 5px;
+}
+
+.boton-login {
+	margin: 5px 0 25px;
+}
+
+.login .input-group-text {
+	background-color: #17a2b8;
+	border-color: #17a2b8;
+	color: white;
+}
+
+.container-fluid .input-group-text {
+	background-color: #17a2b8;
+	border-color: #17a2b8;
+	color: white;
+}
+
+/* layout */
+
+.ui-layout-north {
+	background: #17a2b8;
+}
+
+.ui-layout-pane-north .ui-layout-unit-content {
+	background: #17a2b8;
+}
+
+/* menu */
+.ui-panelmenu .ui-panelmenu-header {
+	font-size: 14px;
+}
+
+.ui-panelmenu .ui-menuitem {
+	font-size: 14px;
+}
+
+.ui-widget-header {
+	font-size: 14px;
+}
+
+/*  */
+.pie {
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.container-fluid {
+	font-size: 14px;
+}
+
+.container-fluid legend {
+	font-size: 14px;
+	text-align: center;
+}
+
+.container-fluid .d-flex {
+	font-size: 14px;
+}
+
+.ui-dialog {
+	font-size: 14px;
+}
+
+

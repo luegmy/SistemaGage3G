@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO VENTAS</ui:define>
+	<ui:define name="content">
+	
+		<div class="container-fluid">
+			<h:form id="formProductoVenta">
+				<p:fieldset id="pnlGuia" legend="CONSULTA VENTA DE PRODUCTOS">
+					
+					<div class="row justify-content-md-center">
+						<div class="col-12 col-sm-12 col-md-4">
+							<p:tabView dynamic="true" cache="true" id="tabVenta"
+								effect="fade">
+								<p:ajax event="tabChange"
+									update=":formProductoVenta:msgRangoFecha" />
+								<p:tab title="Fecha">
+									<p:calendar value="#{productoVentaBean.fecha}"
+										pattern="dd-MM-yyyy" id="fecha" locale="es">
+										<p:ajax event="dateSelect" update=":formProductoVenta:tabla"
+											listener="#{productoVentaBean.listarProductoVentaPorFecha()}" />
+									</p:calendar>
+								</p:tab>
+								<p:tab title="Rango de fecha">
+									<p:calendar value="#{productoVentaBean.fechaIni}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<p:ajax event="dateSelect" update="ffinal" />
+									</p:calendar>
+									<p:calendar id="ffinal" value="#{productoVentaBean.fechaFin}"
+										pattern="dd-MM-yyyy" pages="3" locale="es">
+										<p:ajax event="dateSelect"
+											update=":formProductoVenta:tabla :formProductoVenta:msgRangoFecha"
+											listener="#{productoVentaBean.listarProductoVentaPorRangoFecha()}" />
+									</p:calendar>
+								</p:tab>
+
+							</p:tabView>
+							<p:messages for="mensajeRangoFecha" id="msgRangoFecha" />
+						</div>
+						<div class="col-12 col-sm-12 col-md-2">
+							<h:commandLink action="#{productoVentaBean.exportar()}"
+								styleClass="btn btn-danger btn-sm" title="Exportar">
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<p:outputLabel value=" Exportar" />
+							</h:commandLink>
+						</div>
+					</div>
+
+
+					<p:dataTable id="tabla" value="#{productoVentaBean.detalles}"
+						sortBy="#{t.producto.codProducto}" var="t">
+
+						<p:column headerText="CDP"
+							sortBy="#{t.venta.comprobante.descripcion}">
+							<h:outputText value="#{t.venta.comprobante.descripcion}" />
+						</p:column>
+						<p:column headerText="NRO."
+							sortBy="#{t.venta.numComprobante%10000000}">
+							<h:outputText value="#{t.venta.numComprobante%10000000}" />
+						</p:column>
+						<p:column headerText="CODIGO" sortBy="#{t.producto.codProducto}">
+							<h:outputText value="#{t.producto.codProducto}" />
+						</p:column>
+						<p:column width="50%" headerText="PRODUCTO"
+							sortBy="#{t.producto.descripcion}">
+							<h:outputText value="#{t.producto.descripcion}" />
+						</p:column>
+						<p:column headerText="TIPO"
+							sortBy="#{t.producto.tipo.descripcion}">
+							<h:outputText value="#{t.producto.tipo.descripcion}" />
+						</p:column>
+						<p:column headerText="CANTIDAD" sortBy="#{t.cantidad}">
+							#{productoVentaBean.valorAcumulado(t.cantidad)}						
+							<h:outputText value="#{t.cantidad}">
+								<f:converter converterId="javax.faces.Integer" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="ESTADO"
+							sortBy="#{t.venta.estado.descripcion}">
+							<h:outputText value="#{t.venta.estado.descripcion}" />
+						</p:column>
+						<p:column headerText="PRECIO" sortBy="#{t.precio}">	
+							#{productoVentaBean.montoAcumulado(t.precio)}						
+							<h:outputText value="#{t.precio}">
+							</h:outputText>
+						</p:column>
+
+						<p:summaryRow>
+							<p:column colspan="5" style="text-align:right">
+								<h:outputText value="Total:" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{productoVentaBean.sumaPorFecha()}" />
+							</p:column>
+							<p:column colspan="1" style="text-align:right">
+								<h:outputText value="Importe:" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{productoVentaBean.montoPorFecha()}" />
+							</p:column>
+						</p:summaryRow>
+					</p:dataTable>
+					<p:blockUI block="tabla" trigger="tabVenta:fecha">
+        										CARGANDO<br />
+						<p:graphicImage url="imagenes/load.gif" />
+					</p:blockUI>
+					<p:blockUI block="tabla" trigger="tabVenta:ffinal">
+        										CARGANDO<br />
+						<p:graphicImage url="imagenes/load.gif" />
+					</p:blockUI>
+				</p:fieldset>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

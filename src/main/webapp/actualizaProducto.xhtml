@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/plantilla/plantillaBasica.xhtml">
+	<ui:define name="title">MODULO GESTION</ui:define>
+	<ui:define name="content">
+
+		<div class="container-fluid">
+			<h:form id="formProducto">
+				<p:fieldset id="pnlProducto" legend="GESTION DE PRODUCTO">
+
+					<div class="d-flex justify-content-between">
+
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i
+									class="fa fa-fw fa-search"></i></span>
+								<p:inputText value="#{productoBean.descripcionProducto}"
+									id="descripcion" placeholder="Buscar producto"
+									styleClass="form-control">
+									<p:ajax event="keyup" update="tablaProducto" />
+								</p:inputText>
+							</div>
+						</div>
+						
+						<div class="btn-group" role="group">
+							<h:commandLink styleClass="#{r.rojo}">
+								<p:dataExporter type="xls" target="tablaProducto" fileName="productoReporte"
+									encoding="ISO-8859-1" />
+								<i class="fa fa-fw fa-file-excel-o"></i>
+								<h:outputText value="Excel" />
+							</h:commandLink>
+						</div>
+
+						<div class="btn-group" role="group">
+							<p:commandLink action="ACTUALIZAR_PRODUCTO" id="nuevo"
+								onclick="PF('dlgProducto').show();" styleClass="#{r.verde}">
+								<i class="fa fa-fw fa-plus-circle"></i>
+								<h:outputText value=" Nuevo " />
+							</p:commandLink>
+						</div>
+
+					</div>
+
+
+					<p:dataTable id="tablaProducto" value="#{productoBean.productos}"
+						var="p"
+						emptyMessage="No existe el producto #{productoBean.descripcionProducto}, has click en boton nuevo"
+						paginator="true" rowsPerPageTemplate="5,10,15,20,25,50" rows="25"
+						reflow="true">
+
+						<p:column headerText="CODIGO">
+							<h:outputText value="#{p.codProducto}" />
+						</p:column>
+						<p:column headerText="DESCRIPCION" width="40%">
+							<h:outputText value="#{p.descripcion}" />
+						</p:column>
+						<p:column headerText="TIPO">
+							<h:outputText value="#{p.tipo.descripcion} " />
+						</p:column>
+						<p:column headerText="COSTO">
+							<h:outputText value="#{p.precioCompra}" />
+						</p:column>
+						<p:column headerText="PRECIO">
+							<h:outputText value="#{p.precioVenta}" />
+						</p:column>
+						<p:column headerText="U.M">
+							<h:outputText value="#{p.medida.abreviatura}" />
+						</p:column>
+						<p:column width="12%" styleClass="text-center" exportable="false">
+							<p:commandLink actionListener="#{productoBean.editarProducto}"
+								update="dialogo" action="actualizaProducto" title="Editar"
+								oncomplete="PF('dlgProducto').show();" styleClass="btn btn-primary">
+								<i class="fa fa-fw fa-edit"></i>
+								<f:attribute value="#{p.codProducto}" name="codigo" />
+							</p:commandLink>
+							<p:commandLink actionListener="#{productoBean.mostrarExistenciaXAlmacen}"
+								update="formProducto" action="actualizaProducto" title="Existencias"
+								oncomplete="PF('dlgExistencia').show();" styleClass="btn btn-info">
+								<i class="fa fa-fw fa-cubes"></i>
+								<f:attribute value="#{p.codProducto}" name="codigo" />
+							</p:commandLink>
+							<p:commandLink actionListener="#{productoBean.eliminarProducto}"
+								styleClass="btn btn-danger" action="actualizaProducto"
+								update="tablaProducto" title="Eliminar">
+								<p:confirm header="Confirmacion"
+									message="Estas seguro de eliminar?" icon="ui-icon-alert" />
+								<i class="fa fa-fw fa-trash"></i>
+								<f:attribute value="#{p.codProducto}" name="codigo" />
+							</p:commandLink>
+
+						</p:column>
+					</p:dataTable>
+
+					<p:confirmDialog global="true">
+						<p:commandButton value="Si" update="pnlProducto tablaProducto"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="No" styleClass="ui-confirmdialog-no"
+							icon="ui-icon-close" />
+					</p:confirmDialog>
+
+					<p:messages for="mensajeProductoEliminado"
+						id="msgProductoEliminado" />
+						
+						
+					<!--  EXISTENCIAS EN ALMACEN-->
+					<p:dialog header="EXISTENCIA" widgetVar="dlgExistencia"
+					 showEffect="scale" hideEffect="explode" position="right center"
+						modal="true" appendTo="@(body)">
+						<p:dataTable var="d" value="#{productoBean.existencias}"
+							reflow="true">
+							<p:column headerText="ALMACEN">
+								<h:outputText value="#{d.almacen.descripcion}" />
+							</p:column>
+							<p:column headerText="PRODUCTO">
+								<h:outputText value="#{d.producto.descripcion}" />
+							</p:column>
+							<p:column headerText="TIPO">
+								<h:outputText value="#{d.producto.tipo.descripcion}" />
+							</p:column>
+							<p:column headerText="CANTIDAD">
+								<h:outputText value="#{d.existencia}" />
+							</p:column>
+						</p:dataTable>
+					</p:dialog>
+				</p:fieldset>
+
+			</h:form>
+
+			<p:dialog header="REGISTRAR PRODUCTO" widgetVar="dlgProducto"
+				closable="false" id="dialogo" showEffect="scale" position="left top"
+				hideEffect="explode" modal="true" positionType="absolute"
+				appendTo="@(body)" responsive="true">
+				<h:form id="formProductoNuevo">
+					<h:panelGroup id="pnlProducto">
+
+						<div class="modal-body">
+							<div class="form-group">
+								<p:outputLabel value="#{r.codigo}" for="codigo" />
+								<h:inputText value="#{productoBean.codigoProducto}" id="codigo"
+									disabled="true" styleClass="form-control" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.descripcion}" />
+								<h:inputText value="#{productoBean.descripcion}"
+									styleClass="form-control form-control-sm" required="true"
+									requiredMessage="Ingrese nombre del producto" id="descripcion">
+									<f:ajax event="keyup" render="msgDescripcion" />
+								</h:inputText>
+								<p:message for="descripcion" id="msgDescripcion" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.categoria}" />
+								<p:selectOneMenu value="#{productoBean.codigoTipoProducto}"
+									required="true" styleClass="form-control form-control-sm"
+									requiredMessage="Seleccione un tipo de producto" id="tipo">
+									<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+									<f:selectItems value="#{productoBean.tiposProductos}" />
+									<f:ajax event="change" execute="@this" render="msgTipo" />
+								</p:selectOneMenu>
+								<p:message for="tipo" id="msgTipo" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.um}" />
+								<p:selectOneMenu value="#{productoBean.codigoMedida}"
+									required="true" requiredMessage="Seleccione una medida"
+									id="medida" styleClass="form-control form-control-sm">
+									<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+									<f:selectItems value="#{productoBean.medidas}" />
+									<f:ajax event="change" execute="@this" render="msgMedida" />
+								</p:selectOneMenu>
+								<p:message for="medida" id="msgMedida" />
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="form-group">
+										<h:outputText value="#{r.costo}" />
+										<h:inputText value="#{productoBean.precioCompra}"
+											styleClass="form-control form-control-sm">
+										</h:inputText>
+									</div>
+								</div>
+								<div class="col">
+									<div class="form-group">
+										<h:outputText value="#{r.precio}" />
+										<h:inputText value="#{productoBean.precioVenta}"
+											styleClass="form-control form-control-sm" required="true"
+											requiredMessage="Ingrese el precio" id="precio">
+											<f:ajax event="keyup" execute="@this" render="msgPrecio" />
+										</h:inputText>
+										<p:message for="precio" id="msgPrecio" />
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col">
+									<p:commandLink action="ACTUALIZAR_PRODUCTO"
+										actionListener="#{productoBean.actualizarProducto}"
+										update="formProductoNuevo:pnlProducto msgProducto :formProducto:tablaProducto"
+										styleClass="#{r.azul}">
+										<i class="fa fa-fw fa-save"></i>
+										<h:outputText value=" Grabar" />
+									</p:commandLink>
+								</div>
+
+								<div class="col">
+									<p:commandLink onclick="PF('dlgProducto').hide();"
+										update="formProductoNuevo" immediate="true"
+										action="ACTUALIZAR_PRODUCTO" styleClass="#{r.gris}"
+										actionListener="#{productoBean.limpiar()}">
+										<i class="fa fa-fw fa-sign-out"></i>
+										<h:outputText value=" Salir" />
+									</p:commandLink>
+								</div>
+							</div>
+						</div>
+						<p:messages for="mensajeRegistroProducto" id="msgProducto" />
+					</h:panelGroup>
+
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>
