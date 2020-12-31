@@ -54,13 +54,13 @@ public class Mensajeria {
 
 		BodyPart adjuntoXML = new MimeBodyPart();
 		adjuntoXML.setDataHandler(
-				new DataHandler(new FileDataSource("C:\\SFS_v1.2\\sunat_archivos\\sfs\\FIRMA\\" + firma + ".xml")));
+				new DataHandler(new FileDataSource("D:\\SFS_v1.3.2\\sunat_archivos\\sfs\\FIRMA\\" + firma + ".xml")));
 		adjuntoXML.setFileName(firma + ".xml");
 		multiParte.addBodyPart(adjuntoXML);
 		
 		BodyPart adjuntoPDF = new MimeBodyPart();
 		adjuntoPDF.setDataHandler(
-				new DataHandler(new FileDataSource("C:\\SFS_v1.2\\sunat_archivos\\sfs\\REPO\\" + facturacion + ".pdf")));
+				new DataHandler(new FileDataSource("D:\\SFS_v1.3.2\\sunat_archivos\\sfs\\REPO\\" + facturacion + ".pdf")));
 		adjuntoPDF.setFileName(facturacion + ".pdf");
 		multiParte.addBodyPart(adjuntoPDF);
 

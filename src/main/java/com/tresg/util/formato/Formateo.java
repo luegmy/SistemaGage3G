@@ -17,6 +17,12 @@ public class Formateo implements Serializable{
 		String cadena = String.valueOf(comprobante).concat(numero);
 		return Integer.valueOf(cadena);
 	}
+	
+	public static void main(String[] args) {
+		Formateo abc=new Formateo();
+		String def=abc.obtenerFormatoNumeroComprobanteAnulado(78);
+		System.out.println(def);
+	}
 
 	public String obtenerFecha(Date fecha) {
 		// formato para registrar la fecha

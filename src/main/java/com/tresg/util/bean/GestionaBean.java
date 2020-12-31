@@ -77,6 +77,7 @@ public class GestionaBean implements Serializable {
 		objDetalle.setUnidadMedida(atributo.getUnidad());
 		objDetalle.setCantidad(atributo.getCantidad());
 		objDetalle.setPrecio(atributo.getPrecio());
+		objDetalle.setProductoSunat(atributo.getCodigoProductoSunat());
 		objDetalle.setId(pk);
 
 		return objDetalle;

@@ -65,7 +65,7 @@ public class Impresora {
 				Conexion.getInstancia().getConectar());
 		retornaExporter(ventaPrint).exportReport();
 
-		File destFile = new File("C:\\SFS_v1.2\\sunat_archivos\\sfs\\REPO\\", facturacionPDF + ".pdf");
+		File destFile = new File("D:/SFS_v1.3.2/sunat_archivos/sfs/REPO/" , facturacionPDF + ".pdf");
 		if (destFile.exists()) {
 			destFile.canWrite();
 		}

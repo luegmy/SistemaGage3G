@@ -7,9 +7,11 @@ import com.tresg.almacen.jpa.AlmacenJPA;
 import com.tresg.almacen.jpa.TipoMovimientoJPA;
 import com.tresg.factoria.DAOFactory;
 import com.tresg.incluido.interfaz.ComboDAO;
+import com.tresg.incluido.jpa.ClaseJPA;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
+import com.tresg.incluido.jpa.ProductoSunatJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 import com.tresg.seguridad.jpa.RolJPA;
@@ -80,6 +82,16 @@ public class ComboService implements ComboService_I,Serializable {
 	@Override
 	public List<NotaDebitoJPA> comboDebito() {
 		return iComboDAO.comboDebito();
+	}
+
+	@Override
+	public List<ClaseJPA> comboClase() {
+		return iComboDAO.comboClase();
+	}
+
+	@Override
+	public List<ProductoSunatJPA> comboProductoSunat() {
+		return iComboDAO.comboProductoSunat();
 	}
 
 	

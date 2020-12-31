@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaJSF" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9d593da5-58bf-4279-a629-98d3f5661dbb">
 	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="453"/>
-	<property name="ireport.y" value="630"/>
+	<property name="ireport.x" value="76"/>
+	<property name="ireport.y" value="766"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -440,7 +440,7 @@ CELULAR:  944641764  982495189 - 992039949]]></text>
 				<textFieldExpression><![CDATA[$P{montoLetra}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="FillFrame">
-				<reportElement mode="Transparent" x="3" y="35" width="226" height="66" uuid="748f8217-1d14-4e4f-8577-c45547eb0699"/>
+				<reportElement mode="Transparent" x="120" y="35" width="60" height="66" uuid="748f8217-1d14-4e4f-8577-c45547eb0699"/>
 				<imageExpression><![CDATA[$P{codigoBarra}]]></imageExpression>
 			</image>
 			<staticText>

@@ -59,6 +59,9 @@ public class DetalleVentaJPA implements Serializable {
 	private double cantidadMonto;
 	@Transient
 	private String unidadMedida;
+	@Transient
+	private String productoSunat;
+	
 
 	public DetalleVentaJPAPK getId() {
 		return id;
@@ -146,6 +149,14 @@ public class DetalleVentaJPA implements Serializable {
 
 	public void setUnidadMedida(String unidadMedida) {
 		this.unidadMedida = unidadMedida;
+	}
+
+	public String getProductoSunat() {
+		return productoSunat;
+	}
+
+	public void setProductoSunat(String productoSunat) {
+		this.productoSunat = productoSunat;
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import javax.persistence.Transient;
 
 @NamedQueries({
 		@NamedQuery(name = "producto.listarProductoPorExistencia", query = "select d.producto.codProducto,d.producto.descripcion,d.producto.tipo.descripcion,d.producto.precioVenta,"
-				+ "d.producto.medida.abreviatura,sum(d.existencia) from DetalleAlmacenJPA d where d.producto.descripcion like :x "
+				+ "d.producto.medida.abreviatura,sum(d.existencia),d.producto.prodSunat from DetalleAlmacenJPA d where d.producto.descripcion like :x "
 				+ "group by d.producto.codProducto"),
 		@NamedQuery(name = "producto.listarProducto", query = "select p from ProductoJPA p") })
 
@@ -37,6 +37,7 @@ public class ProductoJPA implements Serializable {
 	private String descripcion;
 	private BigDecimal precioCompra;
 	private BigDecimal precioVenta;
+	private String prodSunat;
 
 	@ManyToOne
 	@JoinColumn(name = "codTipo")
@@ -85,6 +86,14 @@ public class ProductoJPA implements Serializable {
 
 	public void setPrecioVenta(BigDecimal precioVenta) {
 		this.precioVenta = precioVenta;
+	}
+
+	public String getProdSunat() {
+		return prodSunat;
+	}
+
+	public void setProdSunat(String prodSunat) {
+		this.prodSunat = prodSunat;
 	}
 
 	public TipoProductoJPA getTipo() {

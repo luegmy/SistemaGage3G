@@ -49,7 +49,8 @@ public class MysqlDetalleAlmacenDAO implements DetalleAlmacenDAO {
 				obj.setDescripcionTipo(arr[2].toString());
 				obj.setPrecioVenta((BigDecimal) arr[3]);
 				obj.setDescripcionMedida(arr[4].toString());
-				obj.setCantidad((int) (long) arr[5]);				
+				obj.setCantidad((int) (long) arr[5]);	
+				obj.setProdSunat(arr[6].toString());
 			}
 			productos.add(obj);
 		}

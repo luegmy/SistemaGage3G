@@ -8,6 +8,8 @@
 		<class>com.tresg.incluido.jpa.ProductoJPA</class>
 		<class>com.tresg.incluido.jpa.UnidadMedidaJPA</class>
 		<class>com.tresg.incluido.jpa.TipoProductoJPA</class>
+		<class>com.tresg.incluido.jpa.ClaseJPA</class>
+		<class>com.tresg.incluido.jpa.ProductoSunatJPA</class>
 		<class>com.tresg.incluido.jpa.EstadoJPA</class>
 		<class>com.tresg.incluido.jpa.ComprobanteJPA</class>
 		<class>com.tresg.incluido.jpa.MediosPagoJPA</class>

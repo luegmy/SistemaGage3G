@@ -45,9 +45,9 @@ public class AtributoBean implements Serializable {
 	private int codigoComprobanteNota;
 	private int numeroNota;
 	private String codigoNota;
-		
+
 	private int facturaAnulada;
-	private int nroFacturaAnulada;	
+	private int nroFacturaAnulada;
 	private String serieAnulada;
 
 	private BigDecimal igv = new java.math.BigDecimal("0.00");
@@ -64,7 +64,7 @@ public class AtributoBean implements Serializable {
 	private String unidad;
 	private BigDecimal cantidad = new java.math.BigDecimal("0.00");
 	private int codigoProducto;
-	public static final String CODIGO_PRODUCTO_SUNAT = "-";
+	private String codigoProductoSunat;
 	private String descripcionProducto;
 	private BigDecimal precio = new java.math.BigDecimal("0.00");
 	public static final String CODIGO_IGV = "1000";
@@ -80,6 +80,13 @@ public class AtributoBean implements Serializable {
 	public static final String CODIGO_TIPO_TRIBUTO_ISC = "";
 	public static final String TIPO_SISTEMA_ISC = "";
 	public static final String PORCENTAJE_ISC = "";
+
+	public static final String CODIGO_ICBPER = "-";
+	public static final String MONTO_ICBPER = "0.00";
+	public static final String CANTIDAD_ICBPER = "0";
+	public static final String NOMBRE_TRIBUTO_ITEM_ICBPER = "";
+	public static final String CODIGO_TIPO_TRIBUTO_ICBPER = "";
+	public static final String MONTO_UNDAD_ICBPER = "0.00";
 
 	public static final String VALOR_REFERENCIAL = "0.00";
 
@@ -104,7 +111,7 @@ public class AtributoBean implements Serializable {
 
 	public List<SelectItem> getComprobantes() {
 		comprobantes = new ArrayList<>();
-		sCombo.comboComprobante().stream().filter(c->c.getCodComprobante()!=7||c.getCodComprobante()!=8)
+		sCombo.comboComprobante().stream().filter(c -> c.getCodComprobante() != 7 || c.getCodComprobante() != 8)
 				.forEach(c -> comprobantes.add(new SelectItem(c.getCodComprobante(), c.getDescripcion())));
 		return comprobantes;
 	}
@@ -208,9 +215,9 @@ public class AtributoBean implements Serializable {
 	}
 
 	public List<SelectItem> getNotaDebitos() {
-		notaDebitos=new ArrayList<>();
+		notaDebitos = new ArrayList<>();
 		sCombo.comboDebito().stream()
-		.forEach(c -> notaDebitos.add(new SelectItem(c.getCodDebito(), c.getDescripcion())));
+				.forEach(c -> notaDebitos.add(new SelectItem(c.getCodDebito(), c.getDescripcion())));
 		return notaDebitos;
 	}
 
@@ -219,9 +226,9 @@ public class AtributoBean implements Serializable {
 	}
 
 	public List<SelectItem> getNotas() {
-		notas=new ArrayList<>();
-		sCombo.comboComprobante().stream().filter(c->c.getCodComprobante()==7 || c.getCodComprobante()==8)
-		.forEach(c->notas.add(new SelectItem(c.getCodComprobante(),c.getDescripcion())));
+		notas = new ArrayList<>();
+		sCombo.comboComprobante().stream().filter(c -> c.getCodComprobante() == 7 || c.getCodComprobante() == 8)
+				.forEach(c -> notas.add(new SelectItem(c.getCodComprobante(), c.getDescripcion())));
 		return notas;
 	}
 
@@ -350,6 +357,14 @@ public class AtributoBean implements Serializable {
 
 	public void setCodigoProducto(int codigoProducto) {
 		this.codigoProducto = codigoProducto;
+	}
+
+	public String getCodigoProductoSunat() {
+		return codigoProductoSunat;
+	}
+
+	public void setCodigoProductoSunat(String codigoProductoSunat) {
+		this.codigoProductoSunat = codigoProductoSunat;
 	}
 
 	public int getCodigoTipo() {

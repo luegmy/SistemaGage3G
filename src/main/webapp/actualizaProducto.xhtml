@@ -27,11 +27,11 @@
 								</p:inputText>
 							</div>
 						</div>
-						
+
 						<div class="btn-group" role="group">
 							<h:commandLink styleClass="#{r.rojo}">
-								<p:dataExporter type="xls" target="tablaProducto" fileName="productoReporte"
-									encoding="ISO-8859-1" />
+								<p:dataExporter type="xls" target="tablaProducto"
+									fileName="productoReporte" encoding="ISO-8859-1" />
 								<i class="fa fa-fw fa-file-excel-o"></i>
 								<h:outputText value="Excel" />
 							</h:commandLink>
@@ -75,13 +75,16 @@
 						<p:column width="12%" styleClass="text-center" exportable="false">
 							<p:commandLink actionListener="#{productoBean.editarProducto}"
 								update="dialogo" action="actualizaProducto" title="Editar"
-								oncomplete="PF('dlgProducto').show();" styleClass="btn btn-primary">
+								oncomplete="PF('dlgProducto').show();"
+								styleClass="btn btn-primary">
 								<i class="fa fa-fw fa-edit"></i>
 								<f:attribute value="#{p.codProducto}" name="codigo" />
 							</p:commandLink>
-							<p:commandLink actionListener="#{productoBean.mostrarExistenciaXAlmacen}"
-								update="formProducto" action="actualizaProducto" title="Existencias"
-								oncomplete="PF('dlgExistencia').show();" styleClass="btn btn-info">
+							<p:commandLink
+								actionListener="#{productoBean.mostrarExistenciaXAlmacen}"
+								update="formProducto" action="actualizaProducto"
+								title="Existencias" oncomplete="PF('dlgExistencia').show();"
+								styleClass="btn btn-info">
 								<i class="fa fa-fw fa-cubes"></i>
 								<f:attribute value="#{p.codProducto}" name="codigo" />
 							</p:commandLink>
@@ -106,11 +109,11 @@
 
 					<p:messages for="mensajeProductoEliminado"
 						id="msgProductoEliminado" />
-						
-						
+
+
 					<!--  EXISTENCIAS EN ALMACEN-->
 					<p:dialog header="EXISTENCIA" widgetVar="dlgExistencia"
-					 showEffect="scale" hideEffect="explode" position="right center"
+						showEffect="scale" hideEffect="explode" position="right center"
 						modal="true" appendTo="@(body)">
 						<p:dataTable var="d" value="#{productoBean.existencias}"
 							reflow="true">
@@ -175,6 +178,23 @@
 									<f:ajax event="change" execute="@this" render="msgMedida" />
 								</p:selectOneMenu>
 								<p:message for="medida" id="msgMedida" />
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.clase}" />
+								<p:selectOneMenu value="#{productoBean.codigoClase}"
+									styleClass="form-control form-control-sm">
+									<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+									<f:selectItems value="#{productoBean.clases}" />
+									<p:ajax event="change" update="prodSunat" />
+								</p:selectOneMenu>
+							</div>
+							<div class="form-group">
+								<h:outputText value="#{r.prodSunat}" />
+								<p:selectOneMenu value="#{productoBean.codigoProdSunat}"
+									id="prodSunat" styleClass="form-control form-control-sm">
+									<f:selectItem itemValue="" itemLabel="--Seleccione--" />
+									<f:selectItems value="#{productoBean.prodSunats}" />
+								</p:selectOneMenu>
 							</div>
 							<div class="row">
 								<div class="col">

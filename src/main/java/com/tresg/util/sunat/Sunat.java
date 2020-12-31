@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -23,15 +24,16 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.pdf417.PDF417Writer;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.tresg.util.formato.Formateo;
 
 public class Sunat implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String RUTA_DATA = "C:/SFS_v1.2/sunat_archivos/sfs/DATA/";
-	public static final String RUTA_FIRMA = "C:/SFS_v1.2/sunat_archivos/sfs/FIRMA/";
-	public static final String RUTA_IMAGEN = "C:/SFS_v1.2/sunat_archivos/sfs/IMAGEN/";
+	public static final String RUTA_DATA = "D:/SFS_v1.3.2/sunat_archivos/sfs/DATA/";
+	public static final String RUTA_FIRMA = "D:/SFS_v1.3.2/sunat_archivos/sfs/FIRMA/";
+	public static final String RUTA_IMAGEN = "D:/SFS_v1.3.2/sunat_archivos/sfs/IMAGEN/";
 	private String digestTexto;
 	private String signatureTexto;
 
@@ -166,18 +168,18 @@ public class Sunat implements Serializable {
 	}
 
 	public void generarCodigoBarra(String rucEmisor, int comprobante, String serie, int numero, String igv,
-			String monto, String fecha, String identidad, String numeroIdentidad)
+			String monto, Date fecha, String identidad, String numeroIdentidad)
 			throws WriterException, IOException {
 
 		String codigoBarra = rucEmisor.concat("|").concat(formato.obtenerFormatoComprobante(comprobante)).concat("|")
 				.concat(serie).concat("|").concat(formato.obtenerFormatoNumeroComprobante(numero)).concat("|")
-				.concat(String.valueOf(igv)).concat("|").concat(String.valueOf(monto)).concat("|").concat(fecha)
+				.concat(String.valueOf(igv)).concat("|").concat(String.valueOf(monto)).concat("|").concat(formato.obtenerFecha(fecha))
 				.concat("|").concat(identidad).concat("|").concat(numeroIdentidad).concat("|").concat(digestTexto)
 				.concat("|").concat(signatureTexto);
 
 		BitMatrix bitMatrix;
-		Writer escritura = new PDF417Writer();
-		bitMatrix = escritura.encode(codigoBarra, BarcodeFormat.PDF_417, 600, 200);
+		QRCodeWriter escritura = new QRCodeWriter();
+		bitMatrix = escritura.encode(codigoBarra, BarcodeFormat.QR_CODE, 350, 350);
 		MatrixToImageWriter.writeToStream(bitMatrix, "png", new FileOutputStream(new File(
 				RUTA_IMAGEN.concat(generarNombreArchivo(rucEmisor, comprobante, serie, numero)).concat(".png"))));
 

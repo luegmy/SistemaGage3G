@@ -17,7 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.xml.sax.SAXException;
 
@@ -151,6 +151,8 @@ public class RegistroVentaBean implements Serializable {
 				productoSeleccionado.getDescripcion().concat(" ").concat(productoSeleccionado.getDescripcionTipo()));
 		atributoUtil.setUnidad(productoSeleccionado.getDescripcionMedida());
 		atributoUtil.setPrecio(productoSeleccionado.getPrecioVenta());
+		atributoUtil.setCodigoProductoSunat(productoSeleccionado.getProdSunat());
+		System.out.println("--------------"+productoSeleccionado.getProdSunat());
 
 		atributoUtil.getProductos().clear();
 	}
@@ -170,6 +172,8 @@ public class RegistroVentaBean implements Serializable {
 					objProducto.getDescripcion().concat(" ").concat(objProducto.getTipo().getDescripcion()));
 			atributoUtil.setUnidad(objProducto.getMedida().getAbreviatura());
 			atributoUtil.setPrecio(objProducto.getPrecioVenta());
+			atributoUtil.setCodigoProductoSunat(objProducto.getProdSunat());
+			System.out.println("--------------"+objProducto.getProdSunat());
 		}
 	}
 
@@ -210,7 +214,6 @@ public class RegistroVentaBean implements Serializable {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void grabarVenta() throws IOException {
 
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -232,11 +235,11 @@ public class RegistroVentaBean implements Serializable {
 
 				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
 						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales, usuario)), null));
-				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
+				PrimeFaces.current().executeScript(MENSAJE_DIALOGO);
 			}  else {
 				context.addMessage(MENSAJE_REGISTRO, new FacesMessage(FacesMessage.SEVERITY_INFO,
 						sVenta.registraVenta(gestionUtil.retornarVenta(atributoUtil, temporales, usuario)), null));
-				RequestContext.getCurrentInstance().execute(MENSAJE_DIALOGO);
+				PrimeFaces.current().executeScript(MENSAJE_DIALOGO);
 			}
 		}
 	}
@@ -280,7 +283,7 @@ public class RegistroVentaBean implements Serializable {
 
 			cadenas.add(s.getUnidadMedida().concat("|").concat(s.getCantidad().toString()).concat("|")
 					.concat(String.valueOf(s.getId().getCodProducto())).concat("|")
-					.concat(AtributoBean.CODIGO_PRODUCTO_SUNAT).concat("|").concat(s.getDescripcionProducto())
+					.concat(s.getProductoSunat()).concat("|").concat(s.getDescripcionProducto())
 					.concat("|")
 					// valor unitario por item (sin igv)
 					.concat(valorUnitario.toString()).concat("|")
@@ -305,6 +308,13 @@ public class RegistroVentaBean implements Serializable {
 					.concat(AtributoBean.BASE_IMPONIBLE_ISC_ITEM).concat("|")
 					.concat(AtributoBean.NOMBRE_TRIBUTO_ITEM_ISC).concat("|")
 					.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_ISC).concat("|").concat(AtributoBean.PORCENTAJE_ISC)
+					.concat("|")
+					
+					// impuesto a la bolsa plasticas
+					.concat(AtributoBean.CODIGO_ICBPER).concat("|").concat(AtributoBean.MONTO_ICBPER).concat("|")
+					.concat(AtributoBean.CANTIDAD_ICBPER).concat("|")
+					.concat(AtributoBean.NOMBRE_TRIBUTO_ITEM_ICBPER).concat("|")
+					.concat(AtributoBean.CODIGO_TIPO_TRIBUTO_ICBPER).concat("|").concat(AtributoBean.MONTO_UNDAD_ICBPER)
 					.concat("|")
 
 					// precio venta unitario
@@ -383,7 +393,7 @@ public class RegistroVentaBean implements Serializable {
 		// añaden em la clase sunat
 		sunatUtil.generarCodigoBarra(AtributoBean.RUC_EMISOR, atributoUtil.getCodigoComprobante(),
 				atributoUtil.getNumeroSerie(), atributoUtil.getNumeroComprobante(), atributoUtil.getIgv().toString(),
-				atributoUtil.getTotal().toString(), atributoUtil.getFecha().toString(),
+				atributoUtil.getTotal().toString(), atributoUtil.getFecha(),
 				atributoUtil.getCliente().getCodigoDocumento(), atributoUtil.getCliente().getNroDocumento());
 
 		// El monto de la venta en letras

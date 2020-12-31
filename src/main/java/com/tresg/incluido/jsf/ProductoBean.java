@@ -15,7 +15,10 @@ import javax.faces.model.SelectItem;
 import com.tresg.almacen.jpa.DetalleAlmacenJPA;
 import com.tresg.almacen.service.AlmacenBusinessDelegate;
 import com.tresg.almacen.service.ConsultarAlmacenBusinessService;
+import com.tresg.incluido.dao.MysqlProductoDAO;
+import com.tresg.incluido.jpa.ClaseJPA;
 import com.tresg.incluido.jpa.ProductoJPA;
+import com.tresg.incluido.jpa.ProductoSunatJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 import com.tresg.incluido.service.ComboService_I;
@@ -42,9 +45,13 @@ public class ProductoBean implements Serializable {
 	private BigDecimal precioVenta;
 	private int codigoTipoProducto;
 	private int codigoMedida;
+	private int codigoClase;
+	private String codigoProdSunat;
 
 	private List<SelectItem> tiposProductos;
 	private List<SelectItem> medidas;
+	private List<SelectItem> clases;
+	private List<SelectItem> prodSunats;
 
 	private List<DetalleAlmacenJPA> existencias;
 
@@ -64,6 +71,7 @@ public class ProductoBean implements Serializable {
 		setPrecioVenta(objProducto.getPrecioVenta());
 		setCodigoTipoProducto(objProducto.getTipo().getCodTipo());
 		setCodigoMedida(objProducto.getMedida().getCodMedida());
+		setCodigoProdSunat(objProducto.getProdSunat());
 	}
 
 	public void actualizarProducto() {
@@ -81,6 +89,7 @@ public class ProductoBean implements Serializable {
 		objT.setCodTipo(codigoTipoProducto);
 		objP.setPrecioCompra(precioCompra);
 		objP.setPrecioVenta(precioVenta);
+		objP.setProdSunat(codigoProdSunat);
 		objP.setTipo(objT);
 		objP.setMedida(objM);
 
@@ -103,6 +112,8 @@ public class ProductoBean implements Serializable {
 		precioVenta = new java.math.BigDecimal("0.00");
 		codigoTipoProducto = 0;
 		codigoMedida = 0;
+		codigoClase = 0;
+		codigoProdSunat = "";
 	}
 
 	public void mostrarExistenciaXAlmacen(ActionEvent e) {
@@ -168,9 +179,8 @@ public class ProductoBean implements Serializable {
 	// lista despegable tipo de productos
 	public List<SelectItem> getTiposProductos() {
 		tiposProductos = new ArrayList<>();
-		for (TipoProductoJPA p : sCombo.comboTipoProducto()) {
-			tiposProductos.add(new SelectItem(p.getCodTipo(), p.getDescripcion()));
-		}
+		sCombo.comboTipoProducto().stream()
+				.forEach(p -> tiposProductos.add(new SelectItem(p.getCodTipo(), p.getDescripcion())));
 		return tiposProductos;
 	}
 
@@ -188,9 +198,9 @@ public class ProductoBean implements Serializable {
 
 	public List<SelectItem> getMedidas() {
 		medidas = new ArrayList<>();
-		for (UnidadMedidaJPA u : sCombo.comboUnidadMedida()) {
-			medidas.add(new SelectItem(u.getCodMedida(), u.getDescripcion()));
-		}
+		sCombo.comboUnidadMedida().stream()
+				.forEach(u -> medidas.add(new SelectItem(u.getCodMedida(), u.getDescripcion())));
+
 		return medidas;
 	}
 
@@ -204,6 +214,45 @@ public class ProductoBean implements Serializable {
 
 	public void setCodigoMedida(int codigoMedida) {
 		this.codigoMedida = codigoMedida;
+	}
+
+	public int getCodigoClase() {
+		return codigoClase;
+	}
+
+	public void setCodigoClase(int codigoClase) {
+		this.codigoClase = codigoClase;
+	}
+
+	public String getCodigoProdSunat() {
+		return codigoProdSunat;
+	}
+
+	public void setCodigoProdSunat(String codigoProdSunat) {
+		this.codigoProdSunat = codigoProdSunat;
+	}
+
+	public List<SelectItem> getClases() {
+		clases = new ArrayList<>();
+		sCombo.comboClase().stream().forEach(c -> clases.add(new SelectItem(c.getCodClase(), c.getDescripcion())));
+
+		return clases;
+	}
+
+	public void setClases(List<SelectItem> clases) {
+		this.clases = clases;
+	}
+
+	public List<SelectItem> getProdSunats() {
+		prodSunats = new ArrayList<>();
+		sCombo.comboProductoSunat().stream().filter(m->m.getClase().getCodClase()==codigoClase)
+				.forEach(p -> prodSunats.add(new SelectItem(p.getCodProdSunat(), p.getDescripcion())));
+
+		return prodSunats;
+	}
+
+	public void setProdSunats(List<SelectItem> prodSunats) {
+		this.prodSunats = prodSunats;
 	}
 
 	public List<DetalleAlmacenJPA> getExistencias() {

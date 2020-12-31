@@ -8,9 +8,11 @@ import javax.persistence.Query;
 import com.tresg.almacen.jpa.AlmacenJPA;
 import com.tresg.almacen.jpa.TipoMovimientoJPA;
 import com.tresg.incluido.interfaz.ComboDAO;
+import com.tresg.incluido.jpa.ClaseJPA;
 import com.tresg.incluido.jpa.ComprobanteJPA;
 import com.tresg.incluido.jpa.DocumentoIdentidadJPA;
 import com.tresg.incluido.jpa.MediosPagoJPA;
+import com.tresg.incluido.jpa.ProductoSunatJPA;
 import com.tresg.incluido.jpa.TipoProductoJPA;
 import com.tresg.incluido.jpa.UnidadMedidaJPA;
 import com.tresg.seguridad.jpa.RolJPA;
@@ -123,6 +125,26 @@ public class MysqlComboDAO implements ComboDAO {
 	public List<NotaDebitoJPA> comboDebito() {
 		open();
 		Query q=em.createNamedQuery("notaDebito.comboNotaDebito");
+		return q.getResultList();
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClaseJPA> comboClase() {
+		open();
+		Query q = em.createNamedQuery("clase.comboClase");
+
+		return q.getResultList();
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProductoSunatJPA> comboProductoSunat() {
+		open();
+		Query q = em.createNamedQuery("prodSunat.comboProdSunat");
+
 		return q.getResultList();
 	}
 	
